@@ -1,0 +1,17 @@
+image: "python:3.10"
+
+stages:
+  - test
+
+test:
+  stage: test
+  script:
+    - tox
+  artifacts:
+    name: TRANSFORMER-$CI_PIPELINE_ID
+    paths:
+      - htmlcov
+    # untracked: false
+
+    # expire_in: 30 days
+    # public: true
