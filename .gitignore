@@ -2,8 +2,17 @@
 # Created by https://www.toptal.com/developers/gitignore/api/python
 # Edit at https://www.toptal.com/developers/gitignore?templates=python
 
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+*.pyc
+
+
+
 ### Python ###
 # Byte-compiled / optimized / DLL files
+*/__pycache__/
 __pycache__/
 *.py[cod]
 *$py.class
@@ -55,6 +64,8 @@ coverage.xml
 .hypothesis/
 .pytest_cache/
 cover/
+
+
 
 # Translations
 *.mo
