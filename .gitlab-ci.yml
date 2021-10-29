@@ -3,6 +3,11 @@ image: "python:3.10"
 stages:
   - test
 
+before_script:
+  - apt update -y
+  - apt upgrade -y
+  - pip3 install tox
+
 test:
   stage: test
   script:
