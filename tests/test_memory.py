@@ -12,26 +12,27 @@ def sandbox(target: callable, *args: list):
         success = False
         response = ""
         error = f"Error = {err}"
-    
+
     return success, error, response
+
 
 class TestMemoryBasic(TestCase):
     def test_memory_create(self):
-        success, error, response = sandbox(Memory)      
+        success, error, _ = sandbox(Memory)
         self.assertTrue(success, error)
 
     def test_set_data_in_memory(self):
-        data ={"foo": "bar"}
+        # data = {"foo": "bar"}
         m = Memory()
-        success, error, response = sandbox(m.set, "foo2", "bar2")
+        success, error, _ = sandbox(m.set, "foo2", "bar2")
         m.set("foo", "bar")
-        
+
         self.assertTrue(success, error)
 
     def test_get_data(self):
         m = Memory()
         m.set("foo", "bar")
-        
+
         self.assertEqual(m.get("foo"), "bar")
 
     def test_error_set_data(self):
@@ -39,10 +40,10 @@ class TestMemoryBasic(TestCase):
         data = {"foo": "bar"}
         try:
             m.data = data
-            error = False 
+            error = False
         except ValueError:
             error = True
-        
+
         self.assertTrue(error)
 
     def test_drop_memory(self):
@@ -58,7 +59,7 @@ class TestMemoryBasic(TestCase):
         m.set_many(data)
 
         self.assertEqual(m.data, data)
-    
+
     def test_cache_get(self):
         m = Memory()
         data = {"foo": "bar"}
@@ -76,7 +77,7 @@ class TestMemoryBasic(TestCase):
         m.cache_clear()
         bar = "different value"
         m.set("foo", bar)
-        
+
         end = m.get("foo")
-        
+
         self.assertEqual(end, bar)

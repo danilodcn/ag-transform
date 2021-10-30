@@ -1,5 +1,5 @@
 from unittest import TestCase
-from timeit import timeit
+# from timeit import timeit
 from app.transformer import Transformer
 import json
 
@@ -10,7 +10,6 @@ class TestTransformer(TestCase):
         with open(json_test_trafo_file_name) as file:
             json_test_trafo = json.load(file)
 
-
         to_test = list(json_test_trafo[0].values())
         self.to_test_variables = to_test[0]
         self.to_test_constraints = to_test[1:-2]
@@ -19,11 +18,12 @@ class TestTransformer(TestCase):
         tables_file_name = "tests/json/tabelas.json"
         with open(tables_file_name) as file:
             self.tables = json.load(file)
-        
+
         # import ipdb; ipdb.set_trace()
 
     def test_create_transformer(self):
         transformer = Transformer(self.to_test_constraints, self.tables)
+        transformer.tables
 
     def test_execute_run_in_transformer(self):
         transformer = Transformer(self.to_test_constraints, self.tables)
@@ -36,11 +36,12 @@ class TestTransformer(TestCase):
 
         def function_to_repeat():
             transformer.run(self.to_test_variables)
-        return 
-        print("\nAqui")
+        """print("\nAqui")
         n = 1000
         duration = timeit(function_to_repeat, globals=globals(), number=n)
-        print("Média = ", duration / n * 1e6, "ms")
+        print("Média = ", duration / n * 1e6, "ms")"""
+
+        return
 
     def test_update_tables(self):
         transformer = Transformer(self.to_test_constraints, self.tables)
@@ -53,7 +54,6 @@ class TestTransformer(TestCase):
         constraints = self.to_test_constraints
         constraints[0] = "estrela-delta"
         # import ipdb; ipdb.set_trace()
-        
+
         transformer = Transformer(constraints, self.tables)
         transformer.run(self.to_test_variables)
-

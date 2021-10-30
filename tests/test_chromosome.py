@@ -1,14 +1,16 @@
 from collections import OrderedDict
 from unittest import TestCase
-from app.genetic_algorithm.chromosome import Chromosome
+from app.genetic_algorithm.gene import Gene
 
 
 class TestCromossomeBasics(TestCase):
-    def test_crete_chromosome(self):
-        chromosome = Chromosome(range(7))
-    
-    def test_create_random_chromosome(self):
-        chromosome = Chromosome()
+    def test_crete_gene(self):
+        gene = Gene(range(9))
+        gene.abs
+
+    def test_create_random_gene(self):
+        gene = Gene()
+        gene.abs
 
     def test_change_the_variations(self):
         variations = OrderedDict({
@@ -20,7 +22,7 @@ class TestCromossomeBasics(TestCase):
                 "Rjan": (34, 36),
                 "rel": (11, 12),
                 })
-        chromosome_01 = Chromosome()
-        chromosome_01.variations = variations
-        chromosome_02 = Chromosome()
-        self.assertEqual(chromosome_02.variations, variations)
+        gene_01 = Gene()
+        gene_01.variations = variations
+        gene_02 = Gene()
+        self.assertEqual(gene_02.variations, variations)

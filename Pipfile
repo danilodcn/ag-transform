@@ -14,6 +14,7 @@ pandas = "*"
 tox = "*"
 ipdb = "*"
 ipython = "*"
+line-profiler = "*"
 
 [requires]
 python_version = "3.9"

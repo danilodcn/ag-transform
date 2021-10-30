@@ -4,7 +4,7 @@ from app.utils.classmethod import classproperty
 from collections import OrderedDict
 
 
-class Chromosome(Series):
+class Gene(Series):
     __variations = OrderedDict({
             "Jbt": (1.2, 1.4),
             "Jat": (1.4, 1.6),
@@ -15,13 +15,13 @@ class Chromosome(Series):
             "rel": (1.1, 1.2),
             })
 
-    # __names = ["Jbt", "Jat", "Bm", "Ksw", "kt", "Rjan", "rel"]
+    __field_names = ["PerdasT", "Mativa"]
 
     def __init__(self, data=[]):
         data = np.asarray(data)
         if data.shape == (0,):
-            data = self.random_crete()
-        super().__init__(data=data, index=self.names)
+            data = self.random_crete() + [0] * len(self.__field_names)
+        super().__init__(data=data, index=self.names + self.__field_names)
 
     @classproperty
     def variations(cls):
