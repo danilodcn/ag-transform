@@ -1,4 +1,4 @@
-from app.memory import Memory
+from app.utils.memory import Memory
 from numpy import interp
 
 

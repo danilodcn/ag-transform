@@ -7,10 +7,13 @@ name = "pypi"
 numpy = "*"
 flask = "*"
 click = "*"
+numba = "*"
+pandas = "*"
 
 [dev-packages]
 tox = "*"
 ipdb = "*"
+ipython = "*"
 
 [requires]
-python_version = "3.10"
+python_version = "3.9"

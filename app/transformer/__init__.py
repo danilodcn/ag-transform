@@ -1,8 +1,6 @@
 import numpy as np
 from math import sqrt, pi
-from app.tables import Tables
-# from numba import njit
-# from .funcoes import simular_transformador
+from app.utils.tables import Tables
 
 
 class Transformer:
@@ -13,6 +11,7 @@ class Transformer:
     def update_tables(self, tables: str):
         self.tables.tables.set_many(tables)
 
+    # @jit(nopython=True)
     def run(self, variaveis: np.ndarray):
         [
             conexao,

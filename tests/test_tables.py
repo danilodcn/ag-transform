@@ -1,7 +1,6 @@
 import json, os
 from unittest import TestCase
-from app.tables import Tables
-from pprint import pprint
+from app.utils.tables import Tables
 
 class TestTablesBasic(TestCase):
 
@@ -46,3 +45,5 @@ class TestTablesBasic(TestCase):
 
         with self.assertRaises(KeyError) as context:
             tables.constante_tipo_isolacao("coisa", 6)
+
+        

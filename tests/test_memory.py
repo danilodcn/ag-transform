@@ -1,5 +1,5 @@
 from unittest import TestCase
-from app.memory import Memory
+from app.utils.memory import Memory
 
 
 def sandbox(target: callable, *args: list):
