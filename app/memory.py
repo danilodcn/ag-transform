@@ -1,18 +1,18 @@
 from functools import lru_cache
-from typing import Dict
+from typing import Any, Dict
 
 
 class Memory:
 
     def __init__(self) -> None:
-        self.__data = {}
+        self.__data: Dict[str, Dict[str, Any | str]] = {}
 
     @property
     def data(self):
         return self.__data
 
     @data.setter
-    def data(self, value):
+    def data(self, value) -> dict:
         raise ValueError("Do not edit this property")
 
     @lru_cache(maxsize=32, typed=False)
