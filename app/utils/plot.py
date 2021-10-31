@@ -8,10 +8,11 @@ COLORS = list(colors.TABLEAU_COLORS.values())
 
 
 class Plot:
-    def __init__(self, df) -> None:
+    def __init__(self, df: pd.DataFrame) -> None:
         self.Mativa = df["Mativa"]
         self.PerdasT = df["PerdasT"]
         self.rank = df["rank"]
+        self.df = df
 
     def __basic_plot(self, title=""):
         fig, ax = plt.subplots()
@@ -37,14 +38,18 @@ class Plot:
     def plot_with_rank(self):
         # print(annotation)
         _, ax = self.__basic_plot("Points with ranks")
-        iterator = zip(
-            range(len(self.Mativa)),
-            self.Mativa, self.PerdasT,
-            self.rank
-        )
 
-        for i, massa, perdas, rank in iterator:
-            ax.plot(
-                perdas, massa, marker="o",
-                color=COLORS[int(rank % len(COLORS))]
+        ranks = self.rank.drop_duplicates()
+        ranks = list(ranks)
+        ranks.sort()
+        for rank in ranks:
+            massas = self.df.loc[self.df["rank"] == rank]["Mativa"]
+            perdas = self.df.loc[self.df["rank"] == rank]["PerdasT"]
+
+            ax.scatter(
+                perdas, massas, marker="o",
+                color=COLORS[int(rank % len(COLORS))],
+                label=f"rank {rank}"
             )
+
+        plt.legend()

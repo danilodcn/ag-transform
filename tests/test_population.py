@@ -1,5 +1,7 @@
 from collections import OrderedDict
 from unittest import TestCase
+
+import pandas as pd
 from app.genetic_algorithm.gene import Gene
 from app.genetic_algorithm.population import Population
 from app.utils.plot import Plot, plt
@@ -46,6 +48,11 @@ class TestPopulation(TestCase):
             data=[]
         )
 
+    def plot(self):
+        plot = Plot(self.population)
+        plot.plot(self.population)
+        plot.plot_with_rank()
+
     def test_calculate_all(self):
         self.population.calculate_all()
         # plot(self.population)
@@ -59,10 +66,8 @@ class TestPopulation(TestCase):
     def test_sort_population_with_pareto_ranks(self):
         self.population.calculate_all()
         self.population.sort_pareto_ranks()
-        plot = Plot(self.population)
-        plot.plot(self.population)
-        plot.plot_with_rank()
-        plt.show()
+        self.plot()
+        # plt.show()
         # from IPython import embed
         # embed()
         # %timeit self.population.sort_pareto_ranks()
@@ -79,3 +84,19 @@ class TestPopulation(TestCase):
         self.assertTrue(is_dominated(gene2, gene1))
         self.assertTrue(not is_dominated(gene3, gene1))
         self.assertTrue(not is_dominated(gene3, gene2))
+
+    def test_crowding_distance(self):
+        self.population.calculate_all()
+        self.population.sort_pareto_ranks()
+        self.population.calculate_crowding_distance()
+
+    def test_calcule_fitness(self):
+        self.population.calculate_all()
+        self.population.sort_pareto_ranks()
+        self.population.calcule_fitness()
+        # print(self.population)
+        self.plot()
+        plt.show()
+
+
+    
