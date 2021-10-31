@@ -1,4 +1,3 @@
-import itertools as it
 import pandas as pd
 
 from collections import OrderedDict
@@ -7,16 +6,17 @@ from collections import namedtuple
 from app.transformer import Transformer
 from app.utils.classmethod import classproperty
 from app.utils.sort import is_dominated
-from app.utils.plot import Plot, plt
+# from app.utils.plot import Plot, plt
 # from numba import jit
 
 PopulationProps = namedtuple("PopulationProps", field_names=["n_population"])
-sum_of_integers = lambda n1, n2: int((n2 - n1 + 1) * (n1 + n2) / 2)
+
+
+def sum_of_integers(n1, n2):
+    return int((n2 - n1 + 1) * (n1 + n2) / 2)
 
 
 class Population(pd.DataFrame):
-
-    distances = {}
 
     props = PopulationProps(0)
     __transformer = ...
@@ -154,8 +154,7 @@ class Population(pd.DataFrame):
     def calcule_fitness(self):
         self.__calcule_fitness()
         self["sharedFitness"] = self["meanFitness"] / self["sumDistance"]
-        import ipdb; ipdb.set_trace()
-
+        # import ipdb; ipdb.set_trace()
 
     def __calcule_fitness(self):
 
@@ -175,7 +174,7 @@ class Population(pd.DataFrame):
                 sum_of_integers(n_current, n_before) / (n_before - n_current)
             )
             n_before = n_current
-            
+
             # iterator = it.permutations(set.index, 2)
             for i in set.index:
                 perda_i, massa_i = set["Mativa"][i], set["Mativa"][i]
@@ -184,24 +183,23 @@ class Population(pd.DataFrame):
                     if i == j:
                         continue
                     perda_j, massa_j = set["Mativa"][j], set["Mativa"][j]
-                    distance_ij = self.__distance(perda_i, perda_j, massa_i, massa_j)
-                    self.distances[(i, j)] = distance_ij
+                    distance_ij = self.__distance(
+                        perda_i, perda_j, massa_i, massa_j
+                    )
                     distance += self.__shared_function(distance_ij, 1)
-                
-                self["sumDistance"].iloc[i] = distance
-            
 
+                self["sumDistance"].iloc[i] = distance
 
             # self.__distances(set.sort_values(by=["PerdasT"]))
             # continuação do algoritmo
             # niche_ray = 32
 
         # import ipdb; ipdb.set_trace()
-    
+
     def __shared_function(self, distance: float, alfa: float):
         if distance <= self.niche_ray:
             return 1 - (distance / self.niche_ray) ** alfa
-        
+
         else:
             return 0
 
@@ -216,44 +214,3 @@ class Population(pd.DataFrame):
         perdas = ((p1 - p2) / delta_perdas) ** 2
 
         return (massas + perdas) ** .5
-
-    def __distances(self, df: pd.DataFrame):
-        perdas = df["PerdasT"]
-        massas = df["Mativa"]
-        if perdas.count() == 1:
-            i = perdas.index[0]
-            self["meanDistance"].iloc[i] = 1
-            return 
-
-        for i in range(perdas.count()):
-            # import ipdb; ipdb.set_trace()
-            n = perdas.index[i]
-            perda_n, massa_n = perdas[n], massas[n]
-            if i == 0:
-                p = perdas.index[i+1]
-                perda_p, massa_p = perdas[p], massas[p]
-                distance = self.__distance(perda_n, perda_p, massa_n, massa_p)
-            
-            elif i == perdas.count() - 1:
-                m = perdas.index[i-1]
-                perda_m, massa_m = perdas[m], massas[m]
-                distance = self.__distance(perda_n, perda_m, massa_n, massa_m)
-
-
-            else:
-                p = perdas.index[i+1]
-                perda_p, massa_p = perdas[p], massas[p]
-                
-                m = perdas.index[i-1]
-                perda_m, massa_m = perdas[m], massas[m]
-
-                distance_m = self.__distance(perda_n, perda_m, massa_n, massa_m)
-                distance_p = self.__distance(perda_n, perda_p, massa_n, massa_p)
-
-                distance = (distance_m + distance_p) / 2
-
-            # distances.append(distance)
-
-            self["meanDistance"].iloc[n] = distance
-
-        import ipdb; ipdb.set_trace()

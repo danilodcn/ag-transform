@@ -1,7 +1,7 @@
 from collections import OrderedDict
 from unittest import TestCase
 
-import pandas as pd
+# import pandas as pd
 from app.genetic_algorithm.gene import Gene
 from app.genetic_algorithm.population import Population
 from app.utils.plot import Plot, plt
@@ -97,6 +97,3 @@ class TestPopulation(TestCase):
         # print(self.population)
         self.plot()
         plt.show()
-
-
-    
