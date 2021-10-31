@@ -2,13 +2,10 @@ from collections import OrderedDict
 from unittest import TestCase
 from app.genetic_algorithm.gene import Gene
 from app.genetic_algorithm.population import Population
-from app.utils.plot import Plot, plt
 import json
 
-from app.utils.sort import is_dominated
 
-
-class TestPopulation(TestCase):
+class TestSort(TestCase):
     def setUp(self) -> None:
         json_test_trafo_file_name = "tests/json/data_trafo.json"
         with open(json_test_trafo_file_name) as file:
@@ -46,36 +43,10 @@ class TestPopulation(TestCase):
             data=[]
         )
 
-    def test_calculate_all(self):
+    def test_basic_sort(self):
         self.population.calculate_all()
-        # plot(self.population)
         sorted = self.population.sort_values(
             by=["PerdasT", "Mativa"], ascending=[False, False]
-        ).index
-        # plot(self.population)
+        )
         sorted
         # import ipdb; ipdb.set_trace()
-
-    def test_sort_population_with_pareto_ranks(self):
-        self.population.calculate_all()
-        self.population.sort_pareto_ranks()
-        plot = Plot(self.population)
-        plot.plot(self.population)
-        plot.plot_with_rank()
-        plt.show()
-        # from IPython import embed
-        # embed()
-        # %timeit self.population.sort_pareto_ranks()
-        # import ipdb; ipdb.set_trace()
-
-    def test_is_dominated(self):
-        gene1 = (40, 50)
-        gene2 = (46, 56)
-        gene3 = (36, 60)
-
-        self.assertTrue(not is_dominated(gene1, gene2))
-        self.assertTrue(not is_dominated(gene1, gene3))
-        self.assertTrue(not is_dominated(gene2, gene3))
-        self.assertTrue(is_dominated(gene2, gene1))
-        self.assertTrue(not is_dominated(gene3, gene1))
-        self.assertTrue(not is_dominated(gene3, gene2))

@@ -1,22 +1,50 @@
 import pandas as pd
 
 from matplotlib import pyplot as plt
+from matplotlib import colors
 
 
-def plot(df: pd.DataFrame):
-    Mativa = df["Mativa"]
-    PerdasT = df["PerdasT"]
+COLORS = list(colors.TABLEAU_COLORS.values())
 
-    # g = sns.FacetGrid(df, height=5)
-    # g.map(sns.scatterplot, "Mativa", "PerdasT", alpha=.6)
-    # g.add_legend()
 
-    _, ax = plt.subplots()
+class Plot:
+    def __init__(self, df) -> None:
+        self.Mativa = df["Mativa"]
+        self.PerdasT = df["PerdasT"]
+        self.rank = df["rank"]
 
-    ax.plot(PerdasT, Mativa, "ko")
+    def __basic_plot(self, title=""):
+        fig, ax = plt.subplots()
+        ax.set_title(title)
+        ax.set_xlabel("Perdas Totais [W]")
+        ax.set_ylabel("Massa [Kg]")
 
-    for i, massa, perdas in zip(range(len(Mativa)), Mativa, PerdasT):
-        ax.annotate(i, xy=(perdas, massa))
+        return fig, ax
 
-    plt.ioff()
-    plt.show()
+    def plot(self, df: pd.DataFrame):
+        _, ax = self.__basic_plot("")
+
+        ax.plot(self.PerdasT, self.Mativa, "ko")
+
+        iterator = zip(
+            range(len(self.Mativa)),
+            self.Mativa,
+            self.PerdasT
+        )
+        for i, massa, perdas in iterator:
+            ax.annotate(i, xy=(perdas, massa))
+
+    def plot_with_rank(self):
+        # print(annotation)
+        _, ax = self.__basic_plot("Points with ranks")
+        iterator = zip(
+            range(len(self.Mativa)),
+            self.Mativa, self.PerdasT,
+            self.rank
+        )
+
+        for i, massa, perdas, rank in iterator:
+            ax.plot(
+                perdas, massa, marker="o",
+                color=COLORS[int(rank % len(COLORS))]
+            )

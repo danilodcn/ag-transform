@@ -5,7 +5,7 @@ from app.genetic_algorithm.gene import Gene
 
 class TestGeneBasics(TestCase):
     def test_crete_gene(self):
-        gene = Gene(range(9))
+        gene = Gene(range(10))
         gene.abs
 
     def test_create_random_gene(self):

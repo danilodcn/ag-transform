@@ -1,7 +1,19 @@
-import pandas as pd
+import numpy as np
 
 
-def pareto_sort(df: pd.DataFrame):
-    """
-    This function sort create or use an field in Data Frame
-    'pareto_order' for insert the pareto level"""
+def is_dominated(gene1: tuple, gene2: tuple):
+    gene1 = np.asarray(gene1)
+    gene2 = np.asarray(gene2)
+    # import ipdb; ipdb.set_trace()
+
+    # if np.all(gene1 == gene2):
+    #     return False
+
+    if np.all(gene1 <= gene2):
+        return False
+
+    if np.any(gene1 <= gene2):
+        return False
+
+    else:
+        return True

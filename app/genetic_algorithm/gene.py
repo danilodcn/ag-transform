@@ -15,7 +15,7 @@ class Gene(Series):
             "rel": (1.1, 1.2),
             })
 
-    __field_names = ["PerdasT", "Mativa"]
+    __field_names = ["PerdasT", "Mativa", "rank"]
 
     def __init__(self, data=[]):
         data = np.asarray(data)
