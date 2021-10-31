@@ -9,6 +9,7 @@ flask = "*"
 click = "*"
 numba = "*"
 pandas = "*"
+seaborn = "*"
 
 [dev-packages]
 tox = "*"

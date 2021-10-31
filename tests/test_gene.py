@@ -3,7 +3,7 @@ from unittest import TestCase
 from app.genetic_algorithm.gene import Gene
 
 
-class TestCromossomeBasics(TestCase):
+class TestGeneBasics(TestCase):
     def test_crete_gene(self):
         gene = Gene(range(9))
         gene.abs

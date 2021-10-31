@@ -1,5 +1,8 @@
+from collections import OrderedDict
 from unittest import TestCase
+from app.genetic_algorithm.gene import Gene
 from app.genetic_algorithm.population import Population
+from app.utils.plot import plot
 import json
 
 
@@ -19,5 +22,34 @@ class TestPopulation(TestCase):
             self.tables = json.load(file)
         # import ipdb; ipdb.set_trace()
 
-    def test_create_population(self):
-        Population
+        variations = OrderedDict({
+            "Jbt": (1.2, 1.4),
+            "Jat": (1.4, 1.6),
+            "Bm": (1.5, 1.6),
+            "Ksw": (6, 7),
+            "kt": (0.45, 0.55),
+            "Rjan": (3.4, 3.6),
+            "rel": (1.1, 1.2),
+            })
+
+        gene = Gene()
+        gene.variations = variations
+
+        self.n_population = 30
+
+        self.population = Population(
+            self.n_population,
+            self.to_test_constraints,
+            self.tables,
+            data=[]
+        )
+
+    def test_calculate_all(self):
+        self.population.calculate_all()
+        plot(self.population)
+        ordination = self.population.sort_values(
+            by=["PerdasT", "Mativa"], ascending=[False, False]
+        ).index
+        plot(self.population)
+        ordination
+        # import ipdb; ipdb.set_trace()
