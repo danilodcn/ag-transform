@@ -5,7 +5,7 @@ from app.genetic_algorithm.gene import Gene
 
 class TestGeneBasics(TestCase):
     def test_crete_gene(self):
-        gene = Gene(range(14))
+        gene = Gene(range(12))
         gene.abs
 
     def test_create_random_gene(self):
@@ -25,4 +25,5 @@ class TestGeneBasics(TestCase):
         gene_01 = Gene()
         gene_01.variations = variations
         gene_02 = Gene()
+
         self.assertEqual(gene_02.variations, variations)

@@ -17,8 +17,7 @@ class Gene(Series):
 
     __field_names = [
         "PerdasT", "Mativa", "rank",
-        "crowlingDistance", "meanFitness",
-        "sumDistance", "sharedFitness"
+        "crowlingDistance", "fitness"
     ]
 
     def __init__(self, data=[]):

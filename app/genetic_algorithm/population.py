@@ -1,4 +1,5 @@
 import pandas as pd
+import numpy as np
 
 from collections import OrderedDict
 from app.genetic_algorithm.gene import Gene
@@ -26,7 +27,7 @@ class Population(pd.DataFrame):
     })
 
     crowlingDistancePartinner = float("inf")
-    niche_ray = 0.02
+    niche_ray = 0.01
 
     def __init__(self, n_population, constraints, tables, data=[]) -> None:
         # import ipdb; ipdb.set_trace()
@@ -153,24 +154,43 @@ class Population(pd.DataFrame):
 
     def calcule_fitness(self):
         self.__calcule_fitness()
-        self["sharedFitness"] = self["meanFitness"] / self["sumDistance"]
+
         # import ipdb; ipdb.set_trace()
 
     def __calcule_fitness(self):
 
-        ranks = list(self["rank"].drop_duplicates())
+        # import ipdb; ipdb.set_trace()
+        lst_rank = list(self["rank"])
+        df = pd.DataFrame(
+            np.zeros((self.props.n_population, 5)),
+            columns=[
+                "meanFitness", "sumDistance",
+                "sharedFitness", "solutions_for_rank", "rank"
+            ]
+        )
 
+        df["rank"] = lst_rank
+
+        # df = df[df["solutions_for_rank"].notnull()].copy()
+
+        ranks = list(self["rank"].drop_duplicates())
         ranks.sort()
         n_before = self.index.__len__()
         for rank in ranks:
             set = self.loc[self["rank"] == rank][["PerdasT", "Mativa"]]
             perdas_set = set.sort_values(by=["PerdasT"])["PerdasT"]
 
+            # import ipdb; ipdb.set_trace()
+
+            df["solutions_for_rank"].iloc[
+                perdas_set.index
+            ] = perdas_set.count()
+
             # massas_set = set.sort_values(by=["Mativa"])["Mativa"]
             number = perdas_set.index.__len__()
             n_current = n_before - number
 
-            self["meanFitness"].loc[perdas_set.index] = (
+            df["meanFitness"].loc[perdas_set.index] = (
                 sum_of_integers(n_current, n_before) / (n_before - n_current)
             )
             n_before = n_current
@@ -188,11 +208,19 @@ class Population(pd.DataFrame):
                     )
                     distance += self.__shared_function(distance_ij, 1)
 
-                self["sumDistance"].iloc[i] = distance
+                df["sumDistance"].iloc[i] = distance
 
             # self.__distances(set.sort_values(by=["PerdasT"]))
             # continuação do algoritmo
             # niche_ray = 32
+
+        df["sharedFitness"] = df["meanFitness"] / df["sumDistance"]
+
+        sum_shared_fitness = np.sum(df["sharedFitness"])
+
+        self["fitness"] = df["meanFitness"] * df["solutions_for_rank"] * (
+                df["sharedFitness"] / sum_shared_fitness
+            )
 
         # import ipdb; ipdb.set_trace()
 
@@ -214,3 +242,5 @@ class Population(pd.DataFrame):
         perdas = ((p1 - p2) / delta_perdas) ** 2
 
         return (massas + perdas) ** .5
+
+    def 
