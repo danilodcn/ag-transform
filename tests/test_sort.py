@@ -44,7 +44,7 @@ class TestSort(TestCase):
         )
 
     def test_basic_sort(self):
-        self.population.calculate_all()
+        self.population.calcule_all()
         sorted = self.population.sort_values(
             by=["PerdasT", "Mativa"], ascending=[False, False]
         )

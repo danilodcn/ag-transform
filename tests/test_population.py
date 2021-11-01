@@ -53,8 +53,8 @@ class TestPopulation(TestCase):
         plot.plot(self.population)
         plot.plot_with_rank()
 
-    def test_calculate_all(self):
-        self.population.calculate_all()
+    def test_calcule_all(self):
+        self.population.calcule_all()
         # plot(self.population)
         sorted = self.population.sort_values(
             by=["PerdasT", "Mativa"], ascending=[False, False]
@@ -64,7 +64,7 @@ class TestPopulation(TestCase):
         # import ipdb; ipdb.set_trace()
 
     def test_sort_population_with_pareto_ranks(self):
-        self.population.calculate_all()
+        self.population.calcule_all()
         self.population.sort_pareto_ranks()
         self.plot()
         # plt.show()
@@ -86,12 +86,12 @@ class TestPopulation(TestCase):
         self.assertTrue(not is_dominated(gene3, gene2))
 
     def test_crowding_distance(self):
-        self.population.calculate_all()
+        self.population.calcule_all()
         self.population.sort_pareto_ranks()
         self.population.calculate_crowding_distance()
 
     def test_calcule_fitness(self):
-        self.population.calculate_all()
+        self.population.calcule_all()
         self.population.sort_pareto_ranks()
         self.population.calcule_fitness()
         # print(self.population)

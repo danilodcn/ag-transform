@@ -10,7 +10,7 @@ from app.utils.sort import is_dominated
 # from app.utils.plot import Plot, plt
 # from numba import jit
 
-PopulationProps = namedtuple("PopulationProps", field_names=["n_population"])
+PopulationProps = namedtuple("PopulationProps", field_names=["n_population", ])
 
 
 def sum_of_integers(n1, n2):
@@ -56,18 +56,23 @@ class Population(pd.DataFrame):
     def variations(cls, value):
         cls.__variations = value
 
-    def calculate_all(self):
+    def calcule_all(self):
         # import ipdb; ipdb.set_trace()
         PerdasT, Mativa = "PerdasT", "Mativa"
 
         result = pd.DataFrame([
             self.transfomer.run(values[1:8]) for values in self.itertuples()
         ], index=range(self.props.n_population), columns=(PerdasT, Mativa))
-        self[PerdasT] = result[PerdasT]
-        self[Mativa] = result[Mativa]
+        # import ipdb; ipdb.set_trace()
+        # self[PerdasT] = result[PerdasT]
+        # self[Mativa] = result[Mativa]
+        self.update(result)
 
         # print(res[0])
-        return result
+        # return result
+
+    def penalize(self):
+        ...
 
     def sort_pareto_ranks(self):
         no_dominated = list(self.index)
@@ -194,6 +199,7 @@ class Population(pd.DataFrame):
                 sum_of_integers(n_current, n_before) / (n_before - n_current)
             )
             n_before = n_current
+            # import ipdb; ipdb.set_trace()
 
             # iterator = it.permutations(set.index, 2)
             for i in set.index:
@@ -243,4 +249,15 @@ class Population(pd.DataFrame):
 
         return (massas + perdas) ** .5
 
-    def 
+    def sample(self, n, frac=None, replace=False, weights=None, axis=None):
+        if weights is None:
+            weights = self["fitness"]
+        if weights == 1:
+            weights = [1] * self.props.n_population
+
+        return super().sample(
+            n, frac=frac, replace=replace, weights=weights, axis=axis
+        )
+
+    def crossover(self):
+        ...

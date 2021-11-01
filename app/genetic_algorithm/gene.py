@@ -14,10 +14,10 @@ class Gene(Series):
             "Rjan": (3.4, 3.6),
             "rel": (1.1, 1.2),
             })
-
+    # Mativa_P e PerdasT_P são as massas e perdas após a penalização
     __field_names = [
-        "PerdasT", "Mativa", "rank",
-        "crowlingDistance", "fitness"
+        "PerdasT", "Mativa", "PerdasT_P", "Mativa_P",
+        "rank", "crowlingDistance", "fitness"
     ]
 
     def __init__(self, data=[]):
