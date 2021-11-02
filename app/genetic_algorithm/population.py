@@ -76,14 +76,20 @@ class Population(pd.DataFrame):
 
     def penalize(self):
         # print(self)
-        variations = list(Gene.variations.values()) + list(self.variations.values())
-        counts = self.apply(count_restrictions_violated, args=(variations, ), axis=1)
+        variations = (
+            list(Gene.variations.values()) + list(self.variations.values())
+        )
+        counts = self.apply(
+            count_restrictions_violated,
+            args=(variations, ),
+            axis=1
+        )
         perdas, massas = self.variations.values()
         k = 0.2
         vector_params = pd.DataFrame(
             np.asarray([
-                np.ones((self.props.n_population)) * perdas[1] * counts, #+ self["PerdasT"],
-                np.ones((self.props.n_population)) * massas[1] * counts  # + self["Mativa"]
+                np.ones((self.props.n_population)) * perdas[1] * counts,
+                np.ones((self.props.n_population)) * massas[1] * counts
             ]).transpose() * k,
 
             columns=[

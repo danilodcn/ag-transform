@@ -96,18 +96,21 @@ class TestPopulation(TestCase):
         self.population.calcule_fitness()
         # print(self.population)
         self.plot()
-        # plt.show()
+        plt.show()
 
     def test_penalize(self):
         self.population.calcule_all()
         self.population.sort_pareto_ranks()
         Plot(self.population).plot_with_rank("Antes da penalização")
 
-        import ipdb; ipdb.set_trace()
+        # import ipdb; ipdb.set_trace()
         self.population.penalize()
-        
-        self.population.sort_pareto_ranks()
-        Plot(self.population).plot_with_rank("Depois da penalização", penalize=True)
 
-        # plt.show()
-        import ipdb; ipdb.set_trace()
+        self.population.sort_pareto_ranks()
+        Plot(self.population).plot_with_rank(
+            "Depois da penalização",
+            penalize=True
+        )
+
+        plt.show()
+        # import ipdb; ipdb.set_trace()
