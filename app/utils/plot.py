@@ -35,16 +35,19 @@ class Plot:
         for i, massa, perdas in iterator:
             ax.annotate(i, xy=(perdas, massa))
 
-    def plot_with_rank(self):
+    def plot_with_rank(self, title="Points with ranks", penalize=False):
         # print(annotation)
-        _, ax = self.__basic_plot("Points with ranks")
+        _, ax = self.__basic_plot(title)
 
         ranks = self.rank.drop_duplicates()
         ranks = list(ranks)
         ranks.sort()
+        PerdasT, Mativa = "PerdasT Mativa".split()
+        if penalize:
+            PerdasT, Mativa = "PerdasT_P Mativa_P".split()
         for rank in ranks:
-            massas = self.df.loc[self.df["rank"] == rank]["Mativa"]
-            perdas = self.df.loc[self.df["rank"] == rank]["PerdasT"]
+            massas = self.df.loc[self.df["rank"] == rank][Mativa]
+            perdas = self.df.loc[self.df["rank"] == rank][PerdasT]
 
             ax.scatter(
                 perdas, massas, marker="o",

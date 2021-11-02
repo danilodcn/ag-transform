@@ -6,6 +6,7 @@ from app.genetic_algorithm.gene import Gene
 from collections import namedtuple
 from app.transformer import Transformer
 from app.utils.classmethod import classproperty
+from app.utils.functions import count_restrictions_violated
 from app.utils.sort import is_dominated
 # from app.utils.plot import Plot, plt
 # from numba import jit
@@ -23,7 +24,7 @@ class Population(pd.DataFrame):
     __transformer = ...
     __variations = OrderedDict({
         "PerdasT": [0, 2000],
-        "Mativa": [300, 610]
+        "Mativa": [0, 600]
     })
 
     crowlingDistancePartinner = float("inf")
@@ -67,12 +68,32 @@ class Population(pd.DataFrame):
         # self[PerdasT] = result[PerdasT]
         # self[Mativa] = result[Mativa]
         self.update(result)
+        self["PerdasT_P"] = self[PerdasT]
+        self["Mativa_P"] = self[Mativa]
 
         # print(res[0])
         # return result
 
     def penalize(self):
-        ...
+        # print(self)
+        variations = list(Gene.variations.values()) + list(self.variations.values())
+        counts = self.apply(count_restrictions_violated, args=(variations, ), axis=1)
+        perdas, massas = self.variations.values()
+        k = 0.2
+        vector_params = pd.DataFrame(
+            np.asarray([
+                np.ones((self.props.n_population)) * perdas[1] * counts, #+ self["PerdasT"],
+                np.ones((self.props.n_population)) * massas[1] * counts  # + self["Mativa"]
+            ]).transpose() * k,
+
+            columns=[
+                "PerdasT_P", "Mativa_P",
+            ]
+        ) + self[["PerdasT_P", "Mativa_P"]]
+
+        # import ipdb; ipdb.set_trace()
+        self.update(vector_params)
+        # vector_params.dot(vector_params)
 
     def sort_pareto_ranks(self):
         no_dominated = list(self.index)
@@ -95,8 +116,8 @@ class Population(pd.DataFrame):
                 if i == p:
                     continue
                 else:
-                    gene_i = self.loc[i, ["PerdasT", "Mativa"]]
-                    gene_p = self.loc[p, ["PerdasT", "Mativa"]]
+                    gene_i = self.loc[i, ["PerdasT_P", "Mativa_P"]]
+                    gene_p = self.loc[p, ["PerdasT_P", "Mativa_P"]]
 
                     # import ipdb; ipdb.set_trace()
 
@@ -182,8 +203,8 @@ class Population(pd.DataFrame):
         ranks.sort()
         n_before = self.index.__len__()
         for rank in ranks:
-            set = self.loc[self["rank"] == rank][["PerdasT", "Mativa"]]
-            perdas_set = set.sort_values(by=["PerdasT"])["PerdasT"]
+            set = self.loc[self["rank"] == rank][["PerdasT_P", "Mativa_P"]]
+            perdas_set = set.sort_values(by=["PerdasT_P"])["PerdasT_P"]
 
             # import ipdb; ipdb.set_trace()
 
@@ -203,12 +224,12 @@ class Population(pd.DataFrame):
 
             # iterator = it.permutations(set.index, 2)
             for i in set.index:
-                perda_i, massa_i = set["Mativa"][i], set["Mativa"][i]
+                perda_i, massa_i = set["PerdasT_P"][i], set["Mativa_P"][i]
                 distance = 1
                 for j in set.index:
                     if i == j:
                         continue
-                    perda_j, massa_j = set["Mativa"][j], set["Mativa"][j]
+                    perda_j, massa_j = set["PerdasT_P"][j], set["Mativa_P"][j]
                     distance_ij = self.__distance(
                         perda_i, perda_j, massa_i, massa_j
                     )
