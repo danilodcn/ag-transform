@@ -1,3 +1,6 @@
+import json
+# import numpy as np
+
 from collections import OrderedDict
 from unittest import TestCase
 
@@ -5,7 +8,6 @@ from unittest import TestCase
 from app.genetic_algorithm.gene import Gene
 from app.genetic_algorithm.population import Population
 from app.utils.plot import Plot, plt
-import json
 
 from app.utils.sort import is_dominated
 
@@ -47,6 +49,7 @@ class TestPopulation(TestCase):
             self.tables,
             data=[]
         )
+        self.x = 0
 
     def plot(self):
         plot = Plot(self.population)
@@ -114,3 +117,56 @@ class TestPopulation(TestCase):
 
         plt.show()
         # import ipdb; ipdb.set_trace()
+
+    def test_add_gene(self):
+        self.population.calcule_all()
+        self.population.sort_pareto_ranks()
+        self.population.penalize()
+        self.population.sort_pareto_ranks()
+        gene = Gene()
+
+        self.population.add_gene(gene)
+        n = self.population.props.n_population - 1
+        assertion = gene == self.population.loc[n]
+        assert assertion.all()
+
+    def test_crossover(self):
+        self.population.calcule_all()
+        self.population.sort_pareto_ranks()
+        # Plot(self.population).plot_with_rank("Antes da penalização")
+        Plot(self.population).plot_with_rank(
+            "Antes do Crossover com penalização",
+            penalize=True
+        )
+        # import ipdb; ipdb.set_trace()
+        self.population.calcule_fitness()
+        self.population.crossover()
+        self.population.calcule_all()
+
+        self.population.penalize()
+
+        self.population.sort_pareto_ranks()
+        # self.population.calcule_fitness()
+        Plot(self.population).plot_with_rank(
+            "Após Crossover com penalização",
+            penalize=True
+        )
+        Plot(self.population).plot(self.population)
+        # import ipdb; ipdb.set_trace()
+        plt.show()
+
+    def test_mutation(self):
+        self.population.calcule_all()
+        self.population.sort_pareto_ranks()
+        self.population.calcule_fitness()
+
+        self.population.mutation(20)
+        self.population.calcule_all()
+
+        self.population.penalize()
+
+        self.population.sort_pareto_ranks()
+        Plot(self.population).plot_with_rank(
+            "Após mutação com penalização",
+            penalize=True
+        )

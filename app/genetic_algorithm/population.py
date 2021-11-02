@@ -1,5 +1,6 @@
 import pandas as pd
 import numpy as np
+import itertools as it
 
 from collections import OrderedDict
 from app.genetic_algorithm.gene import Gene
@@ -8,10 +9,20 @@ from app.transformer import Transformer
 from app.utils.classmethod import classproperty
 from app.utils.functions import count_restrictions_violated
 from app.utils.sort import is_dominated
+from dataclasses import dataclass
 # from app.utils.plot import Plot, plt
 # from numba import jit
 
 PopulationProps = namedtuple("PopulationProps", field_names=["n_population", ])
+
+
+@dataclass
+class PopulationProps:
+    n_population: int = 0
+    # FIXME taxa de perturbação e probalidade de crossover
+    # foram achados na página 147 do livro do Lobato
+    disturbance_rate: float = .8        # deve esta entre 0.2 e 2
+    crossover_probability: float = .3   # deve esta entre 0.1 e 1
 
 
 def sum_of_integers(n1, n2):
@@ -20,7 +31,8 @@ def sum_of_integers(n1, n2):
 
 class Population(pd.DataFrame):
 
-    props = PopulationProps(0)
+    # props = PopulationProps(0)
+    props = PopulationProps()
     __transformer = ...
     __variations = OrderedDict({
         "PerdasT": [0, 2000],
@@ -33,7 +45,8 @@ class Population(pd.DataFrame):
     def __init__(self, n_population, constraints, tables, data=[]) -> None:
         # import ipdb; ipdb.set_trace()
 
-        self.props = self.props._replace(n_population=n_population)
+        # self.props = self.props._replace(n_population=n_population)
+        self.props.n_population = n_population
         self.transformer = Transformer(constraints, tables)
 
         if not data:
@@ -63,7 +76,7 @@ class Population(pd.DataFrame):
 
         result = pd.DataFrame([
             self.transfomer.run(values[1:8]) for values in self.itertuples()
-        ], index=range(self.props.n_population), columns=(PerdasT, Mativa))
+        ], index=self.index, columns=(PerdasT, Mativa))
         # import ipdb; ipdb.set_trace()
         # self[PerdasT] = result[PerdasT]
         # self[Mativa] = result[Mativa]
@@ -85,7 +98,7 @@ class Population(pd.DataFrame):
             axis=1
         )
         perdas, massas = self.variations.values()
-        k = 0.2
+        k = 1.4
         vector_params = pd.DataFrame(
             np.asarray([
                 np.ones((self.props.n_population)) * perdas[1] * counts,
@@ -102,6 +115,7 @@ class Population(pd.DataFrame):
         # vector_params.dot(vector_params)
 
     def sort_pareto_ranks(self):
+        self["rank"] *= 0
         no_dominated = list(self.index)
         number = 0
         while len(no_dominated) != 0:
@@ -251,10 +265,10 @@ class Population(pd.DataFrame):
 
         sum_shared_fitness = np.sum(df["sharedFitness"])
 
-        self["fitness"] = df["meanFitness"] * df["solutions_for_rank"] * (
+        result = df["meanFitness"] * df["solutions_for_rank"] * (
                 df["sharedFitness"] / sum_shared_fitness
             )
-
+        self["fitness"] = result / np.sum(result)
         # import ipdb; ipdb.set_trace()
 
     def __shared_function(self, distance: float, alfa: float):
@@ -276,15 +290,90 @@ class Population(pd.DataFrame):
 
         return (massas + perdas) ** .5
 
-    def sample(self, n, frac=None, replace=False, weights=None, axis=None):
+    def sample(
+            self, n=None, frac=None, weights=None, axis=None, replace=False
+            ) -> pd.DataFrame:
+        # import ipdb; ipdb.set_trace()
         if weights is None:
             weights = self["fitness"]
-        if weights == 1:
+        elif weights == 1:
             weights = [1] * self.props.n_population
 
         return super().sample(
             n, frac=frac, replace=replace, weights=weights, axis=axis
         )
 
+    def add_gene(self, gene: Gene):
+        # self.index += 1
+        self.loc[self.props.n_population] = gene
+        self.props.n_population += 1
+        # import ipdb; ipdb.set_trace()
+
     def crossover(self):
-        ...
+        father: pd.DataFrame = self.sample(frac=.9, weights=None)
+        father = father.sample(frac=1)
+
+        k = .8
+        father_1: pd.DataFrame = father.sample(
+            frac=k, weights=None
+            ).sample(frac=1)
+
+        n = 1 + (1 + 8 * 1 * self.props.n_population) ** .5
+        n = int(n / 2 + .5)
+        father_2: pd.DataFrame = father.sample(
+            n=n, weights=None
+            ).sample(frac=1)
+
+        iterator = zip(
+            it.cycle(father_1.index),
+            it.combinations(father_2.index, 2)
+            # father_2.index,
+            # father_3.index
+        )
+        # import ipdb; ipdb.set_trace()
+        m = 0
+        for k, values in iterator:
+            i, j = values
+            m += 1
+            if i == j:
+                continue
+
+            self.__crossover(
+                self.iloc[i],
+                self.iloc[j],
+                self.iloc[k],
+            )
+            # import ipdb; ipdb.set_trace()
+
+        # import ipdb; ipdb.set_trace()
+
+    def __crossover(self, p1: Gene, p2: Gene, p3: Gene):
+        # p0 = self.sample(n=1, weights=None)
+        mask = np.random.rand(p1.count()) < self.props.crossover_probability
+        p0 = self.props.disturbance_rate * (p1 - p2) * 1 * mask
+
+        children = p0 + p3
+        self.add_gene(children)
+        # import ipdb; ipdb.set_trace()
+
+    def mutation(self, n):
+        n = 1 + (1 + 8 * n) ** .5
+        n = int(n / 2) + 1
+        father: pd.DataFrame = self.sample(n=n, weights=None).sample(frac=1)
+        index = self.index
+        weights = self["fitness"]
+        iterator = zip(
+            range(n),
+            it.combinations(father.index, 2)
+        )
+        # import ipdb; ipdb.set_trace()
+        for _, value in iterator:
+            i, j = value
+
+            self.__crossover(
+                self.iloc[i],
+                self.iloc[j],
+                self.loc[np.random.choice(index, p=weights)]
+            )
+
+        # import ipdb; ipdb.set_trace()
