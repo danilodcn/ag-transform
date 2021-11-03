@@ -10,6 +10,13 @@ click = "*"
 numba = "*"
 pandas = "*"
 seaborn = "*"
+dash = "*"
+sqlalchemy = "*"
+psycopg2 = "*"
+requests = "*"
+fastapi = "*"
+python-dotenv = "*"
+flask-classful = "*"
 
 [dev-packages]
 tox = "*"

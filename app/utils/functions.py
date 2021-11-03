@@ -1,4 +1,4 @@
-from typing import List
+from typing import Dict, List
 import pandas as pd
 
 
@@ -17,3 +17,8 @@ def count_restrictions_violated(
 
     # import ipdb; ipdb.set_trace()
     return count
+
+
+def deal_response(data: Dict[str, Dict]):
+    # import ipdb; ipdb.set_trace()
+    return 0

@@ -23,6 +23,7 @@ class Plot:
         return fig, ax
 
     def plot(self, df: pd.DataFrame):
+        return
         _, ax = self.__basic_plot("")
 
         ax.plot(self.PerdasT, self.Mativa, "ko")
@@ -36,6 +37,7 @@ class Plot:
             ax.annotate(i, xy=(perdas, massa))
 
     def plot_with_rank(self, title="Points with ranks", penalize=False):
+        return
         # print(annotation)
         _, ax = self.__basic_plot(title)
 

@@ -126,9 +126,10 @@ class TestPopulation(TestCase):
         gene = Gene()
 
         self.population.add_gene(gene)
-        n = self.population.props.n_population - 1
+        n = self.population.index.__len__() - 1
         assertion = gene == self.population.loc[n]
         assert assertion.all()
+        # import ipdb; ipdb.set_trace()
 
     def test_crossover(self):
         self.population.calcule_all()
@@ -158,8 +159,25 @@ class TestPopulation(TestCase):
     def test_mutation(self):
         self.population.calcule_all()
         self.population.sort_pareto_ranks()
-        self.population.calcule_fitness()
 
+        Plot(self.population).plot_with_rank(
+            "Antes do Crossover com penalização",
+            penalize=True
+        )
+
+        self.population.calcule_fitness()
+        self.population.crossover()
+        self.population.calcule_all()
+
+        self.population.penalize()
+
+        self.population.sort_pareto_ranks()
+        # self.population.calcule_fitness()
+        Plot(self.population).plot_with_rank(
+            "Após Crossover com penalização",
+            penalize=True
+        )
+        self.population.calcule_fitness()
         self.population.mutation(20)
         self.population.calcule_all()
 

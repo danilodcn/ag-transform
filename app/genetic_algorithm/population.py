@@ -24,6 +24,9 @@ class PopulationProps:
     disturbance_rate: float = .8        # deve esta entre 0.2 e 2
     crossover_probability: float = .3   # deve esta entre 0.1 e 1
 
+    tables = 0
+    constraints = 0
+
 
 def sum_of_integers(n1, n2):
     return int((n2 - n1 + 1) * (n1 + n2) / 2)
@@ -47,10 +50,16 @@ class Population(pd.DataFrame):
 
         # self.props = self.props._replace(n_population=n_population)
         self.props.n_population = n_population
+        self.props.constraints = constraints
+        self.props.tables = tables
         self.transformer = Transformer(constraints, tables)
 
-        if not data:
+        if isinstance(data, (pd.DataFrame, pd.Series)):
+            pass
+
+        elif not data:
             data = [Gene() for _ in range(n_population)]
+
         index = list(range(len(data)))
         super().__init__(data=data, index=index)
 
@@ -101,8 +110,8 @@ class Population(pd.DataFrame):
         k = 1.4
         vector_params = pd.DataFrame(
             np.asarray([
-                np.ones((self.props.n_population)) * perdas[1] * counts,
-                np.ones((self.props.n_population)) * massas[1] * counts
+                np.ones((self.index.__len__())) * perdas[1] * counts,
+                np.ones((self.index.__len__())) * massas[1] * counts
             ]).transpose() * k,
 
             columns=[
@@ -208,7 +217,7 @@ class Population(pd.DataFrame):
         # import ipdb; ipdb.set_trace()
         lst_rank = list(self["rank"])
         df = pd.DataFrame(
-            np.zeros((self.props.n_population, 5)),
+            np.zeros((self.index.__len__(), 5)),
             columns=[
                 "meanFitness", "sumDistance",
                 "sharedFitness", "solutions_for_rank", "rank"
@@ -237,7 +246,9 @@ class Population(pd.DataFrame):
             n_current = n_before - number
 
             df["meanFitness"].loc[perdas_set.index] = (
-                sum_of_integers(n_current, n_before) / (n_before - n_current)
+                3 * sum_of_integers(n_current, n_before) / (
+                    n_before - n_current
+                    )
             )
             n_before = n_current
             # import ipdb; ipdb.set_trace()
@@ -297,7 +308,7 @@ class Population(pd.DataFrame):
         if weights is None:
             weights = self["fitness"]
         elif weights == 1:
-            weights = [1] * self.props.n_population
+            weights = [1] * self.count()
 
         return super().sample(
             n, frac=frac, replace=replace, weights=weights, axis=axis
@@ -305,8 +316,8 @@ class Population(pd.DataFrame):
 
     def add_gene(self, gene: Gene):
         # self.index += 1
-        self.loc[self.props.n_population] = gene
-        self.props.n_population += 1
+        self.loc[self["rank"].count()] = gene
+        # self.props.n_population += 1
         # import ipdb; ipdb.set_trace()
 
     def crossover(self):
@@ -318,7 +329,7 @@ class Population(pd.DataFrame):
             frac=k, weights=None
             ).sample(frac=1)
 
-        n = 1 + (1 + 8 * 1 * self.props.n_population) ** .5
+        n = 1 + (1 + 8 * 1 * self.index.__len__()) ** .5
         n = int(n / 2 + .5)
         father_2: pd.DataFrame = father.sample(
             n=n, weights=None
@@ -376,4 +387,52 @@ class Population(pd.DataFrame):
                 self.loc[np.random.choice(index, p=weights)]
             )
 
+    def clean(self):
+        print("Começo")
+        weights = self["fitness"]
+        if (weights < 0).any():
+            self.calcule_all()
+            self.sort_pareto_ranks()
+            self.penalize()
+            self.calcule_fitness()
+
+        rank_1 = self.loc[self["rank"] == 1]
+        index = list(rank_1.index)
+
         # import ipdb; ipdb.set_trace()
+
+        if len(index) > self.props.n_population:
+            index = np.random.choice(
+                self.index,
+                self.props.n_population,
+                p=list(rank_1["fitness"])
+            )
+            index = list(index)
+
+        else:
+            bad_index = self.index.isin(index)
+            # res = self.iloc[~bad_index],
+            fitness = self["fitness"].iloc[~bad_index]
+            p = fitness / np.sum(fitness)
+
+            res_index = np.random.choice(
+                fitness.index,
+                self.props.n_population - index.__len__(),
+                p=p
+            )
+            index = list(index)
+            index.extend(list(res_index))
+            # del index[-1]
+
+        # _index = self.index.isin(index)
+        data: pd.DataFrame = self.iloc[index]
+        data.index = list(range(self.props.n_population))
+
+        self = Population(
+            self.props.n_population,
+            self.props.constraints,
+            self.props.tables,
+            data=data
+        )
+        # import ipdb; ipdb.set_trace()
+        return self

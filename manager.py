@@ -1,15 +1,25 @@
 import click
 from unittest import TestLoader, runner
 from app import app
+from app.api import app as api
 
 @click.group()
 def c():
     ...
 
 @c.command()
-def runserver():
-    app.run(debug=True)
+def rundash():
+    app.run_server(debug=True)
 
+
+@c.command()
+def runapi():
+    api.run(debug=True)
+
+@c.command()
+def ag():
+    print("Starting ...")
+    from app.ag import ag
 
 @c.command()
 def tests():
