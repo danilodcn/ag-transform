@@ -2,6 +2,7 @@ import click
 from unittest import TestLoader, runner
 from app import app
 from app.api import app as api
+import time
 
 @click.group()
 def c():
@@ -14,7 +15,12 @@ def rundash():
 
 @c.command()
 def runapi():
-    api.run(debug=True)
+    while True:
+        try:
+            api.run(debug=True)
+        except SyntaxError as error:
+            print(f"Reestarting the server .... Error = {error}")
+            time.sleep(1)
 
 @c.command()
 def ag():

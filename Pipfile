@@ -17,6 +17,8 @@ requests = "*"
 fastapi = "*"
 python-dotenv = "*"
 flask-classful = "*"
+flask-login = "*"
+flask-sqlalchemy = "*"
 
 [dev-packages]
 tox = "*"
