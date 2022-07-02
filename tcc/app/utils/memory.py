@@ -3,7 +3,6 @@ from typing import Any, Dict
 
 
 class Memory:
-
     def __init__(self) -> None:
         self.__data: Dict[str, Dict[str, Any | str]] = {}
 

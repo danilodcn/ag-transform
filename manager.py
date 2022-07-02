@@ -4,9 +4,11 @@ from app import app
 from app.api import app as api
 import time
 
+
 @click.group()
 def c():
     ...
+
 
 @c.command()
 def rundash():
@@ -22,10 +24,12 @@ def runapi():
             print(f"Reestarting the server .... Error = {error}")
             time.sleep(1)
 
+
 @c.command()
 def ag():
     print("Starting ...")
     from app.ag import ag
+
 
 @c.command()
 def tests():
@@ -34,5 +38,5 @@ def tests():
     testrunner = runner.TextTestRunner(verbosity=3)
     testrunner.run(test)
 
+
 c()
-    

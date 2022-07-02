@@ -5,7 +5,8 @@ from collections import OrderedDict
 
 
 class Gene(Series):
-    __variations = OrderedDict({
+    __variations = OrderedDict(
+        {
             "Jbt": (1.2, 1.4),
             "Jat": (1.4, 1.6),
             "Bm": (1.5, 1.6),
@@ -13,11 +14,17 @@ class Gene(Series):
             "kt": (0.45, 0.55),
             "Rjan": (3.4, 3.6),
             "rel": (1.1, 1.2),
-            })
+        }
+    )
     # Mativa_P e PerdasT_P são as massas e perdas após a penalização
     __field_names = [
-        "PerdasT", "Mativa", "PerdasT_P", "Mativa_P",
-        "rank", "crowlingDistance", "fitness"
+        "PerdasT",
+        "Mativa",
+        "PerdasT_P",
+        "Mativa_P",
+        "rank",
+        "crowlingDistance",
+        "fitness",
     ]
 
     def __init__(self, data=[]):
@@ -41,9 +48,5 @@ class Gene(Series):
     def random_crete(self):
         # import ipdb; ipdb.set_trace()
 
-        genes = [
-                np.random.uniform(low, high)
-                for low, high
-                in self.variations.values()
-            ]
+        genes = [np.random.uniform(low, high) for low, high in self.variations.values()]
         return genes

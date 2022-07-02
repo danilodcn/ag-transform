@@ -2,9 +2,7 @@ from typing import Dict, List
 import pandas as pd
 
 
-def count_restrictions_violated(
-        gene: List[pd.Series],
-        variations: List[List]):
+def count_restrictions_violated(gene: List[pd.Series], variations: List[List]):
     count = 0
     # TODO implementar a funcionalidade
     # do usuário passar pesos para cada variação

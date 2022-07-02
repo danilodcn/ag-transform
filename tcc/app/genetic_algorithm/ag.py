@@ -8,33 +8,22 @@ COLORS = list(colors.TABLEAU_COLORS.values())
 
 
 @dataclass
-class AGProps():
+class AGProps:
     n_generations: int
     n_population: int
     n_mutation: int
     current_generation: int = 0
 
 
-class AG():
-    def __init__(
-        self,
-        n_generations,
-        n_population,
-        n_mutation,
-        constraints,
-        tables
-    ):
+class AG:
+    def __init__(self, n_generations, n_population, n_mutation, constraints, tables):
 
-        self.population = Population(
-            n_population,
-            constraints,
-            tables
-        )
+        self.population = Population(n_population, constraints, tables)
 
         self.props = AGProps(
             n_generations=n_generations,
             n_population=n_population,
-            n_mutation=n_mutation
+            n_mutation=n_mutation,
         )
 
         self.population.calcule_all()
@@ -81,7 +70,7 @@ class AG():
             "status": 1,
             "n_generations": self.props.n_generations,
             "current_generation": self.props.current_generation,
-            "population": self.population.to_json()
+            "population": self.population.to_json(),
         }
 
     def run(self):

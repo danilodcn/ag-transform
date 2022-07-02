@@ -1,4 +1,5 @@
 import json
+
 # import numpy as np
 
 from collections import OrderedDict
@@ -7,6 +8,7 @@ from app.genetic_algorithm.ag import AG
 
 # import pandas as pd
 from app.genetic_algorithm.gene import Gene
+
 # from app.genetic_algorithm.population import Population
 # from app.utils.plot import Plot, plt
 
@@ -29,15 +31,17 @@ class TestPopulation(TestCase):
             self.tables = json.load(file)
         # import ipdb; ipdb.set_trace()
 
-        variations = OrderedDict({
-            "Jbt": (1.2, 1.4),
-            "Jat": (1.4, 1.6),
-            "Bm": (1.5, 1.6),
-            "Ksw": (6, 7),
-            "kt": (0.45, 0.55),
-            "Rjan": (3.4, 3.6),
-            "rel": (1.1, 1.2),
-            })
+        variations = OrderedDict(
+            {
+                "Jbt": (1.2, 1.4),
+                "Jat": (1.4, 1.6),
+                "Bm": (1.5, 1.6),
+                "Ksw": (6, 7),
+                "kt": (0.45, 0.55),
+                "Rjan": (3.4, 3.6),
+                "rel": (1.1, 1.2),
+            }
+        )
 
         gene = Gene()
         gene.variations = variations
@@ -50,7 +54,7 @@ class TestPopulation(TestCase):
             self.n_population,
             int(self.n_population / 1.5),
             self.to_test_constraints,
-            self.tables
+            self.tables,
         )
 
     def test_basic(self):

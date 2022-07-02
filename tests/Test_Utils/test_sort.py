@@ -21,15 +21,17 @@ class TestSort(TestCase):
             self.tables = json.load(file)
         # import ipdb; ipdb.set_trace()
 
-        variations = OrderedDict({
-            "Jbt": (1.2, 1.4),
-            "Jat": (1.4, 1.6),
-            "Bm": (1.5, 1.6),
-            "Ksw": (6, 7),
-            "kt": (0.45, 0.55),
-            "Rjan": (3.4, 3.6),
-            "rel": (1.1, 1.2),
-            })
+        variations = OrderedDict(
+            {
+                "Jbt": (1.2, 1.4),
+                "Jat": (1.4, 1.6),
+                "Bm": (1.5, 1.6),
+                "Ksw": (6, 7),
+                "kt": (0.45, 0.55),
+                "Rjan": (3.4, 3.6),
+                "rel": (1.1, 1.2),
+            }
+        )
 
         gene = Gene()
         gene.variations = variations
@@ -37,10 +39,7 @@ class TestSort(TestCase):
         self.n_population = 30
 
         self.population = Population(
-            self.n_population,
-            self.to_test_constraints,
-            self.tables,
-            data=[]
+            self.n_population, self.to_test_constraints, self.tables, data=[]
         )
 
     def test_basic_sort(self):

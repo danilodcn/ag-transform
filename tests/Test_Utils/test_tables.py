@@ -4,7 +4,6 @@ from app.utils.tables import Tables
 
 
 class TestTablesBasic(TestCase):
-
     def setUp(self) -> None:
         json_test_trafo_file_name = "tests/json/data_trafo.json"
         with open(json_test_trafo_file_name) as file:

@@ -1,4 +1,5 @@
 import json
+
 # import numpy as np
 
 from collections import OrderedDict
@@ -28,15 +29,17 @@ class TestPopulation(TestCase):
             self.tables = json.load(file)
         # import ipdb; ipdb.set_trace()
 
-        variations = OrderedDict({
-            "Jbt": (1.2, 1.4),
-            "Jat": (1.4, 1.6),
-            "Bm": (1.5, 1.6),
-            "Ksw": (6, 7),
-            "kt": (0.45, 0.55),
-            "Rjan": (3.4, 3.6),
-            "rel": (1.1, 1.2),
-            })
+        variations = OrderedDict(
+            {
+                "Jbt": (1.2, 1.4),
+                "Jat": (1.4, 1.6),
+                "Bm": (1.5, 1.6),
+                "Ksw": (6, 7),
+                "kt": (0.45, 0.55),
+                "Rjan": (3.4, 3.6),
+                "rel": (1.1, 1.2),
+            }
+        )
 
         gene = Gene()
         gene.variations = variations
@@ -44,10 +47,7 @@ class TestPopulation(TestCase):
         self.n_population = 30
 
         self.population = Population(
-            self.n_population,
-            self.to_test_constraints,
-            self.tables,
-            data=[]
+            self.n_population, self.to_test_constraints, self.tables, data=[]
         )
         self.x = 0
 
@@ -110,10 +110,7 @@ class TestPopulation(TestCase):
         self.population.penalize()
 
         self.population.sort_pareto_ranks()
-        Plot(self.population).plot_with_rank(
-            "Depois da penalização",
-            penalize=True
-        )
+        Plot(self.population).plot_with_rank("Depois da penalização", penalize=True)
 
         plt.show()
         # import ipdb; ipdb.set_trace()
@@ -136,8 +133,7 @@ class TestPopulation(TestCase):
         self.population.sort_pareto_ranks()
         # Plot(self.population).plot_with_rank("Antes da penalização")
         Plot(self.population).plot_with_rank(
-            "Antes do Crossover com penalização",
-            penalize=True
+            "Antes do Crossover com penalização", penalize=True
         )
         # import ipdb; ipdb.set_trace()
         self.population.calcule_fitness()
@@ -149,8 +145,7 @@ class TestPopulation(TestCase):
         self.population.sort_pareto_ranks()
         # self.population.calcule_fitness()
         Plot(self.population).plot_with_rank(
-            "Após Crossover com penalização",
-            penalize=True
+            "Após Crossover com penalização", penalize=True
         )
         Plot(self.population).plot(self.population)
         # import ipdb; ipdb.set_trace()
@@ -161,8 +156,7 @@ class TestPopulation(TestCase):
         self.population.sort_pareto_ranks()
 
         Plot(self.population).plot_with_rank(
-            "Antes do Crossover com penalização",
-            penalize=True
+            "Antes do Crossover com penalização", penalize=True
         )
 
         self.population.calcule_fitness()
@@ -174,8 +168,7 @@ class TestPopulation(TestCase):
         self.population.sort_pareto_ranks()
         # self.population.calcule_fitness()
         Plot(self.population).plot_with_rank(
-            "Após Crossover com penalização",
-            penalize=True
+            "Após Crossover com penalização", penalize=True
         )
         self.population.calcule_fitness()
         self.population.mutation(20)
@@ -185,6 +178,5 @@ class TestPopulation(TestCase):
 
         self.population.sort_pareto_ranks()
         Plot(self.population).plot_with_rank(
-            "Após mutação com penalização",
-            penalize=True
+            "Após mutação com penalização", penalize=True
         )

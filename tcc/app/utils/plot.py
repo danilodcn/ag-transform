@@ -28,11 +28,7 @@ class Plot:
 
         ax.plot(self.PerdasT, self.Mativa, "ko")
 
-        iterator = zip(
-            range(len(self.Mativa)),
-            self.Mativa,
-            self.PerdasT
-        )
+        iterator = zip(range(len(self.Mativa)), self.Mativa, self.PerdasT)
         for i, massa, perdas in iterator:
             ax.annotate(i, xy=(perdas, massa))
 
@@ -52,9 +48,11 @@ class Plot:
             perdas = self.df.loc[self.df["rank"] == rank][PerdasT]
 
             ax.scatter(
-                perdas, massas, marker="o",
+                perdas,
+                massas,
+                marker="o",
                 color=COLORS[int(rank % len(COLORS))],
-                label=f"rank {rank}"
+                label=f"rank {rank}",
             )
 
         plt.legend()

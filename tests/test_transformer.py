@@ -1,4 +1,5 @@
 from unittest import TestCase
+
 # from timeit import timeit
 from app.transformer import Transformer
 import json
@@ -31,11 +32,12 @@ class TestTransformer(TestCase):
 
         PerdasT_, Mativa_ = self.to_test_result
 
-        self.assertAlmostEqual(PerdasT, PerdasT_, delta=PerdasT_*1e-6)
-        self.assertAlmostEqual(Mativa, Mativa_, delta=Mativa_*1e-6)
+        self.assertAlmostEqual(PerdasT, PerdasT_, delta=PerdasT_ * 1e-6)
+        self.assertAlmostEqual(Mativa, Mativa_, delta=Mativa_ * 1e-6)
 
         def function_to_repeat():
             transformer.run(self.to_test_variables)
+
         """print("\nAqui")
         n = 1000
         duration = timeit(function_to_repeat, globals=globals(), number=n)

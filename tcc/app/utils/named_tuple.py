@@ -3,7 +3,6 @@ from collections import namedtuple
 
 
 class NamedTuple:
-
     def convert_for_tuple(self, lst: list) -> NamedTuple:
         if isinstance(lst, tuple):
             # import ipdb; ipdb.set_trace()
@@ -28,9 +27,7 @@ class NamedTuple:
                 return tuple(values)
 
         if isinstance(lst, list):
-            return tuple(
-                [self.convert_for_tuple(x) for x in lst]
-            )
+            return tuple([self.convert_for_tuple(x) for x in lst])
         elif isinstance(lst, dict):
             return self.to_named_tuple(lst)
 

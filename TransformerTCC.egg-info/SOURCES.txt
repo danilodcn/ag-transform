@@ -1,6 +1,0 @@
-README.md
-setup.py
-TransformerTCC.egg-info/PKG-INFO
-TransformerTCC.egg-info/SOURCES.txt
-TransformerTCC.egg-info/dependency_links.txt
-TransformerTCC.egg-info/top_level.txt

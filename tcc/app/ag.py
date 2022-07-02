@@ -1,10 +1,13 @@
 import json
 from collections import OrderedDict
+
 # import os
 from app.genetic_algorithm.ag import AG
 from app.genetic_algorithm.gene import Gene
+
 # from sqlalchemy import create_engine
 from dotenv import load_dotenv
+
 load_dotenv()
 
 
@@ -22,15 +25,17 @@ with open(tables_file_name) as file:
     tables = json.load(file)
 # import ipdb; ipdb.set_trace()
 
-variations = OrderedDict({
-    "Jbt": (1.2, 1.4),
-    "Jat": (1.4, 1.6),
-    "Bm": (1.5, 1.6),
-    "Ksw": (6, 7),
-    "kt": (0.45, 0.55),
-    "Rjan": (3.4, 3.6),
-    "rel": (1.1, 1.2),
-    })
+variations = OrderedDict(
+    {
+        "Jbt": (1.2, 1.4),
+        "Jat": (1.4, 1.6),
+        "Bm": (1.5, 1.6),
+        "Ksw": (6, 7),
+        "kt": (0.45, 0.55),
+        "Rjan": (3.4, 3.6),
+        "rel": (1.1, 1.2),
+    }
+)
 
 gene = Gene()
 gene.variations = variations
@@ -43,7 +48,7 @@ ag = AG(
     n_population,
     int(n_population / 1.5),  # número de indivíduos para a mutação
     to_test_constraints,
-    tables
+    tables,
 )
 
 # POSTGRES_URI=os.getenv("POSTGRES_URI")

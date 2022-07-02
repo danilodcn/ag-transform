@@ -13,7 +13,8 @@ class TestGeneBasics(TestCase):
         gene.abs
 
     def test_change_the_variations(self):
-        variations = OrderedDict({
+        variations = OrderedDict(
+            {
                 "Jbt": (12, 14),
                 "Jat": (14, 16),
                 "Bm": (15, 16),
@@ -21,7 +22,8 @@ class TestGeneBasics(TestCase):
                 "kt": (4.5, 5.5),
                 "Rjan": (34, 36),
                 "rel": (11, 12),
-                })
+            }
+        )
         gene_01 = Gene()
         gene_01.variations = variations
         gene_02 = Gene()

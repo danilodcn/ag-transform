@@ -1,0 +1,13 @@
+version: '3.4'
+
+services:
+  app:
+    image: backend
+    command: 'tail -f /dev/null'
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    environment:
+      -  DEV_ENV:develop
+    volumes:
+      - ".:/app"

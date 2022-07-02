@@ -50,7 +50,7 @@ class Transformer:
 
         # tabelas = Tables(self.tables)
 
-        Et = kt * sqrt(S)       # é a tensão eficaz por espiras [V/e]
+        Et = kt * sqrt(S)  # é a tensão eficaz por espiras [V/e]
         N1 = (Vf1 * 1000) / Et
         N2 = (Vf2 * 1000) / Et
 
@@ -64,7 +64,7 @@ class Transformer:
         # LD é um vetor que contem todos os valores existentes na tabela 2.4
         LD = np.asarray(LD, np.float64)
 
-        So = Abc / Ku           # Seção circular circunscrita
+        So = Abc / Ku  # Seção circular circunscrita
         dc = 2 * sqrt(So / pi)  # é o diâmetro da coluna do núcleo
 
         L = LD * dc
@@ -73,7 +73,7 @@ class Transformer:
         # Calculo da profundidade do núcleo [n]
         e = [np.sin(teta[0]) * dc / 2]
         for i, _ in enumerate(teta[1:]):
-            x = np.sin(teta[i+1]) * dc / 2 - sum(e)
+            x = np.sin(teta[i + 1]) * dc / 2 - sum(e)
             e.append(x)
 
         Abc = np.sum(L * np.asarray(e, np.float64)) * 2
@@ -101,36 +101,36 @@ class Transformer:
         # TODO essa equação não está na tese. Olhar a página 50
         ww = sqrt(Aw / Rjan)
 
-        hw = Aw / ww            # é a altura da janela [m]
+        hw = Aw / ww  # é a altura da janela [m]
 
         # é a maior largura da coluna do núcleo do transformador [m]
         wc = L[0]
         # é a distância entre os centros de duas colunas [m]
         D = ww + wc
-        W = 2 * D + wc          # é a largura total do núcleo [m]
+        W = 2 * D + wc  # é a largura total do núcleo [m]
 
         # a = (d - wc) / 2
         # Estimativa da corrente de carga
         # Abj = rel * Abc     # é a área bruta da culatra [mm²]
-        Aj = rel * Ac       # é a área do jugo ou da culatra [mm²]
+        Aj = rel * Ac  # é a área do jugo ou da culatra [mm²]
         # hy = Abj / Prof     # é a altura da culatra [mm]
-        By = Bm / rel       # densidade de fluxo no jugo (yoke)
+        By = Bm / rel  # densidade de fluxo no jugo (yoke)
         # TODO entender o que é isso
 
         # H = hw + 2 * hy     # é a altura total do núcleo [m]
         Vferc = 3 * hw * Ac  # Volume de ferro no núcleo [mm³]
-        Bfe = Dfe * 1e-9     # Densidade do ferro em [Kg / mm³]
-        Mc = Vferc * Bfe     # Massa da culatra  [Kg]
+        Bfe = Dfe * 1e-9  # Densidade do ferro em [Kg / mm³]
+        Mc = Vferc * Bfe  # Massa da culatra  [Kg]
 
         # import ipdb; ipdb.set_trace()
         # TODO realizar os testes a partir daqui
 
         Pic = self.tables.perda_magnetica_nucleo(Bm)
 
-        Wic = Pic * Mc          # perda específica no núcleo [W]
-        Vferj = Aj * W * 2      # é o volume do ferro nas culatras
+        Wic = Pic * Mc  # perda específica no núcleo [W]
+        Vferj = Aj * W * 2  # é o volume do ferro nas culatras
         Mj = Vferj * Bfe
-        MT = Mj + Mc            # Massa total do Trafo [Kg]
+        MT = Mj + Mc  # Massa total do Trafo [Kg]
         # import ipdb; ipdb.set_trace()
 
         Pij = self.tables.perda_magnetica_nucleo(By)
@@ -157,19 +157,19 @@ class Transformer:
         # Io = sqrt(Ip ** 2 + Iq ** 2) # A corrente a vazio [A]
         # import ipdb; ipdb.set_trace()
 
-        I1 = S / 3 / Vf1   # FIXME S é a potencia total do Trafo
+        I1 = S / 3 / Vf1  # FIXME S é a potencia total do Trafo
         Fc1 = I1 / Jbt
         Swind1 = Fc1 * N1
         z = (hw * Kw) * 2
         hb = (hw - z) * 1.11
-        tbt1 = Swind1 / hb * 1.1     # 10% de folga
+        tbt1 = Swind1 / hb * 1.1  # 10% de folga
         tbt2 = tbt1 * 2
 
-        Dextbt = tbt2 + d           # diametro em mm
+        Dextbt = tbt2 + d  # diametro em mm
         # diâmetro médio na baixa tensão em milímetros
         dmbt = (Dextbt + d) / 2
-        Lmbt = pi * dmbt            # Comprimento médio em mm
-        Compbt1 = Lmbt * N1         # Comprimento do fio na baixa tensão
+        Lmbt = pi * dmbt  # Comprimento médio em mm
+        Compbt1 = Lmbt * N1  # Comprimento do fio na baixa tensão
         # dfc1 = sqrt(4 * Fc1 / pi)
         VALbt = Compbt1 * Fc1 * 3
 
@@ -180,9 +180,9 @@ class Transformer:
         # tap intermediário para dimensionamento dos condutores
         I2c = S / 3 / Vmedio2
 
-        Fc2AT = I2c / Jat           # área do condutor em mm2 no secundário
+        Fc2AT = I2c / Jat  # área do condutor em mm2 no secundário
         # dfc2AT  = sqrt(Fc2AT * 4 / pi)  # Diametro do condutor em mm
-        SwindAT = Fc2AT * N2            # Area referente a alta tensao
+        SwindAT = Fc2AT * N2  # Area referente a alta tensao
         # dAt = sqrt(SwindAT * 4 / pi)
 
         tAT1 = SwindAT / hb * 1.1
@@ -193,7 +193,7 @@ class Transformer:
         dintAT = Dextbt + 6 * (d - wc) / 2
         DextAT = dintAT + 4 * tAT1
 
-        LmATc = pi * (dintAT + DextAT) / 2      # Comprimento em milímetros
+        LmATc = pi * (dintAT + DextAT) / 2  # Comprimento em milímetros
         CompAT = LmATc * N2
 
         # dfc2 = sqrt(I2c / Jat * 4 / pi)
@@ -206,7 +206,7 @@ class Transformer:
         R2 = 0.02857 * CompAT / Fc2AT * 1e-3
 
         I2 = S / 3 / Vf2
-        Pj = (R1 * I1 ** 2 + R2 * I2 ** 2) * 3
+        Pj = (R1 * I1**2 + R2 * I2**2) * 3
         PerdasT = Po + Pj
         Mativa = MAT3 + Mbt3 + MT
         # import ipdb; ipdb.set_trace()

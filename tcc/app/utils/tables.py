@@ -55,26 +55,18 @@ class Tables:
         except Exception:
             txt = f'O tipo de transformador "{tipo}" não é suportado.'
 
-            msg = 'Os tipos suportados sao: [{}]'
-            msg.format(', '.join([f'"{i}"' for i in tabela.keys()]))
+            msg = "Os tipos suportados sao: [{}]"
+            msg.format(", ".join([f'"{i}"' for i in tabela.keys()]))
             txt += msg
             raise KeyError(txt)
 
     def perda_magnetica_nucleo(self, Bm):
         tabela = self.get_table("perda_magnetica")
 
-        return interp(
-            Bm,
-            tabela.get("inducao"),
-            tabela.get("perdas")
-        )
+        return interp(Bm, tabela.get("inducao"), tabela.get("perdas"))
 
     def curva_BH(self, B):
         tabela = self.get_table("curva_BH")
         # from ipdb import set_trace; set_trace()
 
-        return interp(
-            B,
-            tabela.get("B"),
-            tabela.get("H")
-        )
+        return interp(B, tabela.get("B"), tabela.get("H"))

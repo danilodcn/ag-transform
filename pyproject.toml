@@ -1,0 +1,18 @@
+[tool.poetry]
+name = "tcc"
+version = "0.1.0"
+description = ""
+authors = ["Danilo da Conceição Nascimento <daconnas.dcn@gmail.com>"]
+
+[tool.poetry.dependencies]
+python = "3.10.5"
+fastapi = "^0.78.0"
+
+[tool.poetry.dev-dependencies]
+tox = "^3.25.1"
+black = "^22.6.0"
+isort = "^5.10.1"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"

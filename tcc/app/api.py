@@ -10,13 +10,7 @@ from flask_sqlalchemy import SQLAlchemy
 import pandas as pd
 from app.genetic_algorithm.ag import AG
 from app.genetic_algorithm.gene import Gene
-from app.ag import (
-    variations,
-    n_generations,
-    n_population,
-    to_test_constraints,
-    tables
-)
+from app.ag import variations, n_generations, n_population, to_test_constraints, tables
 
 from dotenv import load_dotenv
 
@@ -32,7 +26,7 @@ app = Flask(__name__)
 app.secret_key = SECRET_KEY
 
 # app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////docker/test.db'
-app.config['SQLALCHEMY_DATABASE_URI'] = POSTGRES_URI
+app.config["SQLALCHEMY_DATABASE_URI"] = POSTGRES_URI
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = True
 db = SQLAlchemy(app)
 
@@ -44,14 +38,10 @@ class User(db.Model):
     email = db.Column(db.String(120), unique=True, nullable=False)
 
     def __repr__(self):
-        return '<User %r>' % self.name
+        return "<User %r>" % self.name
 
     def to_json(self):
-        return {
-            "id": self.id,
-            "name": self.name,
-            "email": self.email
-        }
+        return {"id": self.id, "name": self.name, "email": self.email}
 
     def is_authenticated(self):
         return True
@@ -81,23 +71,17 @@ def index():
     data = pd.read_sql('select * from "Population"', engine)
 
     # import ipdb; ipdb.set_trace()
-    return jsonify({
-        "status": 1,
-        "data": json.loads(data.to_json())
-    })
+    return jsonify({"status": 1, "data": json.loads(data.to_json())})
 
 
-@app.route('/login', methods=['POST'])
+@app.route("/login", methods=["POST"])
 def login():
     info = json.loads(request.data)
-    username = info.get('username', 'guest')
-    password = info.get('password', '')
+    username = info.get("username", "guest")
+    password = info.get("password", "")
 
     # import ipdb; ipdb.set_trace()
-    user = User.query.filter_by(
-        name=username,
-        password=password
-    ).first()
+    user = User.query.filter_by(name=username, password=password).first()
     # user = User.objects(name=username,
     #                     password=password).first()
 
@@ -105,15 +89,14 @@ def login():
         login_user(user)
         return jsonify(user.to_json())
     else:
-        return jsonify({"status": 401,
-                        "reason": "Username or Password Error"})
+        return jsonify({"status": 401, "reason": "Username or Password Error"})
 
 
 @app.post("/create-account")
 def create_account():
     info = json.loads(request.data)
-    username = info.get('username', 'guest')
-    password = info.get('password', '')
+    username = info.get("username", "guest")
+    password = info.get("password", "")
     email = info.get("email", "")
 
     # print(username, password, email)
@@ -124,11 +107,9 @@ def create_account():
 
     except Exception as error:
 
-        return jsonify({
-            "status": 405,
-            "reason": "Not created the account",
-            "error": str(error)
-        })
+        return jsonify(
+            {"status": 405, "reason": "Not created the account", "error": str(error)}
+        )
 
 
 class APIView(FlaskView):
@@ -138,7 +119,7 @@ class APIView(FlaskView):
         n_population,
         int(n_population / 1.5),  # número de indivíduos para a mutação
         to_test_constraints,
-        tables
+        tables,
     )
     ag = {}
     engine = create_engine(POSTGRES_URI)
@@ -148,10 +129,7 @@ class APIView(FlaskView):
     def post(self):
         # import ipdb; ipdb.set_trace()
         record = json.loads(request.data)
-        return jsonify({
-            "user": current_user.id,
-            "record": record
-        })
+        return jsonify({"user": current_user.id, "record": record})
 
     def get_data(self):
         return "get" + str(self.ag)

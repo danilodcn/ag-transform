@@ -10,10 +10,16 @@ from app.utils.classmethod import classproperty
 from app.utils.functions import count_restrictions_violated
 from app.utils.sort import is_dominated
 from dataclasses import dataclass
+
 # from app.utils.plot import Plot, plt
 # from numba import jit
 
-PopulationProps = namedtuple("PopulationProps", field_names=["n_population", ])
+PopulationProps = namedtuple(
+    "PopulationProps",
+    field_names=[
+        "n_population",
+    ],
+)
 
 
 @dataclass
@@ -21,8 +27,8 @@ class PopulationProps:
     n_population: int = 0
     # FIXME taxa de perturbação e probalidade de crossover
     # foram achados na página 147 do livro do Lobato
-    disturbance_rate: float = .8        # deve esta entre 0.2 e 2
-    crossover_probability: float = .3   # deve esta entre 0.1 e 1
+    disturbance_rate: float = 0.8  # deve esta entre 0.2 e 2
+    crossover_probability: float = 0.3  # deve esta entre 0.1 e 1
 
     tables = 0
     constraints = 0
@@ -37,10 +43,7 @@ class Population(pd.DataFrame):
     # props = PopulationProps(0)
     props = PopulationProps()
     __transformer = ...
-    __variations = OrderedDict({
-        "PerdasT": [0, 2000],
-        "Mativa": [0, 600]
-    })
+    __variations = OrderedDict({"PerdasT": [0, 2000], "Mativa": [0, 600]})
 
     crowlingDistancePartinner = float("inf")
     niche_ray = 0.01
@@ -83,9 +86,11 @@ class Population(pd.DataFrame):
         # import ipdb; ipdb.set_trace()
         PerdasT, Mativa = "PerdasT", "Mativa"
 
-        result = pd.DataFrame([
-            self.transfomer.run(values[1:8]) for values in self.itertuples()
-        ], index=self.index, columns=(PerdasT, Mativa))
+        result = pd.DataFrame(
+            [self.transfomer.run(values[1:8]) for values in self.itertuples()],
+            index=self.index,
+            columns=(PerdasT, Mativa),
+        )
         # import ipdb; ipdb.set_trace()
         # self[PerdasT] = result[PerdasT]
         # self[Mativa] = result[Mativa]
@@ -98,26 +103,26 @@ class Population(pd.DataFrame):
 
     def penalize(self):
         # print(self)
-        variations = (
-            list(Gene.variations.values()) + list(self.variations.values())
-        )
-        counts = self.apply(
-            count_restrictions_violated,
-            args=(variations, ),
-            axis=1
-        )
+        variations = list(Gene.variations.values()) + list(self.variations.values())
+        counts = self.apply(count_restrictions_violated, args=(variations,), axis=1)
         perdas, massas = self.variations.values()
         k = 1.4
-        vector_params = pd.DataFrame(
-            np.asarray([
-                np.ones((self.index.__len__())) * perdas[1] * counts,
-                np.ones((self.index.__len__())) * massas[1] * counts
-            ]).transpose() * k,
-
-            columns=[
-                "PerdasT_P", "Mativa_P",
-            ]
-        ) + self[["PerdasT_P", "Mativa_P"]]
+        vector_params = (
+            pd.DataFrame(
+                np.asarray(
+                    [
+                        np.ones((self.index.__len__())) * perdas[1] * counts,
+                        np.ones((self.index.__len__())) * massas[1] * counts,
+                    ]
+                ).transpose()
+                * k,
+                columns=[
+                    "PerdasT_P",
+                    "Mativa_P",
+                ],
+            )
+            + self[["PerdasT_P", "Mativa_P"]]
+        )
 
         # import ipdb; ipdb.set_trace()
         self.update(vector_params)
@@ -178,14 +183,14 @@ class Population(pd.DataFrame):
 
         ranks.sort()
         for rank in ranks:
-            solution_set = self.loc[
-                self["rank"] == rank
-                ].sort_values(by=[objetive])[objetive]
+            solution_set = self.loc[self["rank"] == rank].sort_values(by=[objetive])[
+                objetive
+            ]
 
             if solution_set.count() < 3:
                 self["crowlingDistance"].iloc[
                     solution_set.index
-                    ] = self.crowlingDistancePartinner
+                ] = self.crowlingDistancePartinner
                 continue
 
             else:
@@ -193,17 +198,19 @@ class Population(pd.DataFrame):
                 # import ipdb; ipdb.set_trace()
                 self["crowlingDistance"].iloc[
                     [ind[0], ind[-1]]
-                    ] = self.crowlingDistancePartinner
+                ] = self.crowlingDistancePartinner
 
             iterator = zip(
                 solution_set[:-2],
                 solution_set.index[1:-1],
                 solution_set[2:],
             )
-            for f_left, index, f_right, in iterator:
-                self["crowlingDistance"].iloc[
-                    index
-                    ] += (f_right - f_left) / delta
+            for (
+                f_left,
+                index,
+                f_right,
+            ) in iterator:
+                self["crowlingDistance"].iloc[index] += (f_right - f_left) / delta
 
         # import ipdb; ipdb.set_trace()
 
@@ -219,9 +226,12 @@ class Population(pd.DataFrame):
         df = pd.DataFrame(
             np.zeros((self.index.__len__(), 5)),
             columns=[
-                "meanFitness", "sumDistance",
-                "sharedFitness", "solutions_for_rank", "rank"
-            ]
+                "meanFitness",
+                "sumDistance",
+                "sharedFitness",
+                "solutions_for_rank",
+                "rank",
+            ],
         )
 
         df["rank"] = lst_rank
@@ -237,18 +247,14 @@ class Population(pd.DataFrame):
 
             # import ipdb; ipdb.set_trace()
 
-            df["solutions_for_rank"].iloc[
-                perdas_set.index
-            ] = perdas_set.count()
+            df["solutions_for_rank"].iloc[perdas_set.index] = perdas_set.count()
 
             # massas_set = set.sort_values(by=["Mativa"])["Mativa"]
             number = perdas_set.index.__len__()
             n_current = n_before - number
 
             df["meanFitness"].loc[perdas_set.index] = (
-                3 * sum_of_integers(n_current, n_before) / (
-                    n_before - n_current
-                    )
+                3 * sum_of_integers(n_current, n_before) / (n_before - n_current)
             )
             n_before = n_current
             # import ipdb; ipdb.set_trace()
@@ -261,9 +267,7 @@ class Population(pd.DataFrame):
                     if i == j:
                         continue
                     perda_j, massa_j = set["PerdasT_P"][j], set["Mativa_P"][j]
-                    distance_ij = self.__distance(
-                        perda_i, perda_j, massa_i, massa_j
-                    )
+                    distance_ij = self.__distance(perda_i, perda_j, massa_i, massa_j)
                     distance += self.__shared_function(distance_ij, 1)
 
                 df["sumDistance"].iloc[i] = distance
@@ -276,9 +280,11 @@ class Population(pd.DataFrame):
 
         sum_shared_fitness = np.sum(df["sharedFitness"])
 
-        result = df["meanFitness"] * df["solutions_for_rank"] * (
-                df["sharedFitness"] / sum_shared_fitness
-            )
+        result = (
+            df["meanFitness"]
+            * df["solutions_for_rank"]
+            * (df["sharedFitness"] / sum_shared_fitness)
+        )
         self["fitness"] = result / np.sum(result)
         # import ipdb; ipdb.set_trace()
 
@@ -299,20 +305,18 @@ class Population(pd.DataFrame):
         massas = ((m1 - m2) / delta_massas) ** 2
         perdas = ((p1 - p2) / delta_perdas) ** 2
 
-        return (massas + perdas) ** .5
+        return (massas + perdas) ** 0.5
 
     def sample(
-            self, n=None, frac=None, weights=None, axis=None, replace=False
-            ) -> pd.DataFrame:
+        self, n=None, frac=None, weights=None, axis=None, replace=False
+    ) -> pd.DataFrame:
         # import ipdb; ipdb.set_trace()
         if weights is None:
             weights = self["fitness"]
         elif weights == 1:
             weights = [1] * self.count()
 
-        return super().sample(
-            n, frac=frac, replace=replace, weights=weights, axis=axis
-        )
+        return super().sample(n, frac=frac, replace=replace, weights=weights, axis=axis)
 
     def add_gene(self, gene: Gene):
         # self.index += 1
@@ -321,19 +325,15 @@ class Population(pd.DataFrame):
         # import ipdb; ipdb.set_trace()
 
     def crossover(self):
-        father: pd.DataFrame = self.sample(frac=.9, weights=None)
+        father: pd.DataFrame = self.sample(frac=0.9, weights=None)
         father = father.sample(frac=1)
 
-        k = .8
-        father_1: pd.DataFrame = father.sample(
-            frac=k, weights=None
-            ).sample(frac=1)
+        k = 0.8
+        father_1: pd.DataFrame = father.sample(frac=k, weights=None).sample(frac=1)
 
-        n = 1 + (1 + 8 * 1 * self.index.__len__()) ** .5
-        n = int(n / 2 + .5)
-        father_2: pd.DataFrame = father.sample(
-            n=n, weights=None
-            ).sample(frac=1)
+        n = 1 + (1 + 8 * 1 * self.index.__len__()) ** 0.5
+        n = int(n / 2 + 0.5)
+        father_2: pd.DataFrame = father.sample(n=n, weights=None).sample(frac=1)
 
         iterator = zip(
             it.cycle(father_1.index),
@@ -368,23 +368,18 @@ class Population(pd.DataFrame):
         # import ipdb; ipdb.set_trace()
 
     def mutation(self, n):
-        n = 1 + (1 + 8 * n) ** .5
+        n = 1 + (1 + 8 * n) ** 0.5
         n = int(n / 2) + 1
         father: pd.DataFrame = self.sample(n=n, weights=None).sample(frac=1)
         index = self.index
         weights = self["fitness"]
-        iterator = zip(
-            range(n),
-            it.combinations(father.index, 2)
-        )
+        iterator = zip(range(n), it.combinations(father.index, 2))
         # import ipdb; ipdb.set_trace()
         for _, value in iterator:
             i, j = value
 
             self.__crossover(
-                self.iloc[i],
-                self.iloc[j],
-                self.loc[np.random.choice(index, p=weights)]
+                self.iloc[i], self.iloc[j], self.loc[np.random.choice(index, p=weights)]
             )
 
     def clean(self):
@@ -403,9 +398,7 @@ class Population(pd.DataFrame):
 
         if len(index) > self.props.n_population:
             index = np.random.choice(
-                self.index,
-                self.props.n_population,
-                p=list(rank_1["fitness"])
+                self.index, self.props.n_population, p=list(rank_1["fitness"])
             )
             index = list(index)
 
@@ -416,9 +409,7 @@ class Population(pd.DataFrame):
             p = fitness / np.sum(fitness)
 
             res_index = np.random.choice(
-                fitness.index,
-                self.props.n_population - index.__len__(),
-                p=p
+                fitness.index, self.props.n_population - index.__len__(), p=p
             )
             index = list(index)
             index.extend(list(res_index))
@@ -432,7 +423,7 @@ class Population(pd.DataFrame):
             self.props.n_population,
             self.props.constraints,
             self.props.tables,
-            data=data
+            data=data,
         )
         # import ipdb; ipdb.set_trace()
         return self
