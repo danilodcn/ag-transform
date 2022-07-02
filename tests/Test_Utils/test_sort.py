@@ -1,8 +1,9 @@
+import json
 from collections import OrderedDict
 from unittest import TestCase
+
 from tcc.genetic_algorithm.gene import Gene
 from tcc.genetic_algorithm.population import Population
-import json
 
 
 class TestSort(TestCase):

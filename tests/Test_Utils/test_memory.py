@@ -1,4 +1,5 @@
 from unittest import TestCase
+
 from tcc.utils.memory import Memory
 
 

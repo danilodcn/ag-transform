@@ -1,7 +1,4 @@
 import json
-
-# import numpy as np
-
 from collections import OrderedDict
 from unittest import TestCase
 
@@ -9,8 +6,9 @@ from unittest import TestCase
 from tcc.genetic_algorithm.gene import Gene
 from tcc.genetic_algorithm.population import Population
 from tcc.utils.plot import Plot, plt
-
 from tcc.utils.sort import is_dominated
+
+# import numpy as np
 
 
 class TestPopulation(TestCase):

@@ -1,8 +1,9 @@
-import click
-from unittest import TestLoader, runner
 # from tcc import app
 # from tcc.api import app as api
 import time
+from unittest import TestLoader, runner
+
+import click
 
 
 @click.group()

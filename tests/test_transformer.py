@@ -1,8 +1,8 @@
+import json
 from unittest import TestCase
 
 # from timeit import timeit
 from tcc.transformer import Transformer
-import json
 
 
 class TestTransformer(TestCase):

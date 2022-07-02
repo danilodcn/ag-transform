@@ -1,8 +1,6 @@
 import pandas as pd
-
-from matplotlib import pyplot as plt
 from matplotlib import colors
-
+from matplotlib import pyplot as plt
 
 COLORS = list(colors.TABLEAU_COLORS.values())
 

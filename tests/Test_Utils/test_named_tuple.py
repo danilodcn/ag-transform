@@ -1,6 +1,7 @@
 import json
 import os
 from unittest import TestCase
+
 from tcc.utils.named_tuple import NamedTuple
 
 

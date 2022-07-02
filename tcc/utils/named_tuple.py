@@ -1,5 +1,5 @@
-from typing import Dict, NamedTuple
 from collections import namedtuple
+from typing import Dict, NamedTuple
 
 
 class NamedTuple:

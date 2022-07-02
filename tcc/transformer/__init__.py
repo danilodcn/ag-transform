@@ -1,5 +1,7 @@
+from math import pi, sqrt
+
 import numpy as np
-from math import sqrt, pi
+
 from tcc.utils.tables import Tables
 
 

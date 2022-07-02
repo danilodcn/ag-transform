@@ -1,7 +1,9 @@
+from collections import OrderedDict
+
 import numpy as np
 from pandas import Series
+
 from tcc.utils.classmethod import classproperty
-from collections import OrderedDict
 
 
 class Gene(Series):

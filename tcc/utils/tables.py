@@ -1,5 +1,6 @@
-from tcc.utils.memory import Memory
 from numpy import interp
+
+from tcc.utils.memory import Memory
 
 
 class Tables:

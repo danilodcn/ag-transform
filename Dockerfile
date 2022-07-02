@@ -22,16 +22,13 @@ RUN pip install -U pip && pip install poetry
 
 WORKDIR /app
 
-# COPY pyproject.toml poetry.lock /app/
+COPY pyproject.toml poetry.lock /app/
 
-# RUN poetry init -y
-# RUN poetry config virtualenvs.create false \
-#     # && poetry install --no-dev --no-interaction --no-ansi
-#     && poetry install $(/usr/bin/test "$DEV_ENV" == "production" && echo "--no-dev")
+RUN poetry config virtualenvs.create false \
+    # && poetry install --no-dev --no-interaction --no-ansi
+    && poetry install $(/usr/bin/test "$DEV_ENV" == "production" && echo "--no-dev")
 
 COPY . .
-
-# RUN cd src && python manage.py collectstatic --no-input --clear
 
 CMD ["tail", "-f", "/dev/null"]
 # CMD [ "sh", "./src/internal_scripts/web.sh" ]

@@ -1,13 +1,14 @@
 import json
-
-# import numpy as np
-
 from collections import OrderedDict
 from unittest import TestCase
+
 from tcc.genetic_algorithm.ag import AG
 
 # import pandas as pd
 from tcc.genetic_algorithm.gene import Gene
+
+# import numpy as np
+
 
 # from tcc.genetic_algorithm.population import Population
 # from tcc.utils.plot import Plot, plt

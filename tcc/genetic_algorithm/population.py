@@ -1,15 +1,15 @@
-import pandas as pd
-import numpy as np
 import itertools as it
+from collections import OrderedDict, namedtuple
+from dataclasses import dataclass
 
-from collections import OrderedDict
+import numpy as np
+import pandas as pd
+
 from tcc.genetic_algorithm.gene import Gene
-from collections import namedtuple
 from tcc.transformer import Transformer
 from tcc.utils.classmethod import classproperty
 from tcc.utils.functions import count_restrictions_violated
 from tcc.utils.sort import is_dominated
-from dataclasses import dataclass
 
 # from tcc.utils.plot import Plot, plt
 # from numba import jit

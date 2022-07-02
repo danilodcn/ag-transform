@@ -1,3 +1,11 @@
 {
-  "cSpell.words": ["dimensoes", "espaco", "iloc", "ipdb", "tensao", "trafo"]
+  "cSpell.words": [
+    "dimensoes",
+    "espaco",
+    "iloc",
+    "ipdb",
+    "pydantic",
+    "tensao",
+    "trafo"
+  ]
 }
