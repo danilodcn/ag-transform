@@ -1,5 +1,5 @@
 from unittest import TestCase
-from app.utils.classmethod import classproperty
+from tcc.utils.classmethod import classproperty
 
 
 class MethodForTesting:

@@ -4,15 +4,15 @@ import json
 
 from collections import OrderedDict
 from unittest import TestCase
-from app.genetic_algorithm.ag import AG
+from tcc.genetic_algorithm.ag import AG
 
 # import pandas as pd
-from app.genetic_algorithm.gene import Gene
+from tcc.genetic_algorithm.gene import Gene
 
-# from app.genetic_algorithm.population import Population
-# from app.utils.plot import Plot, plt
+# from tcc.genetic_algorithm.population import Population
+# from tcc.utils.plot import Plot, plt
 
-# from app.utils.sort import is_dominated
+# from tcc.utils.sort import is_dominated
 
 
 class TestPopulation(TestCase):

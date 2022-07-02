@@ -1,7 +1,7 @@
 # import json
 
 from dataclasses import dataclass
-from app.genetic_algorithm.population import Population
+from tcc.genetic_algorithm.population import Population
 from matplotlib import colors
 
 COLORS = list(colors.TABLEAU_COLORS.values())

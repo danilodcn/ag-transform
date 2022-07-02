@@ -2,8 +2,8 @@ import json
 from collections import OrderedDict
 
 # import os
-from app.genetic_algorithm.ag import AG
-from app.genetic_algorithm.gene import Gene
+from tcc.genetic_algorithm.ag import AG
+from tcc.genetic_algorithm.gene import Gene
 
 # from sqlalchemy import create_engine
 from dotenv import load_dotenv

@@ -1,6 +1,6 @@
 import json
 from unittest import TestCase
-from app.utils.tables import Tables
+from tcc.utils.tables import Tables
 
 
 class TestTablesBasic(TestCase):

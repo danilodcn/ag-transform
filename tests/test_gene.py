@@ -1,6 +1,6 @@
 from collections import OrderedDict
 from unittest import TestCase
-from app.genetic_algorithm.gene import Gene
+from tcc.genetic_algorithm.gene import Gene
 
 
 class TestGeneBasics(TestCase):

@@ -1,7 +1,7 @@
 from unittest import TestCase
 
 # from timeit import timeit
-from app.transformer import Transformer
+from tcc.transformer import Transformer
 import json
 
 

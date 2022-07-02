@@ -3,15 +3,15 @@ import numpy as np
 import itertools as it
 
 from collections import OrderedDict
-from app.genetic_algorithm.gene import Gene
+from tcc.genetic_algorithm.gene import Gene
 from collections import namedtuple
-from app.transformer import Transformer
-from app.utils.classmethod import classproperty
-from app.utils.functions import count_restrictions_violated
-from app.utils.sort import is_dominated
+from tcc.transformer import Transformer
+from tcc.utils.classmethod import classproperty
+from tcc.utils.functions import count_restrictions_violated
+from tcc.utils.sort import is_dominated
 from dataclasses import dataclass
 
-# from app.utils.plot import Plot, plt
+# from tcc.utils.plot import Plot, plt
 # from numba import jit
 
 PopulationProps = namedtuple(

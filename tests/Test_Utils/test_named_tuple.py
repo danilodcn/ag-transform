@@ -1,7 +1,7 @@
 import json
 import os
 from unittest import TestCase
-from app.utils.named_tuple import NamedTuple
+from tcc.utils.named_tuple import NamedTuple
 
 
 class TestNamedTuple(TestCase):

@@ -1,6 +1,6 @@
 import numpy as np
 from pandas import Series
-from app.utils.classmethod import classproperty
+from tcc.utils.classmethod import classproperty
 from collections import OrderedDict
 
 

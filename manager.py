@@ -1,7 +1,7 @@
 import click
 from unittest import TestLoader, runner
-from app import app
-from app.api import app as api
+# from tcc import app
+# from tcc.api import app as api
 import time
 
 

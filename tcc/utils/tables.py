@@ -1,4 +1,4 @@
-from app.utils.memory import Memory
+from tcc.utils.memory import Memory
 from numpy import interp
 
 

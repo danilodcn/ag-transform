@@ -1,6 +1,6 @@
 import numpy as np
 from math import sqrt, pi
-from app.utils.tables import Tables
+from tcc.utils.tables import Tables
 
 
 class Transformer:
