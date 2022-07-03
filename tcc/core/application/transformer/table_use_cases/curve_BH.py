@@ -1,4 +1,5 @@
 import numpy as np
+from tcc.core.domain.transformer.entities import TableNameEnum
 
 from tcc.core.domain.transformer.table_repository import TableRepository
 
@@ -8,7 +9,7 @@ class GetCurveBH:
         self.table_repository = table_repository
 
     def execute(self, Bm: float) -> float:
-        TABLE_NAME = "curve_BH"
+        TABLE_NAME = TableNameEnum.curve_BH
 
         table = self.table_repository.get(TABLE_NAME)
         B = np.asarray(table.data["B"])

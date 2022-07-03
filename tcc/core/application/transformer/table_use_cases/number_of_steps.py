@@ -1,3 +1,4 @@
+from tcc.core.domain.transformer.entities import TableNameEnum
 from tcc.core.domain.transformer.table_repository import TableRepository
 
 
@@ -6,7 +7,7 @@ class GetNumberOfSteps:
         self.table_repository = table_repository
 
     def execute(self, area: float):
-        TABLE_NAME = "number_of_steps"
+        TABLE_NAME = TableNameEnum.number_of_steps
         if area >= 200 or area <= 0:
             raise ValueError("A a area nao pode ser maior 0.2 m² nem menor 0")
 

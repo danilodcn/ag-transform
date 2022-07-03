@@ -1,3 +1,4 @@
+from tcc.core.domain.transformer.entities import TableNameEnum
 from tcc.core.domain.transformer.table_repository import TableRepository
 
 
@@ -6,7 +7,7 @@ class GetInsulationTypeConstraint:
         self.table_repository = table_repository
 
     def execute(self, type: str, number_of_steps: int):
-        TABLE_NAME = "insulation_type_constant"
+        TABLE_NAME = TableNameEnum.insulation_type_constant
         table = self.table_repository.get(TABLE_NAME)
 
         number_of_steps -= 1

@@ -1,4 +1,5 @@
 import numpy as np
+from tcc.core.domain.transformer.entities import TableNameEnum
 
 from tcc.core.domain.transformer.table_repository import TableRepository
 
@@ -8,7 +9,8 @@ class GetCoreMagneticLoss:
         self.table_repository = table_repository
 
     def execute(self, B: float) -> float:
-        TABLE_NAME = "core_magnetic_loss"
+        TABLE_NAME = TableNameEnum.core_magnetic_loss
+        
         table = self.table_repository.get(TABLE_NAME)
         magnetic_induction = np.asarray(table.data["induction"])
         magnetic_loss = np.asarray(table.data["loss"])

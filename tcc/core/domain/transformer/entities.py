@@ -9,6 +9,14 @@ class ConnectionEnum(str, Enum):
     triangle = "triangle"
 
 
+class TableNameEnum(str, Enum):
+    core_dimensions = "core_dimensions"
+    core_magnetic_loss = "core_magnetic_loss"
+    curve_BH = "curve_BH"
+    insulation_type_constant = "insulation_type_constant"
+    number_of_steps = "number_of_steps"
+
+
 class Connection(NamedTuple):
     primary: ConnectionEnum
     secondary: ConnectionEnum
@@ -37,6 +45,9 @@ class Variable(BaseModel):
     rel: float
 
 
+TableDataType = Dict[str, List[float] | List[List[float]]]
+
+
 class Table(BaseModel):
-    name: str
-    data: Dict[str, List[float] | List[List[float]]]
+    name: TableNameEnum
+    data: TableDataType

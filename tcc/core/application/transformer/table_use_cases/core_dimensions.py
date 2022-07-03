@@ -1,3 +1,4 @@
+from tcc.core.domain.transformer.entities import TableNameEnum
 from tcc.core.domain.transformer.table_repository import TableRepository
 
 
@@ -6,7 +7,7 @@ class GetCoreDimensions:
         self.table_repository = table_repository
 
     def execute(self, number_of_steps: int):
-        TABLE_NAME = "core_dimensions"
+        TABLE_NAME = TableNameEnum.core_dimensions
 
         table = self.table_repository.get(TABLE_NAME)
         Ku = table.data["Ku"][number_of_steps]
