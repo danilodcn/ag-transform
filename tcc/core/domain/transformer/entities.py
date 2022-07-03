@@ -1,7 +1,7 @@
 from enum import Enum
-from typing import Dict, List, NamedTuple
+from typing import Dict, List, NamedTuple, Tuple
 
-from pydantic import BaseModel
+from tcc.core.domain.base_model import BaseModel
 
 
 class ConnectionEnum(str, Enum):
@@ -43,6 +43,16 @@ class Variable(BaseModel):
     kt: float
     Rjan: float
     rel: float
+
+
+class Variation(BaseModel):
+    Jbt: Tuple[float, float]
+    Jat: Tuple[float, float]
+    Bm: Tuple[float, float]
+    Ksw: Tuple[float, float]
+    kt: Tuple[float, float]
+    Rjan: Tuple[float, float]
+    rel: Tuple[float, float]
 
 
 TableDataType = Dict[str, List[float] | List[List[float]]]

@@ -2,11 +2,12 @@ from math import sqrt
 
 from pydantic import BaseModel
 
-from .entities import ConnectionEnum, Constraint, Variable
+from .entities import ConnectionEnum, Constraint, Variable, Variation
 
 
 class Transformer(BaseModel):
     variables: Variable
+    variations: Variation
     constraints: Constraint
 
     def get_voltages(self):
