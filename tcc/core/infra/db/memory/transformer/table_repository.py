@@ -1,12 +1,12 @@
 import json
-from typing import Dict
+from typing import Any
 
-from tcc.core.domain.transformer.entities import Table, TableDataType, TableNameEnum
+from tcc.core.domain.transformer.entities import Table, TableNameEnum
 from tcc.core.domain.transformer.table_repository import TableRepository
 
 
 class TableRepositoryInMemory(TableRepository):
-    _tables: Dict[str, TableDataType]
+    _tables: Any
 
     @property
     def tables(self):
@@ -28,4 +28,4 @@ class TableRepositoryInMemory(TableRepository):
         if table is None:
             raise KeyError(f"A tabela '{name}' não existe")
         else:
-            return Table(name=name, data=table)
+            return Table(name=name, data=table["data"])

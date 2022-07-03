@@ -1,5 +1,8 @@
 .PHONE: tests, format
 
+clear:
+	find . | grep -E "(/__pycache__$|\.pyc$|\.pyo$)" | xargs rm -rf
+
 tests:
 	@echo "Testing ..."
 	poetry run python manager.py tests

@@ -35,7 +35,7 @@ def ag():
 @c.command()
 def tests():
     loader = TestLoader()
-    test = loader.discover("tests/")
+    test = loader.discover("tests/core")
     testrunner = runner.TextTestRunner(verbosity=3)
     testrunner.run(test)
 
