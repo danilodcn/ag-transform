@@ -27,6 +27,6 @@ class TableFacade(object):
         use_case = GetCoreMagneticLoss(self.table_repository)
         return use_case.execute(B=B)
 
-    def get_curve_BH(self, Bm: float):
+    def get_curve_BH(self, B: float):
         use_case = GetCurveBH(self.table_repository)
-        return use_case.execute(Bm)
+        return use_case.execute(B=B)

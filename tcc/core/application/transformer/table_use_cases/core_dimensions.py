@@ -8,11 +8,11 @@ class GetCoreDimensions:
 
     def execute(self, number_of_steps: int):
         TABLE_NAME = TableNameEnum.core_dimensions
+        number_of_steps -= 1
 
         table = self.table_repository.get(TABLE_NAME)
         Ku = table.data["Ku"][number_of_steps]
         L = table.data["core_dimensions"][number_of_steps]
-
         assert isinstance(Ku, float)
-        assert isinstance(L, float)
+        assert isinstance(L, list)
         return Ku, L
