@@ -50,5 +50,8 @@ class Gene(Series):
     def random_crete(self):
         # import ipdb; ipdb.set_trace()
 
-        genes = [np.random.uniform(low, high) for low, high in self.variations.values()]
+        genes = [
+            np.random.uniform(low, high)
+            for low, high in self.variations.values()
+        ]
         return genes

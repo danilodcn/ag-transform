@@ -18,7 +18,9 @@ class AGProps:
 
 
 class AG:
-    def __init__(self, n_generations, n_population, n_mutation, constraints, tables):
+    def __init__(
+        self, n_generations, n_population, n_mutation, constraints, tables
+    ):
 
         self.population = Population(n_population, constraints, tables)
 

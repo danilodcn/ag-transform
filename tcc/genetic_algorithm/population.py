@@ -103,8 +103,12 @@ class Population(pd.DataFrame):
 
     def penalize(self):
         # print(self)
-        variations = list(Gene.variations.values()) + list(self.variations.values())
-        counts = self.apply(count_restrictions_violated, args=(variations,), axis=1)
+        variations = list(Gene.variations.values()) + list(
+            self.variations.values()
+        )
+        counts = self.apply(
+            count_restrictions_violated, args=(variations,), axis=1
+        )
         perdas, massas = self.variations.values()
         k = 1.4
         vector_params = (
@@ -183,9 +187,9 @@ class Population(pd.DataFrame):
 
         ranks.sort()
         for rank in ranks:
-            solution_set = self.loc[self["rank"] == rank].sort_values(by=[objetive])[
-                objetive
-            ]
+            solution_set = self.loc[self["rank"] == rank].sort_values(
+                by=[objetive]
+            )[objetive]
 
             if solution_set.count() < 3:
                 self["crowlingDistance"].iloc[
@@ -210,7 +214,9 @@ class Population(pd.DataFrame):
                 index,
                 f_right,
             ) in iterator:
-                self["crowlingDistance"].iloc[index] += (f_right - f_left) / delta
+                self["crowlingDistance"].iloc[index] += (
+                    f_right - f_left
+                ) / delta
 
         # import ipdb; ipdb.set_trace()
 
@@ -247,14 +253,18 @@ class Population(pd.DataFrame):
 
             # import ipdb; ipdb.set_trace()
 
-            df["solutions_for_rank"].iloc[perdas_set.index] = perdas_set.count()
+            df["solutions_for_rank"].iloc[
+                perdas_set.index
+            ] = perdas_set.count()
 
             # massas_set = set.sort_values(by=["Mativa"])["Mativa"]
             number = perdas_set.index.__len__()
             n_current = n_before - number
 
             df["meanFitness"].loc[perdas_set.index] = (
-                3 * sum_of_integers(n_current, n_before) / (n_before - n_current)
+                3
+                * sum_of_integers(n_current, n_before)
+                / (n_before - n_current)
             )
             n_before = n_current
             # import ipdb; ipdb.set_trace()
@@ -267,7 +277,9 @@ class Population(pd.DataFrame):
                     if i == j:
                         continue
                     perda_j, massa_j = set["PerdasT_P"][j], set["Mativa_P"][j]
-                    distance_ij = self.__distance(perda_i, perda_j, massa_i, massa_j)
+                    distance_ij = self.__distance(
+                        perda_i, perda_j, massa_i, massa_j
+                    )
                     distance += self.__shared_function(distance_ij, 1)
 
                 df["sumDistance"].iloc[i] = distance
@@ -316,7 +328,9 @@ class Population(pd.DataFrame):
         elif weights == 1:
             weights = [1] * self.count()
 
-        return super().sample(n, frac=frac, replace=replace, weights=weights, axis=axis)
+        return super().sample(
+            n, frac=frac, replace=replace, weights=weights, axis=axis
+        )
 
     def add_gene(self, gene: Gene):
         # self.index += 1
@@ -329,11 +343,15 @@ class Population(pd.DataFrame):
         father = father.sample(frac=1)
 
         k = 0.8
-        father_1: pd.DataFrame = father.sample(frac=k, weights=None).sample(frac=1)
+        father_1: pd.DataFrame = father.sample(frac=k, weights=None).sample(
+            frac=1
+        )
 
         n = 1 + (1 + 8 * 1 * self.index.__len__()) ** 0.5
         n = int(n / 2 + 0.5)
-        father_2: pd.DataFrame = father.sample(n=n, weights=None).sample(frac=1)
+        father_2: pd.DataFrame = father.sample(n=n, weights=None).sample(
+            frac=1
+        )
 
         iterator = zip(
             it.cycle(father_1.index),
@@ -379,7 +397,9 @@ class Population(pd.DataFrame):
             i, j = value
 
             self.__crossover(
-                self.iloc[i], self.iloc[j], self.loc[np.random.choice(index, p=weights)]
+                self.iloc[i],
+                self.iloc[j],
+                self.loc[np.random.choice(index, p=weights)],
             )
 
     def clean(self):

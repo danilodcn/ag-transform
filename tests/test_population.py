@@ -108,7 +108,9 @@ class TestPopulation(TestCase):
         self.population.penalize()
 
         self.population.sort_pareto_ranks()
-        Plot(self.population).plot_with_rank("Depois da penalização", penalize=True)
+        Plot(self.population).plot_with_rank(
+            "Depois da penalização", penalize=True
+        )
 
         plt.show()
         # import ipdb; ipdb.set_trace()
