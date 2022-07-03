@@ -40,7 +40,13 @@ class TestTableFacade(unittest.TestCase):
         self.assertEqual(expected, calculated, error_message)
 
     def test_get_curve_BH_from_facade(self):
-        expected = (0.636, [0.707])
-        calculated = self.facade.get_curve_BH(B=43)
+        expected = 240.3265 + 1e-5  # valor obtido através de outra simulação
+        calculated = self.facade.get_curve_BH(B=1.75)
         error_message = "Erro inesperado!"
-        # self.assertEqual(expected, calculated, error_message)
+        self.assertAlmostEqual(expected, calculated, 4, error_message)
+
+    def test_get_core_magnetic_loss_from_facade(self):
+        expected = 1.665 + 1e-5  # valor obtido através de outra simulação
+        calculated = self.facade.get_core_magnetic_loss(B=1.75)
+        error_message = "Erro inesperado!"
+        self.assertAlmostEqual(expected, calculated, 4, error_message)
