@@ -1,7 +1,7 @@
 from enum import Enum
 from typing import Dict, List, NamedTuple, Tuple
 
-from tcc.core.domain.base_model import BaseModel
+from tcc.core.domain import BaseModel
 
 
 class ConnectionEnum(str, Enum):
