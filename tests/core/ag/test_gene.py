@@ -3,10 +3,13 @@ import unittest
 
 import pandas as pd
 
+from tcc.core.application.genetic_algorithm.gene.gene_builder import (
+    GeneBuilder,
+)
 from tcc.core.application.transformer.table_use_cases.table_facade import (
     TableFacade,
 )
-from tcc.core.domain.ag.gene import Gene
+from tcc.core.domain.genetic_algorithm.gene import Gene
 from tcc.core.domain.transformer.entities import (
     Table,
     TableNameEnum,
@@ -25,7 +28,7 @@ class TestCreateGene(unittest.TestCase):
         self.repository = VariationRepositoryInMemory()
 
     def test_create_gene(self):
-        gene = Gene(self.repository)
+        gene = GeneBuilder.build(variation_repository=self.repository)
         self.assertIsInstance(gene, Gene)
 
     def teste_data_in_gene_is_Series(self):
@@ -33,5 +36,8 @@ class TestCreateGene(unittest.TestCase):
             Jbt=1.2, Jat=1.4, Bm=2.3, Ksw=2.5, kt=34, Rjan=2.8, rel=0.7
         )
 
-        gene = Gene(self.repository, variables=variables)
+        gene = GeneBuilder.build(
+            variation_repository=self.repository, variables=variables
+        )
+
         self.assertIsInstance(gene.data, pd.Series)
