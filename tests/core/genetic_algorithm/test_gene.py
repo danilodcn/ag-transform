@@ -6,29 +6,20 @@ import pandas as pd
 from tcc.core.application.genetic_algorithm.gene.gene_builder import (
     GeneBuilder,
 )
-from tcc.core.application.transformer.table_use_cases.table_facade import (
-    TableFacade,
-)
 from tcc.core.domain.genetic_algorithm.gene import Gene
-from tcc.core.domain.transformer.entities import (
-    Table,
-    TableNameEnum,
-    Variable,
-    Variation,
-)
-from tcc.core.infra.db.memory.transformer.variation_repository import (
+from tcc.core.domain.transformer.entities import Variable
+from tcc.core.infra.db.memory.transformer.variation_repository_in_memory import (
     VariationRepositoryInMemory,
 )
-
-FILE_NAME = os.getcwd() + "/tests/core/json/tables.json"
 
 
 class TestCreateGene(unittest.TestCase):
     def setUp(self) -> None:
         self.repository = VariationRepositoryInMemory()
+        self.variations = self.repository.get()
 
     def test_create_gene(self):
-        gene = GeneBuilder.build(variation_repository=self.repository)
+        gene = GeneBuilder.build(variations=self.variations)
         self.assertIsInstance(gene, Gene)
 
     def teste_data_in_gene_is_Series(self):
@@ -37,7 +28,7 @@ class TestCreateGene(unittest.TestCase):
         )
 
         gene = GeneBuilder.build(
-            variation_repository=self.repository, variables=variables
+            variations=self.variations, variables=variables
         )
 
         self.assertIsInstance(gene.data, pd.Series)
