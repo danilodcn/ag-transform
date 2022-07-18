@@ -1,7 +1,7 @@
-from pydantic import BaseModel
+from pydantic import BaseModel as PydanticBaseModel
 
 
-class BaseModel(BaseModel):
+class BaseModel(PydanticBaseModel):
     @classmethod
     def get_field_names(cls, alias=False):
-        return list(cls.schema(alias)["properties"].keys())
+        return list(map(str, cls.schema(alias)["properties"].keys()))

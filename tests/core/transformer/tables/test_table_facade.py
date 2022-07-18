@@ -5,7 +5,7 @@ from tcc.core.application.transformer.table_use_cases.table_facade import (
     TableFacade,
 )
 from tcc.core.domain.transformer.entities import Table, TableNameEnum
-from tcc.core.infra.db.memory.transformer.table_repository import (
+from tcc.core.infra.db.memory.transformer.table_repository_in_memory import (
     TableRepositoryInMemory,
 )
 

@@ -2,7 +2,7 @@ import os
 import unittest
 
 from tcc.core.domain.transformer.entities import Table, TableNameEnum
-from tcc.core.infra.db.memory.transformer.table_repository import (
+from tcc.core.infra.db.memory.transformer.table_repository_in_memory import (
     TableRepositoryInMemory,
 )
 

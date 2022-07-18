@@ -2,7 +2,12 @@ from math import sqrt
 
 from pydantic import BaseModel
 
-from .entities import ConnectionEnum, Constraint, Variable, Variation
+from tcc.core.domain.transformer.entities import (
+    ConnectionEnum,
+    Constraint,
+    Variable,
+    Variation,
+)
 
 
 class Transformer(BaseModel):
