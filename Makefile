@@ -18,3 +18,4 @@ format:
 
 lint:
 	flake8 tcc/core
+	mypy .
