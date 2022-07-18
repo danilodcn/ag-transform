@@ -1,13 +1,10 @@
-from typing import Any, List, Optional
+from typing import Any, Optional
 
 import numpy as np
 import pandas as pd
 
 from tcc.core.domain.genetic_algorithm.gene import Gene
-from tcc.core.domain.transformer.entities import Variable
-from tcc.core.domain.transformer.variation_repository import (
-    VariationRepository,
-)
+from tcc.core.domain.transformer.entities import Variable, Variation
 from tcc.core.domain.types import DictStrAny
 
 
@@ -23,19 +20,16 @@ class GeneBuilder:
         "fitness",
     ]
 
-    repository: VariationRepository
-
     @classmethod
     def build(
         cls,
-        variation_repository: VariationRepository,
+        variations: Variation,
         variables: Optional[Variable] = None,
     ) -> Gene:
-        cls.repository = variation_repository
         if variables is not None:
             data = list(variables.dict().values())
         else:
-            data = cls.random_crete()
+            data = cls.random_crete(variations=variations)
 
         data += [0] * len(cls.result_field_names)
         serie = pd.Series(data=data, index=cls.get_index_names())
@@ -46,16 +40,14 @@ class GeneBuilder:
         raise ValueError
 
     @classmethod
-    def get_index_names(cls) -> List[str]:
+    def get_index_names(cls):
         return cls.variables_field_names + cls.result_field_names
 
     @classmethod
-    def random_crete(cls, id: Optional[int] = None):
-        variation = cls.repository.get(id=id)
-
+    def random_crete(cls, variations: Variation):
         genes = [
             np.random.uniform(min, max)
-            for min, max in variation.dict().values()
+            for min, max in variations.dict().values()
         ]
 
         return genes
