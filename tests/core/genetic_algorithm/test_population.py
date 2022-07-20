@@ -37,19 +37,11 @@ class TestCreatePopulation(unittest.TestCase):
             )
 
         self.variations = self.variation_repository.get()
-        self.transformer = self.create_transformer()
-
-    def create_transformer(self) -> Transformer:
-        transformer = Transformer(
+        self.transformer = Transformer(
             variables=self.variables,
             constraints=self.constraints,
             variations=self.variations,
         )
-
-        return transformer
-
-    def test_create_transformer(self):
-        self.assertIsInstance(self.transformer, Transformer)
 
     def test_create_population(self):
         props = PopulationProps(
