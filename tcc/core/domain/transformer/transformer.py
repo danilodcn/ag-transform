@@ -1,6 +1,8 @@
 from math import sqrt
+from typing import Type, TypeVar
+from uuid import uuid4
 
-from pydantic import BaseModel
+from pydantic import UUID4, BaseModel, Field
 
 from tcc.core.domain.transformer.entities import (
     ConnectionEnum,
@@ -9,11 +11,17 @@ from tcc.core.domain.transformer.entities import (
     Variation,
 )
 
+Model = TypeVar("Model", bound="Transformer")
+
 
 class Transformer(BaseModel):
+    uuid: UUID4 = Field(default_factory=uuid4)
     variables: Variable
     variations: Variation
     constraints: Constraint
+
+    def __eq__(self, other: Type["Model"]) -> bool:
+        return self.uuid == other.uuid
 
     def get_voltages(self):
 

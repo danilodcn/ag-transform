@@ -45,6 +45,28 @@ class TestCreatePopulation(unittest.TestCase):
     def test_create_transformer(self):
         self.assertIsInstance(self.transformer, Transformer)
 
+    def test_transformers_not_equal(self):
+        transformer01 = Transformer(
+            variables=self.variables,
+            constraints=self.constraints,
+            variations=self.variations,
+        )
+
+        transformer02 = Transformer(
+            uuid=transformer01.uuid,
+            variables=self.variables,
+            constraints=self.constraints,
+            variations=self.variations,
+        )
+
+        transformer03 = Transformer(
+            variables=self.variables,
+            constraints=self.constraints,
+            variations=self.variations,
+        )
+        self.assertTrue(transformer01 == transformer02)
+        self.assertFalse(transformer01 == transformer03)
+
     def test_get_voltages(self):
         Vf1, Vf2 = self.transformer.get_voltages()
 
