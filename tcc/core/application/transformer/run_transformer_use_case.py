@@ -2,17 +2,18 @@ from math import pi, sqrt
 
 import numpy as np
 
+from tcc.core.application.transformer.table_use_cases.table_facade import (
+    TableFacade,
+)
 from tcc.core.domain.transformer.table_repository import TableRepository
 from tcc.core.domain.transformer.transformer import Transformer
 
-from .table_use_cases.table_facade import TableFacade
 
-
-class TransformerService(object):
+class RunTransformerUseCase:
     def __init__(self, table_repository: TableRepository) -> None:
         self.table_facade = TableFacade(table_repository=table_repository)
 
-    def run(self, transformer: Transformer):
+    def execute(self, transformer: Transformer):
         constraints = transformer.constraints
         variables = transformer.variables
 

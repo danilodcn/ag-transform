@@ -6,7 +6,7 @@ from tcc.core.domain import BaseModel
 
 class ConnectionEnum(str, Enum):
     delta = "delta"
-    triangle = "triangle"
+    star = "star"
 
 
 class TableNameEnum(str, Enum):
