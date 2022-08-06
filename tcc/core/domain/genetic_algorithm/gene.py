@@ -3,6 +3,7 @@ from typing import Any, Optional
 
 import numpy as np
 import pandas as pd
+from typing_extensions import Self
 
 from tcc.core.domain import BaseModel
 from tcc.core.domain.transformer.entities import Variable, Variation
@@ -26,6 +27,22 @@ class Gene(BaseModel):
     calculated: bool = False
     variables: Variable
     results: Result
+
+    def set_data(self, data: pd.Series) -> Self:
+        self.data = data
+        return self
+
+    def set_calculated(self, calculated: bool) -> Self:
+        self.calculated = calculated
+        return self
+
+    def set_variables(self, variables: Variable) -> Self:
+        self.variables = variables
+        return self
+
+    def set_results(self, results: Result) -> Self:
+        self.results = results
+        return self
 
     def generate_data(self) -> None:
         variables = self.variables.dict()

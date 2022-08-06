@@ -3,6 +3,7 @@ import itertools
 from typing import List, Optional, Sequence
 
 import pandas as pd
+from typing_extensions import Self
 
 from tcc.core.domain import BaseModel
 from tcc.core.domain.genetic_algorithm.gene import Gene, GeneBuilder
@@ -21,6 +22,18 @@ class Population(BaseModel):
     data: Optional[pd.DataFrame] = None
     props: PopulationProps
     genes: Sequence[Gene]
+
+    def set_data(self, data: pd.DataFrame) -> Self:
+        self.data = data
+        return self
+
+    def set_props(self, props: PopulationProps) -> Self:
+        self.props = props
+        return self
+
+    def set_genes(self, genes: List[Gene]) -> Self:
+        self.genes = genes
+        return self
 
     class Config:
         arbitrary_types_allowed = True
