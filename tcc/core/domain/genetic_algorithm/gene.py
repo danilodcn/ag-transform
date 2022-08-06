@@ -77,7 +77,7 @@ class GeneBuilder:
 
     @get_variable.register
     @classmethod
-    def _(cls, data: Variable, variations: Optional[Variation] = None):
+    def _(cls, data: Variable, **_):
 
         return data
 

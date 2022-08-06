@@ -75,22 +75,12 @@ class PopulationBuilder:
 
     @get_genes.register
     @classmethod
-    def _(
-        cls,
-        data: pd.DataFrame,
-        n_population: Optional[int] = None,
-        variations: Optional[Variation] = None,
-    ):
+    def _(cls, data: pd.DataFrame, **_):
         raise NotImplementedError
 
     @get_genes.register(list)
     @classmethod
-    def _(
-        cls,
-        data: List[Gene],
-        n_population: Optional[int] = None,
-        variations: Optional[Variation] = None,
-    ):
+    def _(cls, data: List[Gene], **_):
         return data
 
     @classmethod
