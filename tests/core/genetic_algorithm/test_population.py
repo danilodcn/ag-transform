@@ -49,7 +49,6 @@ class TestCreatePopulation(unittest.TestCase):
         )
         population = PopulationBuilder.build(
             props=props,
-            transformer=self.transformer,
             variations=self.variations,
         )
         len = population.len()
