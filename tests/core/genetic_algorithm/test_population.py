@@ -2,12 +2,9 @@ import json
 import os
 import unittest
 
-from tcc.core.application.genetic_algorithm.population.population_builder import (
-    PopulationBuilder,
-)
-from tcc.core.domain.genetic_algorithm.gene import Gene
 from tcc.core.domain.genetic_algorithm.population import (
     Population,
+    PopulationBuilder,
     PopulationProps,
 )
 from tcc.core.domain.transformer.entities import Constraint, Variable
