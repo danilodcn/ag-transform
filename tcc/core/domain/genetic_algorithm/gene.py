@@ -20,20 +20,16 @@ class Result(BaseModel):
     rank: Optional[float] = None
     crowlingDistance: Optional[float] = None
     fitness: Optional[float] = None
+    calculated: float = False
 
 
 class Gene(BaseModel):
     data: Optional[pd.Series] = None
-    calculated: bool = False
     variables: Variable
     results: Result
 
     def set_data(self, data: pd.Series) -> Self:
         self.data = data
-        return self
-
-    def set_calculated(self, calculated: bool) -> Self:
-        self.calculated = calculated
         return self
 
     def set_variables(self, variables: Variable) -> Self:
@@ -56,9 +52,16 @@ class Gene(BaseModel):
         )
         self.data = series
 
-    @classmethod
-    def get_variables_from_data(cls):
-        ...
+    def process_data(self):
+        variables_number = len(Variable.get_field_names())
+
+        assert self.data is not None
+
+        variables_data = self.data[0:variables_number]
+        results_data = self.data[variables_number:]
+
+        self.set_variables(Variable(**variables_data))  # type: ignore
+        self.set_results(Result(**results_data))  # type: ignore
 
     class Config:
         arbitrary_types_allowed = True

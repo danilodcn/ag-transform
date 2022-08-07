@@ -15,18 +15,20 @@ class TestCreateGene(unittest.TestCase):
         self.repository = VariationRepositoryInMemory()
         self.variations = self.repository.get()
 
+        self.variables = Variable(
+            Jbt=1.2, Jat=1.4, Bm=2.3, Ksw=2.5, kt=34, Rjan=2.8, rel=0.7
+        )
+
     def test_create_gene(self):
         gene = GeneBuilder.build(variations=self.variations)
 
         self.assertIsInstance(gene, Gene)
-        self.assertFalse(gene.calculated)
+        self.assertFalse(gene.results.calculated)
 
     def test_data_in_gene_is_None(self):
-        variables = Variable(
-            Jbt=1.2, Jat=1.4, Bm=2.3, Ksw=2.5, kt=34, Rjan=2.8, rel=0.7
+        gene = GeneBuilder.build(
+            variations=self.variations, data=self.variables
         )
-
-        gene = GeneBuilder.build(variations=self.variations, data=variables)
 
         self.assertIsNone(gene.data)
 
@@ -36,6 +38,22 @@ class TestCreateGene(unittest.TestCase):
         gene.generate_data()
 
         self.assertIsInstance(gene.data, pd.Series)
+
+    def test_change_variation_and_result_on_handle_data(self):
+        gene = GeneBuilder.build(variations=self.variations)
+        Jat = 3
+        Mativa = 800
+        gene.generate_data()
+        assert gene.data is not None
+        gene.data["Jat"] = Jat
+        gene.data["Mativa"] = Mativa
+
+        gene.process_data()
+        import ipdb
+
+        ipdb.set_trace()
+        self.assertEqual(gene.variables.Jat, Jat)
+        self.assertEqual(gene.results.Mativa, Mativa)
 
     def test_index_of_gene_is_list_titles_of_variables_and_results(self):
         gene = GeneBuilder.build(variations=self.variations)
@@ -52,4 +70,4 @@ class TestCreateGene(unittest.TestCase):
         self.assertEqual(number, expected_number)
         self.assertTrue(equal_all, f"\n{index=}\n{expected_index=}")
         self.assertIsInstance(gene, Gene)
-        self.assertFalse(gene.calculated)
+        self.assertFalse(gene.results.calculated)
