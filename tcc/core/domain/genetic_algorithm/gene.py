@@ -40,7 +40,7 @@ class Gene(BaseModel):
         self.results = results
         return self
 
-    def generate_data(self) -> None:
+    def generate_data(self) -> "pd.Series[float]":
         variables = self.variables.dict()
         results = self.results.dict()
 
@@ -51,6 +51,7 @@ class Gene(BaseModel):
             index=index,
         )
         self.data = series
+        return series
 
     def process_data(self):
         variables_number = len(Variable.get_field_names())
@@ -73,33 +74,52 @@ class GeneBuilder:
     @classmethod
     def build(
         cls,
-        variations: Variation,
+        variations: Optional[Variation] = None,
         data: InputData = None,
         # variables: Optional[Variable] = None,
     ) -> Gene:
         # if variables is None:
         #     variables = cls.random_create(variations=variations)
-        variables = cls.get_variable(data, variations=variations)
-        results = Result()
-        return Gene(results=results, variables=variables)
+        gene = cls.create_gene(data, variations=variations)
+        return gene
 
     def __init__(*args: Any, **kwargs: DictStrAny) -> None:
         raise ValueError
 
     @functools.singledispatchmethod
     @classmethod
-    def get_variable(
-        cls, data: None = None, variations: Optional[Variation] = None
-    ) -> Variable:
-        assert variations is not None
+    def create_gene(cls, data, variations: Optional[Variation] = None) -> Gene:
+        # assert variations is not None
 
-        return cls.random_create(variations)
+        # return cls.random_create(variations)
+        ...
 
-    @get_variable.register
+    @create_gene.register
     @classmethod
     def _(cls, data: Variable, **_):
+        results = Result()
+        return Gene(variables=data, results=results)
 
-        return data
+    @create_gene.register
+    @classmethod
+    def _(cls, data: None, variations: Optional[Variation] = None):
+        assert variations is not None
+        variables = cls.random_create(variations)
+        results = Result()
+        return Gene(variables=variables, results=results)
+
+    @create_gene.register
+    @classmethod
+    def _(cls, data: pd.Series, **_):
+        variables_number = len(Variable.get_field_names())
+
+        variables_data = data[0:variables_number]
+        results_data = data[variables_number:]
+
+        variables = Variable(**variables_data)  # type: ignore
+        results = Result(**results_data)  # type: ignore
+
+        return Gene(variables=variables, results=results, data=data)
 
     @classmethod
     def random_create(cls, variations: Variation) -> Variable:

@@ -23,6 +23,9 @@ class Population(BaseModel):
     props: PopulationProps
     genes: Sequence[Gene]
 
+    class Config:
+        arbitrary_types_allowed = True
+
     def set_data(self, data: pd.DataFrame) -> Self:
         self.data = data
         return self
@@ -34,9 +37,6 @@ class Population(BaseModel):
     def set_genes(self, genes: List[Gene]) -> Self:
         self.genes = genes
         return self
-
-    class Config:
-        arbitrary_types_allowed = True
 
     # def get_gene(self, i: int) -> Gene:
     #     assert self.data is not None
@@ -50,6 +50,21 @@ class Population(BaseModel):
 
     def len(self):
         return self.shape()[0]
+
+    def generate_data(self):
+        data = [gene.generate_data() for gene in self.genes]
+        self.data = pd.DataFrame(data)
+
+        return self.data
+
+    def generate_genes(self):
+        assert self.data is not None
+        data = self.data.apply(
+            lambda data: GeneBuilder.build(data=data), axis=1
+        )
+        genes: List[Gene] = list(data)  # type: ignore
+        self.genes = genes
+        return data
 
 
 class PopulationBuilder:
@@ -69,10 +84,7 @@ class PopulationBuilder:
             variations=variations,
         )
 
-        index = pd.Index(data=range(len(data)))
-        return Population(
-            data=pd.DataFrame(data=data, index=index), props=props, genes=data
-        )
+        return Population(props=props, genes=data)
 
     @functools.singledispatchmethod
     @classmethod

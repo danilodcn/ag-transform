@@ -2,6 +2,7 @@ import json
 import os
 import unittest
 
+from tcc.core.domain.genetic_algorithm.gene import Gene
 from tcc.core.domain.genetic_algorithm.population import (
     Population,
     PopulationBuilder,
@@ -39,16 +40,39 @@ class TestCreatePopulation(unittest.TestCase):
             constraints=self.constraints,
             variations=self.variations,
         )
-
-    def test_create_population(self):
-        props = PopulationProps(
+        self.props = PopulationProps(
             n_population=10, disturbance_rate=0.3, crossover_probability=0.4
         )
+
+    def test_create_population(self):
         population = PopulationBuilder.build(
-            props=props,
+            props=self.props,
             variations=self.variations,
         )
-        len = population.len()
 
         self.assertIsInstance(population, Population)
-        self.assertEqual(len, props.n_population)
+
+    def test_generate_data(self):
+        population = PopulationBuilder.build(
+            props=self.props,
+            variations=self.variations,
+        )
+        self.assertIsNone(population.data)
+
+        population.generate_data()
+
+        self.assertIsNotNone(population.data)
+
+    def test_generate_genes(self):
+        population = PopulationBuilder.build(
+            props=self.props,
+            variations=self.variations,
+        )
+        population.generate_data()
+
+        population.generate_genes()
+
+        self.assertIsNotNone(population.data)
+        self.assertEqual(len(population.genes), population.props.n_population)
+        for gene in population.genes:
+            self.assertIsInstance(gene, Gene)

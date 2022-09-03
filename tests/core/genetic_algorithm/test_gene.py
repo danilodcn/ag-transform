@@ -49,9 +49,7 @@ class TestCreateGene(unittest.TestCase):
         gene.data["Mativa"] = Mativa
 
         gene.process_data()
-        import ipdb
 
-        ipdb.set_trace()
         self.assertEqual(gene.variables.Jat, Jat)
         self.assertEqual(gene.results.Mativa, Mativa)
 
