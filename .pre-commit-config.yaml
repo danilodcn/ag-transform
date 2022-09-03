@@ -16,8 +16,10 @@ repos:
     hooks:
     -   id: flake8
         files: tcc/core
-# -   repo: https://github.com/psf/black
-#     rev: 22.6.0
-#     hooks:
-#     -   id: black
-#         args: [ --check, --line-length=79]
+        args:
+          - "--statistics"
+-   repo: https://github.com/psf/black
+    rev: 22.6.0
+    hooks:
+    -   id: black
+        args: [ --check, --line-length=79]
