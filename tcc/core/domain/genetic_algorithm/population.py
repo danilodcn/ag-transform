@@ -1,5 +1,6 @@
 import functools
 import itertools
+import logging
 from typing import List, Optional, Sequence
 
 import pandas as pd
@@ -118,3 +119,4 @@ class PopulationBuilder:
         data = [gene for gene in genes]
 
         return data
+
