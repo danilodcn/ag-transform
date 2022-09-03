@@ -9,7 +9,6 @@ test:
 	@echo "Testing ..."
 	poetry run python manager.py tests
 
-
 format:
 	@echo "formating the project"
 	isort .
