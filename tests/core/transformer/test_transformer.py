@@ -14,9 +14,7 @@ from tcc.core.infra.db.memory.transformer.table_repository_in_memory import (
 from tcc.core.infra.db.memory.transformer.variation_repository_in_memory import (
     VariationRepositoryInMemory,
 )
-
-TABLE_FILE_NAME = os.getcwd() + "/tests/core/json/tables.json"
-TRANSFORMER_FILE_NAME = os.getcwd() + "/tests/core/json/transformer.json"
+from tests.constants import *
 
 
 class TestCreatePopulation(unittest.TestCase):
