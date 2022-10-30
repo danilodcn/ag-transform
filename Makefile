@@ -16,7 +16,7 @@ format:
 	make lint
 
 lint:
-	poetry run flake8 tcc/core  --count --show-source --statistics
+	flake8 tcc/core  --count --show-source --statistics
 
 mypy:
 	mypy .

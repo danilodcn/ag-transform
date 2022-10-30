@@ -12,6 +12,9 @@ on:
 permissions:
   contents: read
 
+env:
+  PYTHON_VERSION: "3.10.5"
+
 jobs:
   install-dependencies:
     runs-on: ubuntu-latest
@@ -20,11 +23,11 @@ jobs:
     steps:
     - uses: actions/checkout@v3
 
-    - name: Set up Python 3.10.5
+    - name: Set up Python ${{ PYTHON_VERSION }}
       uses: actions/setup-python@v3
       id: setup-python
       with:
-        python-version: "3.10.5"
+        python-version: ${{ PYTHON_VERSION }}
 
       #  -----  install & configure poetry  -----
     - name: Install Poetry
@@ -62,8 +65,19 @@ jobs:
     needs: install-dependencies
     steps:
     - uses: actions/checkout@v3
+    - name: Set up Python ${{ PYTHON_VERSION }}
+      uses: actions/setup-python@v3
+      id: setup-python
+      with:
+        python-version: ${{ PYTHON_VERSION }}
+    - name: Load cached venv
+      id: cached-poetry-dependencies
+      uses: actions/cache@v3
 
-    - name: meu
-      run: |
-        echo de output: ${{ needs.install-dependencies.outputs.cache-key }}
-        echo do cache-key: ${{ needs.install-dependencies.steps.cache-key.outputs.key }}
+      with:
+        path: .venv
+        key: ${{ needs.install-dependencies.outputs.cache-key }}
+    - name: load packages
+      run: source .venv/bin/activate
+    - name: lint
+      run: make lint
