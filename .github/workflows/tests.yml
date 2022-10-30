@@ -86,7 +86,5 @@ jobs:
         path: ${{ needs.install-dependencies.outputs.cache-path }}
         key: ${{ needs.install-dependencies.outputs.cache-key }}
 
-    - name: load packages
-      run: source .venv/bin/activate
     - name: lint
       run: make lint
