@@ -65,5 +65,5 @@ jobs:
 
     - name: meu
       run: |
-        echo ${{ needs.install-dependencies.outputs.cache-key }}
-        echo ${{ needs.install-dependencies.steps.cache-key.outputs.key }}
+        echo de output: ${{ needs.install-dependencies.outputs.cache-key }}
+        echo do cache-key: ${{ needs.install-dependencies.steps.cache-key.outputs.key }}
