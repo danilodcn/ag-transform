@@ -38,7 +38,7 @@ jobs:
       id: cache-key
       run: echo "::set-output name=key::venv-${{ runner.os }}-python-${{ steps.setup-python.outputs.python-version }}-${{ hashFiles('**/poetry.lock') }}"
     - name: Teste cache key
-      run: echo ${{ steps.cache-key.key }}
+      run: echo ${{ steps.cache-key.outputs.key }}
 
       # load cached venv if cache exists
     - name: Load cached venv
@@ -47,7 +47,7 @@ jobs:
 
       with:
         path: .venv
-        key: ${{ steps.cache-key.key }}
+        key: ${{ steps.cache-key.outputs.key }}
 
       # install dependencies if cache does not exist
     - name: Install dependencies
