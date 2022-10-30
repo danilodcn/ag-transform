@@ -23,3 +23,12 @@ repos:
     hooks:
     -   id: black
         args: [ --check, --line-length=79]
+
+-   repo: https://github.com/commitizen-tools/commitizen
+    rev: v2.37.0
+    hooks:
+      - id: commitizen
+      - id: commitizen-branch
+        stages:
+          - post-commit
+          - push
