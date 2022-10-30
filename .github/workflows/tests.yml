@@ -56,4 +56,4 @@ jobs:
       run: |
         source .venv/bin/activate
         make lint
-        flake8 tcc/core  --count --show-source --statistics
+        make test

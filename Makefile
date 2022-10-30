@@ -7,7 +7,7 @@ clear:
 
 test:
 	@echo "Testing ..."
-	poetry run python manager.py tests
+	python manager.py tests
 
 format:
 	@echo "formating the project"
