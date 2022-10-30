@@ -20,6 +20,7 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       cache-key: ${{ steps.cache.outputs.key }}
+      cache-path: ${{ steps.cache.outputs.path }}
     steps:
     - uses: actions/checkout@v3
 
@@ -71,13 +72,20 @@ jobs:
       id: setup-python
       with:
         python-version: ${{ env.PYTHON_VERSION }}
+
+    - name: Install Poetry
+      uses: snok/install-poetry@v1
+      with:
+        virtualenvs-create: false
+        installer-parallel: true
+
     - name: Load cached venv
       id: cached-poetry-dependencies
       uses: actions/cache@v3
-
       with:
-        path: .venv
-        key: ${{ needs.install-dependencies.outputs.cache }}
+        path: ${{ needs.install-dependencies.outputs.cache-path }}
+        key: ${{ needs.install-dependencies.outputs.cache-key }}
+
     - name: load packages
       run: source .venv/bin/activate
     - name: lint
