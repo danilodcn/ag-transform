@@ -4,7 +4,7 @@ FROM python:3.10.5-slim-buster
 ARG DEV_ENV
 
 ENV \
-    DEV_ENV=${DEV_ENV}\
+    DEV_ENV=${DEV_ENV} \
     PYTHONFAULTHANDLER=1 \
     PYTHONUNBUFFERED=1 \
     PYTHONHASHSEED=random \
@@ -20,14 +20,17 @@ RUN apt-get autoremove -y \
 
 RUN pip install -U pip && pip install poetry
 
-WORKDIR /app
+RUN useradd -ms /bin/bash python
+USER python
+WORKDIR /home/python/app/
+COPY pyproject.toml poetry.lock /home/python/app/
 
-COPY pyproject.toml poetry.lock /app/
-
+USER root
 RUN poetry config virtualenvs.create false \
     # && poetry install --no-dev --no-interaction --no-ansi
     && poetry install $(/usr/bin/test "$DEV_ENV" == "production" && echo "--no-dev")
 
+USER python
 COPY . .
 
 CMD ["tail", "-f", "/dev/null"]

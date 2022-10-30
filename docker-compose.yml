@@ -2,12 +2,13 @@ version: '3.4'
 
 services:
   app:
-    image: backend
+    image: app_tcc
+    container_name: app_tcc
     command: 'tail -f /dev/null'
     build:
       context: .
       dockerfile: ./Dockerfile
     environment:
-      -  DEV_ENV:develop
+      -  ENVIROMENT:develop
     volumes:
-      - ".:/app"
+      - ".:/home/python/app/"
