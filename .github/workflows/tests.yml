@@ -12,6 +12,9 @@ on:
 permissions:
   contents: read
 
+env:
+  CACHE_KEY: ""
+
 jobs:
   install-dependencies:
     env:
