@@ -12,11 +12,6 @@ def c():
 
 
 @c.command()
-def rundash():
-    app.run_server(debug=True)  # flake8: noqa
-
-
-@c.command()
 def runapi():
     while True:
         try:
