@@ -42,8 +42,8 @@ jobs:
         CACHE_KEY: venv-${{ runner.os }}-python-${{ steps.setup-python.outputs.python-version }}-${{ hashFiles('**/poetry.lock') }}
         CACHE_PATH: /usr/local/lib/python3.10/site-packages
       run: |
-        echo "::set-output name=key::${{ CACHE_KEY }}"
-        echo "::set-output name=path::${{ CACHE_KEY }}"
+        echo "::set-output name=key::${{ env.CACHE_KEY }}"
+        echo "::set-output name=path::${{ env.CACHE_PATH }}"
 
       # load cached venv if cache exists
     - name: Load cached venv
