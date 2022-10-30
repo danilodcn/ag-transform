@@ -13,7 +13,7 @@ permissions:
   contents: read
 
 jobs:
-  install-dependencies:
+  build:
     runs-on: ubuntu-latest
 
     steps:
@@ -22,27 +22,12 @@ jobs:
       uses: actions/setup-python@v3
       with:
         python-version: "3.10.5"
-        cache: "poetry"
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install poetry
-        python -m poetry install --no-dev
-  lint:
-    runs-on: ubuntu-22.04
-    needs: install-dependencies
-    steps:
-    - uses: actions/checkout@v3
-    - name: Set up Python 3.10
-      uses: actions/setup-python@v3
-      with:
-        python-version: "3.10.5"
-        cache: "poetry"
-    - name: Install dependencies
-      run: |
-        python -m pip install --upgrade pip
-        pip install poetry
+        pip install poetry flake8
         poetry install --no-dev
+
     - name: Lint with flake8
       run: |
         make lint
