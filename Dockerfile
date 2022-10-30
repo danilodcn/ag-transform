@@ -7,6 +7,7 @@ ENV \
     DEV_ENV=${DEV_ENV} \
     PYTHONFAULTHANDLER=1 \
     PYTHONUNBUFFERED=1 \
+    PYTHONDONTWRITEBYTECODE=1 \
     PYTHONHASHSEED=random \
     PIP_NO_CACHE_DIR=off \
     PIP_DISABLE_PIP_VERSION_CHECK=on \
@@ -31,6 +32,8 @@ RUN poetry config virtualenvs.create false \
     && poetry install $(/usr/bin/test "$DEV_ENV" == "production" && echo "--no-dev")
 
 USER python
+RUN poetry config virtualenvs.create false
+
 COPY . .
 
 CMD ["tail", "-f", "/dev/null"]
