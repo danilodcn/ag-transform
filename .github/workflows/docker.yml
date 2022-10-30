@@ -30,8 +30,7 @@ jobs:
         run: |
           echo  ${{ github.GITHUB_SHA }}
           echo  ${{ github.GITHUB_RUN_ID }}
-          echo  ${{ GITHUB_SHA }}
-          echo  ${{ GITHUB_RUN_ID }}
+
       -
         name: Build and push
         uses: docker/build-push-action@v3
