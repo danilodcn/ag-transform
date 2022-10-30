@@ -12,13 +12,8 @@ on:
 permissions:
   contents: read
 
-env:
-  CACHE_KEY: ""
-
 jobs:
   install-dependencies:
-    env:
-      CACHE_KEY: ""
     runs-on: ubuntu-latest
     outputs:
       cache-key: ${{ steps.cache-key.outputs.key }}
@@ -42,8 +37,8 @@ jobs:
     - name: Creating cache key
       id: cache-key
       env:
-        CACHE_KEY: "venv-${{ runner.os }}-python-${{ steps.setup-python.outputs.python-version }}-${{ hashFiles('**/poetry.lock') }}"
-      run: echo "::set-output name=key::${{ CACHE_KEY }}"
+        CACHE_KEY_ID: "venv-${{ runner.os }}-python-${{ steps.setup-python.outputs.python-version }}-${{ hashFiles('**/poetry.lock') }}"
+      run: echo "::set-output name=key::${{ CACHE_KEY_ID }}"
 
       # load cached venv if cache exists
     - name: Load cached venv
