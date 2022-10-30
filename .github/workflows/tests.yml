@@ -23,11 +23,11 @@ jobs:
     steps:
     - uses: actions/checkout@v3
 
-    - name: Set up Python ${{ PYTHON_VERSION }}
+    - name: Set up Python ${{ env.PYTHON_VERSION }}
       uses: actions/setup-python@v3
       id: setup-python
       with:
-        python-version: ${{ PYTHON_VERSION }}
+        python-version: ${{ env.PYTHON_VERSION }}
 
       #  -----  install & configure poetry  -----
     - name: Install Poetry
@@ -65,11 +65,11 @@ jobs:
     needs: install-dependencies
     steps:
     - uses: actions/checkout@v3
-    - name: Set up Python ${{ PYTHON_VERSION }}
+    - name: Set up Python ${{ env.PYTHON_VERSION }}
       uses: actions/setup-python@v3
       id: setup-python
       with:
-        python-version: ${{ PYTHON_VERSION }}
+        python-version: ${{ env.PYTHON_VERSION }}
     - name: Load cached venv
       id: cached-poetry-dependencies
       uses: actions/cache@v3
