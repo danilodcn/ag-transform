@@ -16,7 +16,7 @@ jobs:
   install-dependencies:
     runs-on: ubuntu-latest
     outputs:
-      cache-key: ${{ steps.cached-poetry-dependencies.outputs.key }}
+      cache-key: ${{ steps.cache-key.outputs.key }}
     steps:
     - uses: actions/checkout@v3
 
@@ -34,16 +34,20 @@ jobs:
         virtualenvs-in-project: true
         installer-parallel: true
 
-      #       load cached venv if cache exists
+    - name: Creating cache key
+      id: cache-key
+      env:
+        CACHE_KEY: "venv-${{ runner.os }}-python-${{ steps.setup-python.outputs.python-version }}-${{ hashFiles('**/poetry.lock') }}"
+      run: echo "::set-output name=key::${{ CACHE_KEY }}"
+
+      # load cached venv if cache exists
     - name: Load cached venv
       id: cached-poetry-dependencies
       uses: actions/cache@v3
-      env:
-        CACHE_KEY: "venv-${{ runner.os }}-python-${{ steps.setup-python.outputs.python-version }}-${{ hashFiles('**/poetry.lock') }}"
+
       with:
         path: .venv
-        key: ${{ CACHE_KEY }}
-      run: echo "key=${{ CACHE_KEY }}" >> $GITHUB_OUTPUT
+        key: ${{ steps.cache-key.key }}
 
       # install dependencies if cache does not exist
     - name: Install dependencies
@@ -60,4 +64,6 @@ jobs:
     - uses: actions/checkout@v3
 
     - name: meu
-      run: echo ${{ needs.install-dependencies.outputs.cache-key }}
+      run: |
+        echo ${{ needs.install-dependencies.outputs.cache-key }}
+        echo ${{ needs.install-dependencies.steps.cache-key.outputs.key }}
