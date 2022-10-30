@@ -16,20 +16,18 @@ env:
   env.PYTHON_VERSION: "3.10.5"
 
 jobs:
-  install-dependencies:
+  test:
     runs-on: ubuntu-latest
-    outputs:
-      cache-key: ${{ steps.cache-key.outputs.key }}
     steps:
     - uses: actions/checkout@v3
 
-    - name: Set up Python ${{ env.PYTHON_VERSION }}
+    - name: Set up Python 3.10.5
       uses: actions/setup-python@v3
       id: setup-python
       with:
-        python-version: ${{ env.PYTHON_VERSION }}
+        python-version: "3.10.5"
 
-      #  -----  install & configure poetry  -----
+      # install & configure poetry
     - name: Install Poetry
       uses: snok/install-poetry@v1
       with:
@@ -37,29 +35,24 @@ jobs:
         virtualenvs-in-project: true
         installer-parallel: true
 
-    - name: Creating cache key
-      id: cache-key
-      run: echo "::set-output name=key::venv-${{ runner.os }}-python-${{ steps.setup-python.outputs.python-version }}-${{ hashFiles('**/poetry.lock') }}"
-    - name: Teste cache key
-      run: echo ${{ steps.cache-key.outputs.key }}
-
       # load cached venv if cache exists
     - name: Load cached venv
       id: cached-poetry-dependencies
       uses: actions/cache@v3
       with:
         path: .venv
-        key: ${{ steps.cache-key.outputs.key }}
+        key: venv-${{ runner.os }}-python-${{ steps.setup-python.outputs.python-version }}-${{ hashFiles('**/poetry.lock') }}
 
       # install dependencies if cache does not exist
     - name: Install dependencies
       if: steps.cached-poetry-dependencies.outputs.cache-hit != 'true'
       run: poetry install --no-interaction --no-root
 
+    # install your root project, if required
     - name: Install project
       run: poetry install --no-interaction
 
-    - name: source
+    - name: Run tests
       run: |
-          source .venv/bin/activate
-          make lint
+        source .venv/bin/activate
+        pytest tests/
