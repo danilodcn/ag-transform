@@ -51,7 +51,10 @@ jobs:
       - name: Build and push
         uses: docker/build-push-action@v3
         with:
+          context: ./
+          file: ./Dockerfile
+          builder: ${{ steps.buildx.outputs.name }}
           push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/app_tcc:latest #${{ github.sha }}
-          cache-from: type=registry,ref= ${{ secrets.DOCKERHUB_USERNAME }}/app_tcc:buildcache
-          cache-to: type=registry,ref= ${{ secrets.DOCKERHUB_USERNAME }}/app_tcc:buildcache,mode=max
+          tags: ${{ secrets.DOCKER_HUB_USERNAME }}/app_tcc:latest
+          cache-from: type=registry,ref=${{ secrets.DOCKER_HUB_USERNAME }}/app_tcc:buildcache
+          cache-to: type=registry,ref=${{ secrets.DOCKER_HUB_USERNAME }}/app_tcc:buildcache,mode=max
