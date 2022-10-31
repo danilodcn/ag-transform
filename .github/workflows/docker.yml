@@ -32,8 +32,6 @@ jobs:
 
   docker-build:
     runs-on: ubuntu-latest
-    env:
-      APP_TAG_NAME=${{ secrets.DOCKERHUB_USERNAME }}/app_tcc
     needs:
       - lint
     steps:
@@ -54,6 +52,6 @@ jobs:
         uses: docker/build-push-action@v3
         with:
           push: true
-          tags: ${{ env.APP_TAG_NAME }}:latest #${{ github.sha }}
-          cache-from: type=registry,ref= ghcr.io/${{ env.APP_TAG_NAME }}:buildcache
-          cache-to: type=registry,ref= ghcr.io/${{ env.APP_TAG_NAME }}:buildcache,mode=max
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/app_tcc:latest #${{ github.sha }}
+          cache-from: type=registry,ref= ghcr.io/${{ secrets.DOCKERHUB_USERNAME }}/app_tcc:buildcache
+          cache-to: type=registry,ref= ghcr.io/${{ secrets.DOCKERHUB_USERNAME }}/app_tcc:buildcache,mode=max
