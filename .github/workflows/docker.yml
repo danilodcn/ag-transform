@@ -10,7 +10,7 @@ on:
     branches: [ "main" ]
 
 env:
- APP_TAG_NAME=${{ secrets.DOCKERHUB_USERNAME }}/app_tcc
+ env.APP_TAG_NAME=${{ secrets.DOCKERHUB_USERNAME }}/app_tcc
 
 jobs:
   lint:
