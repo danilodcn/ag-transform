@@ -27,4 +27,4 @@ jobs:
             --build-arg BUILDKIT_INLINE_CACHE=1 \
             "."
       - name: Push to docker hub
-        run: docker push $CACHE_IMAGE -a
+        run: docker push --all-tags $CACHE_IMAGE
