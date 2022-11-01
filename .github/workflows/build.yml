@@ -1,0 +1,31 @@
+name: Docker Build
+
+on: [push]
+
+env:
+  CACHE_IMAGE: ${{ secrets.DOCKERHUB_USERNAME }}/tcc_app
+  DOCKER_BUILDKIT: 1
+  COMPOSE_DOCKER_CLI_BUILD: 1
+
+jobs:
+  build:
+    name: Build Docker Image
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout master
+        uses: actions/checkout@v1
+      - name: Log in to docker hub
+        run: docker login -u ${{ secrets.DOCKERHUB_USERNAME }} -p ${{ secrets.DOCKERHUB_TOKEN }}
+      - name: Build Docker images
+        run: docker-compose build --build-arg BUILDKIT_INLINE_CACHE=1
+      - name: Build Image
+        run: |
+          docker build \
+            # --target base \
+            --cache-from $CACHE_IMAGE:cache-image \
+            --tag $CACHE_IMAGE:cache-image \
+            --tag $CACHE_IMAGE:latest \
+            --build-arg BUILDKIT_INLINE_CACHE=1 \
+            "."
+      - name: Push to docker hub
+        run: docker push $CACHE_IMAGE -a
