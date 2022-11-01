@@ -21,7 +21,6 @@ jobs:
       - name: Build Image
         run: |
           docker build \
-            # --target base \
             --cache-from $CACHE_IMAGE:cache-image \
             --tag $CACHE_IMAGE:cache-image \
             --tag $CACHE_IMAGE:latest \
