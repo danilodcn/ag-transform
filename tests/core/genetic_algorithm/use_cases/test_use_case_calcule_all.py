@@ -4,6 +4,7 @@ import unittest
 from tcc.core.application.genetic_algorithm.population.use_cases.calcule_all_use_case import (
     PopulationCalculator,
 )
+from tcc.core.application.tools.plot import Plot
 from tcc.core.domain.genetic_algorithm.gene import Gene
 from tcc.core.domain.genetic_algorithm.population import (
     Population,
@@ -68,3 +69,11 @@ class TestUseCaseCalculeAll(unittest.TestCase):
 
         for name in test_field_names:
             self.assertNotIn(None, self.population.data[name])
+
+    def test_plot_after_calculation(self):
+        self.test_calcule_all_in_population()
+        plot = Plot()
+        assert self.population.data is not None
+        fields_names = "PerdasT Mativa".split()
+        plot.plot(self.population.data, fields_names)
+        plot.save(suffix="plot_after_calculation", type="pdf", dpi=500)

@@ -1,45 +1,59 @@
 import io
+from collections import defaultdict
 from pathlib import Path
+from typing import Iterable, Literal
+from uuid import uuid4
 
 import pandas as pd
 from matplotlib import pyplot as plt
 from matplotlib._color_data import XKCD_COLORS
+from matplotlib.backends.backend_pdf import PdfPages
 
 COLORS = list(XKCD_COLORS.values())
 
 
 class Plot:
-    # def __init__(self, df: pd.DataFrame) -> None:
-    #     self.Mativa = df["Mativa"]
-    #     self.PerdasT = df["PerdasT"]
-    #     self.rank = df["rank"]
-    #     self.df = df
+
+    LABEL_NAMES = defaultdict(
+        lambda: "",
+        **{
+            "Mativa": "Massa [Kg]",
+            "Mativa_P": "Massa [Kg] (após penalização)",
+            "PerdasT": "Perdas Totais [W]",
+            "PerdasT_P": "Perdas Totais [W] (após penalização)",
+            "Jat": "Indução (alta tensão)",
+            "Jbt": "Indução (baixa tensão)",
+        },
+    )
 
     def __basic_plot(self, title: str = ""):
         fig, ax = plt.subplots()
         # ax.set_title(title)
+        fig.title = title or f"figure-{fig.number}"  # type: ignore
         fig.suptitle(title)
-        ax.set_xlabel("Perdas Totais [W]")
-        ax.set_ylabel("Massa [Kg]")
 
         return fig, ax
 
-    def plot(self, df: pd.DataFrame, title=""):
+    def plot(self, df: pd.DataFrame, field_names: Iterable[str], title=""):
         _, ax = self.__basic_plot(title)
 
-        PerdasT = df["PerdasT"]
-        Mativa = df["Mativa"]
-        Mativa = df["Jat"]
-        PerdasT = df["Jbt"]
+        x_name, y_name = field_names
+        x_label = self.LABEL_NAMES[x_name]
+        y_label = self.LABEL_NAMES[y_name]
 
-        ax.plot(PerdasT, Mativa, "ko")
+        ax.set_xlabel(x_label)
+        ax.set_ylabel(y_label)
 
-        dx = max(PerdasT) - min(PerdasT)
-        dy = max(Mativa) - min(Mativa)
+        x_data = df[x_name]
+        y_data = df[y_name]
+        ax.plot(x_data, y_data, "ko")
+
+        dx = max(x_data) - min(x_data)
+        dy = max(y_data) - min(y_data)
 
         kx = dx / 100
         ky = dy * 0
-        iterator = zip(range(len(Mativa)), Mativa, PerdasT)
+        iterator = zip(range(len(y_data)), y_data, x_data)
         for i, massa, perdas in iterator:
             ax.annotate(str(i), xy=(perdas + kx, massa + ky))
 
@@ -48,18 +62,45 @@ class Plot:
         plt.show()
 
     @staticmethod
-    def save(dpi=100):
-        dir_name = "/tmp/tcc/images"
+    def save(
+        suffix="",
+        dir_name="",
+        type: Literal["jpg", "png", "pdf"] = "jpg",
+        dpi=100,
+    ):
+        dir_name = f"/tmp/tcc/images/{dir_name}"
         dir = Path(dir_name)
         dir.mkdir(parents=True, exist_ok=True)
+
+        format = type.lower()
+        if format == "pdf":
+            Plot.save_pdf(dir, suffix)
+        else:
+            Plot.save_images(dir, suffix, format, dpi)
+
+    @staticmethod
+    def save_images(dir: Path, suffix="", format="jpg", dpi=100):
         figs = [plt.figure(n) for n in plt.get_fignums()]
         for fig in figs:
-            fig.get_axes()
             with io.BytesIO() as buffer:
-                fig.savefig(buffer, format="jpg", dpi=dpi)
-                fig_title: str = fig.texts[0].get_text()  # type: ignore
-                fp = dir / f"{fig_title}.jpg"
+                fig.savefig(buffer, format=format, dpi=dpi)
+                fig_title: str = f"{fig.title}-{suffix}"  # type: ignore
+                fp = dir / f"{fig_title}.{format}"
                 fp.write_bytes(buffer.getvalue())
+
+            plt.close(fig)
+
+    @staticmethod
+    def save_pdf(dir: Path, suffix=""):
+        if not suffix:
+            uuid = uuid4()
+            suffix = uuid.hex
+        figs = [plt.figure(n) for n in plt.get_fignums()]
+        pdf = PdfPages(f"{dir}/{suffix}.pdf")
+        for fig in figs:
+            pdf.savefig(fig)
+            plt.close(fig)
+        pdf.close()
 
     def plot_with_rank(self, title="Points with ranks", penalize=False):
         # print(annotation)

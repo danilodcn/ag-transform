@@ -49,6 +49,8 @@ class TestCreatePopulation(unittest.TestCase):
         self.population.generate_data()
         assert self.population.data is not None
         plot = Plot()
-        plot.plot(self.population.data, "primeiro")
-        plot.plot(self.population.data, "segundo")
-        Plot.save(dpi=100)
+        plot.plot(self.population.data, "Jat Jbt".split(), "primeiro")
+        plot.plot(self.population.data, "rel Rjan".split(), "segundo")
+        Plot.save(
+            type="png", suffix="test_population", dir_name="tests", dpi=100
+        )
