@@ -1,16 +1,17 @@
-from typing import Dict, Optional, Tuple
+from typing import Dict, List, Tuple
+from uuid import UUID
 
 from tcc.core.domain.transformer.entities import Variation
 from tcc.core.domain.transformer.variation_repository import (
     VariationRepository,
 )
 
-VariationRepositoryData = Dict[str, bool | Tuple[float, float]]
-
 
 class VariationRepositoryInMemory(VariationRepository):
-    variations: Dict[int, VariationRepositoryData] = {
-        1: {
+    __name__ = Variation.__name__
+    items: List[Dict[str, bool | str | Tuple[float, float]]] = [
+        {
+            "id": "b572eabc-88f5-4f80-9df7-09b8b15ec50a",
             "default": True,
             "Jbt": (1.2, 1.4),
             "Jat": (1.4, 1.6),
@@ -20,11 +21,16 @@ class VariationRepositoryInMemory(VariationRepository):
             "Rjan": (3.4, 3.6),
             "rel": (1.1, 1.2),
         }
-    }
+    ]
 
-    def get(self, id: Optional[int] = None) -> Variation:
-        for key, value in self.variations.items():
-            if key == id or (id is None and value["default"]):
-                return Variation(**value)  # type: ignore
+    def get(self, id: UUID | str | None = None) -> Variation:
+        if id is None:
+            filtered = filter(lambda x: x["default"], self.items)
+        else:
+            filtered = filter(lambda x: x["id"] == id, self.items)
 
-        raise KeyError("objeto não encontrado")
+        try:
+            value = next(filtered)
+            return Variation(**value)  # type: ignore
+        except Exception as error:
+            raise self.DoesNotExist from error

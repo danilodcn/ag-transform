@@ -16,6 +16,8 @@ class TestTablesRepository(unittest.TestCase):
         self.assertIsInstance(variation, Variation)
 
     def test_search_for_not_exist_variation_on_memory(self):
-        with self.assertRaises(KeyError) as context:
-            self.repository.get(id=0)
-        self.assertIn("não encontrado", str(context.exception))
+        with self.assertRaises(
+            self.repository.DoesNotExist.__class__
+        ) as context:
+            self.repository.get(id="918253ec-6e12-4226-8f6b-7fbdda5a3b83")
+        self.assertIn("not found", str(context.exception))
