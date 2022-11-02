@@ -67,10 +67,8 @@ jobs:
     steps:
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v2
-
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
-
       - name: Test using docker container
         run: |
           docker run --entrypoint "sh -c 'make lint && make test'"  ${{ secrets.DOCKERHUB_USERNAME }}/app_tcc:test
