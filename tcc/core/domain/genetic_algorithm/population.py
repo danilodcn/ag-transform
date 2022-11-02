@@ -28,6 +28,7 @@ class Population(BaseModel):
 
     def set_data(self, data: pd.DataFrame) -> Self:
         self.data = data
+        self.generate_genes()
         return self
 
     def set_props(self, props: PopulationProps) -> Self:
@@ -60,7 +61,7 @@ class Population(BaseModel):
     def generate_genes(self):
         assert self.data is not None
         data = self.data.apply(
-            lambda data: GeneBuilder.build(data=data), axis=1
+            lambda data_gene: GeneBuilder.build(data=data_gene), axis=1
         )
         genes: List[Gene] = list(data)  # type: ignore
         self.genes = genes
