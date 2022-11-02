@@ -48,7 +48,7 @@ class Plot:
         plt.show()
 
     @staticmethod
-    def save():
+    def save(dpi=100):
         dir_name = "/tmp/tcc/images"
         dir = Path(dir_name)
         dir.mkdir(parents=True, exist_ok=True)
@@ -56,7 +56,7 @@ class Plot:
         for fig in figs:
             fig.get_axes()
             with io.BytesIO() as buffer:
-                fig.savefig(buffer, format="jpg", dpi=1000)
+                fig.savefig(buffer, format="jpg", dpi=dpi)
                 fig_title: str = fig.texts[0].get_text()  # type: ignore
                 fp = dir / f"{fig_title}.jpg"
                 fp.write_bytes(buffer.getvalue())

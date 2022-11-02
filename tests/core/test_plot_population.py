@@ -51,4 +51,4 @@ class TestCreatePopulation(unittest.TestCase):
         plot = Plot()
         plot.plot(self.population.data, "primeiro")
         plot.plot(self.population.data, "segundo")
-        Plot.save()
+        Plot.save(dpi=100)
