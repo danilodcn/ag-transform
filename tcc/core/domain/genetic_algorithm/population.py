@@ -64,7 +64,7 @@ class Population(BaseModel):
         )
         genes: List[Gene] = list(data)  # type: ignore
         self.genes = genes
-        return data
+        return self.genes
 
 
 class PopulationBuilder:

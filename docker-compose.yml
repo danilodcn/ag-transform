@@ -5,6 +5,7 @@ services:
     image: app_tcc
     container_name: app_tcc
     command: 'tail -f /dev/null'
+    user: python
     build:
       context: .
       dockerfile: ./Dockerfile
@@ -12,3 +13,4 @@ services:
       -  ENVIROMENT:develop
     volumes:
       - ".:/home/python/app/"
+      - "./images:/tmp/tcc/"

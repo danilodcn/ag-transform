@@ -1,11 +1,11 @@
 import json
 import unittest
 
+from tcc.core.application.tools.plot import Plot
 from tcc.core.domain.genetic_algorithm.population import (
     PopulationBuilder,
     PopulationProps,
 )
-from tcc.core.application.tools.plot import Plot
 from tcc.core.domain.transformer.entities import Constraint, Variable
 from tcc.core.domain.transformer.transformer import Transformer
 from tcc.core.infra.db.memory.transformer.table_repository_in_memory import (
@@ -46,7 +46,9 @@ class TestCreatePopulation(unittest.TestCase):
         )
 
     def test_plot(self):
-        plot = Plot()
         self.population.generate_data()
         assert self.population.data is not None
-        plot.plot(self.population.data)
+        plot = Plot()
+        plot.plot(self.population.data, "primeiro")
+        plot.plot(self.population.data, "segundo")
+        Plot.save()
