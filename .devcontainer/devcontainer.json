@@ -7,7 +7,7 @@
 
 	"settings": {
 		"terminal.integrated.shell.linux": "/bin/bash",
-		"python.analysis.typeCheckingMode": "strict",
+		"python.analysis.typeCheckingMode": "basic",
 		"python.pythonPath": "/usr/local/bin/python",
 		"python.linting.enabled": true,
 		"python.linting.pylintEnabled": true,
@@ -53,8 +53,8 @@
 		"dracula-theme.theme-dracula",
 		"ms-vscode.makefile-tools",
 		"dzhavat.bracket-pair-toggler"
-	],
+	]
 
 	// Use 'forwardPorts' to make a list of ports inside the container available locally.
-	"forwardPorts": [8000]
+	// "forwardPorts": [8000]
 }
