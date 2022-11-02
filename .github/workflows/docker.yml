@@ -61,7 +61,7 @@ jobs:
 
   tests:
     runs-on: ubuntu-latest
-    name: Test using docker container
+    name: Test Using Docker Container
     needs:
       - docker-build
     steps:
@@ -73,4 +73,4 @@ jobs:
 
       - name: Test using docker container
         run: |
-          docker run --entrypoint ".docker/entrypoint/test.sh"  ${{ secrets.DOCKERHUB_USERNAME }}/app_tcc:test
+          docker run --entrypoint ".docker/entrypoint/test.sh" ${{ secrets.DOCKERHUB_USERNAME }}/app_tcc:test
