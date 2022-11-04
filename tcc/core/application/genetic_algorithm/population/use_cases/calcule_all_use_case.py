@@ -3,7 +3,10 @@ import pandas as pd
 from tcc.core.application.transformer.run_transformer_use_case import (
     RunTransformerUseCase,
 )
-from tcc.core.domain.genetic_algorithm.population import Population
+from tcc.core.domain.genetic_algorithm.population import (
+    Population,
+    PopulationSteps,
+)
 from tcc.core.domain.transformer.entities import (
     Constraint,
     Variable,
@@ -12,8 +15,10 @@ from tcc.core.domain.transformer.entities import (
 from tcc.core.domain.transformer.table_repository import TableRepository
 from tcc.core.domain.transformer.transformer import Transformer
 
+from .base_use_case import PopulationUseCaseBase
 
-class PopulationCalculator:
+
+class PopulationCalculatorUseCase(PopulationUseCaseBase):
     def __init__(
         self,
         population: Population,
@@ -29,7 +34,10 @@ class PopulationCalculator:
         self.constraints = constraints
         self.variations = variations
 
-    def execute(self):
+    def minimal_step(self) -> PopulationSteps:
+        return PopulationSteps.new
+
+    def run(self):
         transformer = Transformer(
             variables=Variable(Jbt=0, Jat=0, Bm=0, Ksw=0, kt=0, Rjan=0, rel=0),
             constraints=self.constraints,
@@ -55,3 +63,5 @@ class PopulationCalculator:
         assert self.population.data is not None
         self.population.data.update(pd_result)
         self.population.generate_genes()
+
+        self.population.step = PopulationSteps.calculated

@@ -2,7 +2,10 @@ import json
 import unittest
 
 from tcc.core.application.genetic_algorithm.population.use_cases.calcule_all_use_case import (
-    PopulationCalculator,
+    PopulationCalculatorUseCase,
+)
+from tcc.core.application.genetic_algorithm.population.use_cases.sort_pareto_ranks_use_case import (
+    SortParetoRanksUseCase,
 )
 from tcc.core.application.tools.plot import Plot
 from tcc.core.domain.genetic_algorithm.gene import Gene
@@ -51,7 +54,7 @@ class TestUseCaseCalculeAll(unittest.TestCase):
         )
 
     def test_calcule_all_in_population(self):
-        calculator = PopulationCalculator(
+        calculator = PopulationCalculatorUseCase(
             self.population,
             self.table_repository,
             self.constraints,
@@ -69,6 +72,11 @@ class TestUseCaseCalculeAll(unittest.TestCase):
 
         for name in test_field_names:
             self.assertNotIn(None, self.population.data[name])
+
+    def test_sort_pareto_ranks(self):
+        self.test_calcule_all_in_population()
+        use_case = SortParetoRanksUseCase(self.population)
+        use_case.execute()
 
     def test_plot_after_calculation(self):
         self.test_calcule_all_in_population()
