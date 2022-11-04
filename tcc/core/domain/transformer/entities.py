@@ -45,14 +45,17 @@ class Variable(BaseModel):
     rel: float
 
 
+VariationTuple = Tuple[float, float, int]
+
+
 class Variation(BaseModel):
-    Jbt: Tuple[float, float]
-    Jat: Tuple[float, float]
-    Bm: Tuple[float, float]
-    Ksw: Tuple[float, float]
-    kt: Tuple[float, float]
-    Rjan: Tuple[float, float]
-    rel: Tuple[float, float]
+    Jbt: VariationTuple
+    Jat: VariationTuple
+    Bm: VariationTuple
+    Ksw: VariationTuple
+    kt: VariationTuple
+    Rjan: VariationTuple
+    rel: VariationTuple
 
 
 TableDataType = Dict[str, List[float] | List[List[float]]]

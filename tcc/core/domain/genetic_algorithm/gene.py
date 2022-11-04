@@ -124,7 +124,7 @@ class GeneBuilder:
     @classmethod
     def random_create(cls, variations: Variation) -> Variable:
         dict = {
-            name: np.random.uniform(*value)
+            name: np.random.uniform(value[0], value[1])
             for name, value in variations.dict().items()
         }
         return Variable(**dict)
