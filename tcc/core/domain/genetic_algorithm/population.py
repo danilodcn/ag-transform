@@ -1,5 +1,7 @@
 import functools
 import itertools
+from collections import defaultdict
+from enum import Enum
 from typing import List, Optional, Sequence
 
 import pandas as pd
@@ -18,8 +20,16 @@ class PopulationProps(BaseModel):
     crossover_probability: float
 
 
+class PopulationSteps(int, Enum):
+    new = 0
+    calculated = 1
+    penalized = 2
+    ranks_sorted = 3
+
+
 class Population(BaseModel):
-    data: Optional[pd.DataFrame] = None
+    step = PopulationSteps.new
+    data: pd.DataFrame | None = None
     props: PopulationProps
     genes: Sequence[Gene]
 
@@ -66,6 +76,21 @@ class Population(BaseModel):
         genes: List[Gene] = list(data)  # type: ignore
         self.genes = genes
         return self.genes
+
+    def get_step_display(self, step=None):
+        steps = defaultdict(lambda: "-")
+        steps.update(
+            {
+                0: "novo",
+                1: "calculado",
+                2: "penalizado",
+                3: "ranks ordenados",
+            }
+        )
+
+        if step is None:
+            step = self.step
+        return steps[step]
 
 
 class PopulationBuilder:
