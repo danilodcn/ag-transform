@@ -1,5 +1,6 @@
 import json
 import unittest
+from typing import Callable, Iterable
 
 from tcc.core.application.genetic_algorithm.population.use_cases.calcule_all_use_case import (
     PopulationCalculatorUseCase,
@@ -59,6 +60,30 @@ class TestUseCaseCalculeAll(unittest.TestCase):
             variations=self.variations,
         )
 
+    def assertPopulationChangeValue(
+        self, func: Callable, test_field_names: Iterable[str], *args, **kwargs
+    ):
+        assert self.population.data is not None
+        for name in test_field_names:
+            elements = self.population.data[name]
+            for element in elements:
+                self.assertEqual(
+                    element,
+                    None,
+                    f"Antes da operação deve ser igual a 'None'.\n{elements}",
+                )
+
+        func(*args, **kwargs)
+
+        for name in test_field_names:
+            elements = self.population.data[name]
+            for element in elements:
+                self.assertNotEqual(
+                    element,
+                    None,
+                    f"Após a operação deve ser diferente de 'None'.\n{elements}",
+                )
+
     def calcule_all(self):
         calculator = PopulationCalculatorUseCase(
             self.population,
@@ -78,11 +103,7 @@ class TestUseCaseCalculeAll(unittest.TestCase):
         assert self.population.data is not None
         test_field_names = ["Mativa", "PerdasT"]
 
-        for name in test_field_names:
-            self.assertTrue(all(self.population.data[name] != None))
-        self.calcule_all()
-        for name in test_field_names:
-            self.assertFalse(any(self.population.data[name] == None))
+        self.assertPopulationChangeValue(self.calcule_all, test_field_names)
 
     def test_penalize_population(self):
         self.calcule_all()
@@ -90,16 +111,20 @@ class TestUseCaseCalculeAll(unittest.TestCase):
         assert self.population.data is not None
         test_field_names = ["Mativa_P", "PerdasT_P"]
 
-        for name in test_field_names:
-            self.assertTrue(all(self.population.data[name] != None))
-        self.penalize_population()
-        for name in test_field_names:
-            self.assertFalse(any(self.population.data[name] == None))
+        self.assertPopulationChangeValue(
+            self.penalize_population, test_field_names
+        )
+
+    def sort_pareto_ranks(self):
+        use_case = SortParetoRanksUseCase(self.population)
+        use_case.execute()
 
     def test_sort_pareto_ranks(self):
         self.calcule_all()
-        use_case = SortParetoRanksUseCase(self.population)
-        use_case.execute()
+        self.penalize_population(type="weigh")
+        assert self.population.data is not None
+
+        self.assertPopulationChangeValue(self.sort_pareto_ranks, ["rank"])
 
     def test_plot_after_calculation(self):
         self.calcule_all()

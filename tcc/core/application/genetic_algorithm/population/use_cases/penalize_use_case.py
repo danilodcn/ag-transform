@@ -58,3 +58,4 @@ class PopulationPenalizeUseCase(PopulationUseCaseBase):
 
         assert len(vector_params.keys()) == 2
         self.data.update(vector_params)
+        self.population.step = PopulationSteps.penalized
