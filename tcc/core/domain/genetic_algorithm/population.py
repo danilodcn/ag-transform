@@ -2,7 +2,7 @@ import functools
 import itertools
 from collections import defaultdict
 from enum import Enum
-from typing import List, Optional, Sequence
+from typing import Dict, List, Optional
 
 import pandas as pd
 from typing_extensions import Self
@@ -32,7 +32,7 @@ class Population(BaseModel):
     step = PopulationSteps.new
     data: pd.DataFrame | None = None
     props: PopulationProps
-    genes: Sequence[Gene]
+    genes: List[Gene]
 
     class Config:
         arbitrary_types_allowed = True
@@ -77,6 +77,23 @@ class Population(BaseModel):
         genes: List[Gene] = list(data)  # type: ignore
         self.genes = genes
         return self.genes
+
+    def add_genes(self, *genes: Gene):
+        self.genes.extend(genes)
+        rows: Dict[int, pd.Series[float]] = {}
+        for i, gene in enumerate(genes, start=len(genes)):
+            rows[i] = gene.generate_data()
+
+        assert self.data is not None
+        objs = [
+            self.data,
+            pd.DataFrame(rows.values(), index=list(rows.keys())),
+        ]
+
+        self.data = pd.concat(
+            objs=objs,
+            ignore_index=True,
+        )
 
     def get_step_display(self, step=None):
         steps = defaultdict(lambda: "-")

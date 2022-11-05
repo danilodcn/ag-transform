@@ -28,6 +28,12 @@ class Gene(BaseModel):
     variables: Variable
     results: Result
 
+    def __eq__(self, other: Self) -> bool:
+        assert isinstance(other, Gene), "precisa ser gene"
+        return (
+            self.results == other.results and self.variables == other.variables
+        )
+
     def set_data(self, data: pd.Series) -> Self:
         self.data = data
         return self

@@ -1,5 +1,8 @@
 import json
 import unittest
+from typing import List
+
+import numpy as np
 
 from tcc.core.domain.genetic_algorithm.gene import Gene
 from tcc.core.domain.genetic_algorithm.population import (
@@ -76,3 +79,49 @@ class TestCreatePopulation(unittest.TestCase):
         self.assertEqual(len(population.genes), population.props.n_population)
         for gene in population.genes:
             self.assertIsInstance(gene, Gene)
+
+    def test_add_genes(self):
+        population_1 = PopulationBuilder.build(
+            props=self.props,
+            variations=self.variations,
+        )
+
+        population_2 = PopulationBuilder.build(
+            props=self.props,
+            variations=self.variations,
+        )
+
+        population_1.generate_data()
+        population_2.generate_data()
+        assert population_1.data is not None
+        assert population_2.data is not None
+        N = 4
+        genes_for_add_ids = np.random.choice(
+            list(population_2.data.index), N, replace=False
+        )
+        genes_for_add_ids.sort()
+        genes_for_add: List[Gene] = []
+        for i, gene in enumerate(population_2.genes):
+            if i in genes_for_add_ids:
+                genes_for_add.append(gene)
+        population_1.add_genes(*genes_for_add)
+        for gene_1, gene_2 in zip(genes_for_add, population_1.genes[-N:]):
+            try:
+                self.assertEqual(gene_1, gene_2)
+            except ValueError as error:
+                self.assertIn(
+                    "The truth value of a Series is ambiguous", str(error)
+                )
+
+        selected_1 = population_1.data[-N:]
+        selected_2 = population_2.data.iloc[genes_for_add_ids]
+        selected_2.index = selected_1.index
+        for key_1 in selected_1.index:
+            value_1 = selected_1.loc[key_1]
+            value_2 = selected_2.loc[key_1]
+
+            for i, j in zip(value_1, value_2):
+                self.assertEqual(
+                    i,
+                    j,
+                )
