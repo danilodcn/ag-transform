@@ -18,6 +18,7 @@ class PopulationProps(BaseModel):
     n_population: int
     disturbance_rate: float
     crossover_probability: float
+    penalize_constant: float
 
 
 class PopulationSteps(int, Enum):

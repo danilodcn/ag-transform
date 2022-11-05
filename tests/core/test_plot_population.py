@@ -37,7 +37,10 @@ class TestCreatePopulation(unittest.TestCase):
             variations=variations,
         )
         props = PopulationProps(
-            n_population=10, disturbance_rate=0.3, crossover_probability=0.4
+            n_population=10,
+            disturbance_rate=0.3,
+            crossover_probability=0.4,
+            penalize_constant=1.4,
         )
 
         self.population = PopulationBuilder.build(
