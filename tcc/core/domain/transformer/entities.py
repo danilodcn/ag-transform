@@ -45,7 +45,8 @@ class Variable(BaseModel):
     rel: float
 
 
-VariationTuple = Tuple[float, float, int]
+# tula contendo valor mínimo, máximo e peso usado
+VariationTuple = Tuple[float, float, float]
 
 
 class Variation(BaseModel):
@@ -56,6 +57,8 @@ class Variation(BaseModel):
     kt: VariationTuple
     Rjan: VariationTuple
     rel: VariationTuple
+    Mativa: VariationTuple
+    PerdasT: VariationTuple
 
 
 TableDataType = Dict[str, List[float] | List[List[float]]]
