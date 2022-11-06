@@ -1,7 +1,7 @@
 import io
 from collections import defaultdict
 from pathlib import Path
-from typing import Iterable, Literal
+from typing import Iterable, Literal, Tuple
 from uuid import uuid4
 
 import pandas as pd
@@ -31,7 +31,6 @@ class Plot:
         fig, ax = plt.subplots()
         fig.title = title or f"figure-{fig.number}"  # type: ignore
         fig.suptitle(title)
-
         return fig, ax
 
     def plot(
@@ -40,9 +39,10 @@ class Plot:
         field_names: Iterable[str],
         with_ranks=False,
         title="",
+        size: Tuple[float, float] = (10, 10),
     ):
         _, ax = self.__basic_plot(title)
-
+        plt.gcf().set_size_inches(*size)
         x_name, y_name = field_names
         x_label = self.LABEL_NAMES[x_name]
         y_label = self.LABEL_NAMES[y_name]
@@ -93,7 +93,6 @@ class Plot:
         dir_name = f"/tmp/tcc/images/{dir_name}"
         dir = Path(dir_name)
         dir.mkdir(parents=True, exist_ok=True)
-
         format = type.lower()
         if format == "pdf":
             Plot.save_pdf(dir, suffix)
