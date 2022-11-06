@@ -1,4 +1,5 @@
 from abc import ABC, abstractmethod, abstractproperty
+from typing import Any
 
 import pandas as pd
 
@@ -19,7 +20,7 @@ class PopulationUseCaseBase(ABC):
     def run(self, **options):
         raise NotImplementedError("not implemented!")
 
-    def execute(self, **options):
+    def execute(self, **options: Any):
         self.validate()
         self.run(**options)
 

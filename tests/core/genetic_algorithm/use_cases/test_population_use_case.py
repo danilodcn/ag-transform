@@ -5,6 +5,9 @@ from typing import Callable, Iterable
 from tcc.core.application.genetic_algorithm.population.use_cases.calcule_all_use_case import (
     PopulationCalculatorUseCase,
 )
+from tcc.core.application.genetic_algorithm.population.use_cases.fitness_population_use_case import (
+    PopulationFitnessUseCase,
+)
 from tcc.core.application.genetic_algorithm.population.use_cases.penalize_use_case import (
     PopulationPenalizeUseCase,
 )
@@ -53,6 +56,7 @@ class TestUseCaseCalculeAll(unittest.TestCase):
             disturbance_rate=0.3,
             crossover_probability=0.4,
             penalize_constant=1.4,
+            niche_radius=0.1,
         )
 
         self.population = PopulationBuilder.build(
@@ -98,6 +102,16 @@ class TestUseCaseCalculeAll(unittest.TestCase):
         use_case = PopulationPenalizeUseCase(self.population, self.variations)
         use_case.execute(**options)
 
+    def sort_pareto_ranks(self):
+        use_case = SortParetoRanksUseCase(self.population)
+        use_case.execute()
+
+    def calcule_fitness(self):
+        use_case = PopulationFitnessUseCase(
+            population=self.population, variations=self.variations
+        )
+        use_case.execute()
+
     def test_calcule_all_in_population(self):
         self.population.generate_data()
         assert self.population.data is not None
@@ -115,16 +129,19 @@ class TestUseCaseCalculeAll(unittest.TestCase):
             self.penalize_population, test_field_names
         )
 
-    def sort_pareto_ranks(self):
-        use_case = SortParetoRanksUseCase(self.population)
-        use_case.execute()
-
     def test_sort_pareto_ranks(self):
         self.calcule_all()
         self.penalize_population(type="weigh")
         assert self.population.data is not None
 
         self.assertPopulationChangeValue(self.sort_pareto_ranks, ["rank"])
+
+    def test_calcule_fitness(self):
+        self.calcule_all()
+        self.penalize_population()
+        self.sort_pareto_ranks()
+
+        self.assertPopulationChangeValue(self.calcule_fitness, ["fitness"])
 
     def test_plot_after_calculation(self):
         self.calcule_all()
@@ -136,11 +153,18 @@ class TestUseCaseCalculeAll(unittest.TestCase):
         plot.plot(self.population.data, fields_names, title="Primeira Geração")
         fields_names = "PerdasT_P Mativa_P".split()
         plot.plot(self.population.data, fields_names, title="Com penalização")
-        fields_names = "PerdasT_P Mativa_P".split()
+        fields_names = "PerdasT Mativa".split()
         plot.plot(
             self.population.data,
             fields_names,
             with_ranks=True,
             title="Com ranks",
+        )
+        fields_names = "PerdasT_P Mativa_P".split()
+        plot.plot(
+            self.population.data,
+            fields_names,
+            with_ranks=True,
+            title="Com ranks (Valores penalizados)",
         )
         plot.save(suffix="plot_after_calculation", type="pdf", dpi=500)
