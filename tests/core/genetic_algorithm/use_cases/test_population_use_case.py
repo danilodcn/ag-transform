@@ -129,10 +129,18 @@ class TestUseCaseCalculeAll(unittest.TestCase):
     def test_plot_after_calculation(self):
         self.calcule_all()
         self.penalize_population(type="weigh")
+        self.sort_pareto_ranks()
         plot = Plot()
         assert self.population.data is not None
         fields_names = "PerdasT Mativa".split()
-        plot.plot(self.population.data, fields_names)
+        plot.plot(self.population.data, fields_names, title="Primeira Geração")
         fields_names = "PerdasT_P Mativa_P".split()
-        plot.plot(self.population.data, fields_names)
+        plot.plot(self.population.data, fields_names, title="Com penalização")
+        fields_names = "PerdasT_P Mativa_P".split()
+        plot.plot(
+            self.population.data,
+            fields_names,
+            with_ranks=True,
+            title="Com ranks",
+        )
         plot.save(suffix="plot_after_calculation", type="pdf", dpi=500)

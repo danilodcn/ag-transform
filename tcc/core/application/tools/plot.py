@@ -6,10 +6,11 @@ from uuid import uuid4
 
 import pandas as pd
 from matplotlib import pyplot as plt
-from matplotlib._color_data import XKCD_COLORS
+from matplotlib._color_data import TABLEAU_COLORS
 from matplotlib.backends.backend_pdf import PdfPages
 
-COLORS = list(XKCD_COLORS.values())
+COLORS = list(TABLEAU_COLORS.values())
+NUMBER_OF_COLORS = len(COLORS)
 
 
 class Plot:
@@ -28,13 +29,18 @@ class Plot:
 
     def __basic_plot(self, title: str = ""):
         fig, ax = plt.subplots()
-        # ax.set_title(title)
         fig.title = title or f"figure-{fig.number}"  # type: ignore
         fig.suptitle(title)
 
         return fig, ax
 
-    def plot(self, df: pd.DataFrame, field_names: Iterable[str], title=""):
+    def plot(
+        self,
+        df: pd.DataFrame,
+        field_names: Iterable[str],
+        with_ranks=False,
+        title="",
+    ):
         _, ax = self.__basic_plot(title)
 
         x_name, y_name = field_names
@@ -46,7 +52,6 @@ class Plot:
 
         x_data = df[x_name]
         y_data = df[y_name]
-        ax.plot(x_data, y_data, "ko")
 
         dx = max(x_data) - min(x_data)
         dy = max(y_data) - min(y_data)
@@ -56,6 +61,23 @@ class Plot:
         iterator = zip(range(len(y_data)), y_data, x_data)
         for i, massa, perdas in iterator:
             ax.annotate(str(i), xy=(perdas + kx, massa + ky))
+        if with_ranks:
+            ranks = list(df["rank"].drop_duplicates())
+            ranks.sort()
+            for rank in ranks:
+                filtered_df = df.loc[df["rank"] == rank]
+                x_data = filtered_df[x_name]
+                y_data = filtered_df[y_name]
+                ax.scatter(
+                    x_data,
+                    y_data,
+                    # marker="o",
+                    color=COLORS[int(rank % NUMBER_OF_COLORS)],
+                    label=f"rank {rank}",
+                )
+            ax.legend()
+        else:
+            ax.plot(x_data, y_data, "ko")
 
     @staticmethod
     def show():
