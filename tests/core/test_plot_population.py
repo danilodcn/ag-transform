@@ -41,6 +41,7 @@ class TestCreatePopulation(unittest.TestCase):
             disturbance_rate=0.3,
             crossover_probability=0.4,
             penalize_constant=1.4,
+            niche_radius=0.1,
         )
 
         self.population = PopulationBuilder.build(

@@ -19,6 +19,7 @@ class PopulationProps(BaseModel):
     disturbance_rate: float
     crossover_probability: float
     penalize_constant: float
+    niche_radius: float
 
 
 class PopulationSteps(int, Enum):
@@ -26,6 +27,7 @@ class PopulationSteps(int, Enum):
     calculated = 1
     penalized = 2
     ranks_sorted = 3
+    fitness_calculated = 4
 
 
 class Population(BaseModel):
@@ -60,7 +62,7 @@ class Population(BaseModel):
         assert self.data is not None
         return self.data.shape
 
-    def len(self):
+    def len(self) -> int:
         return self.shape()[0]
 
     def generate_data(self):

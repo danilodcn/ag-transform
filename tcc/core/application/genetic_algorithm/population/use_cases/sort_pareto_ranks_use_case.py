@@ -28,6 +28,8 @@ class SortParetoRanksUseCase(PopulationUseCaseBase):
             number += 1
             self.data.loc[no_dominated, "rank"] = number
 
+        self.population.step = PopulationSteps.ranks_sorted
+
     def __sort_pareto_ranks(self, no_dominated: List[int], number: int):
         dominates: List[int] = []
         for i in no_dominated:
