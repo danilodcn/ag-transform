@@ -2,6 +2,9 @@ import json
 import unittest
 from typing import Callable, Iterable
 
+from tcc.core.application.genetic_algorithm.population.use_cases import (
+    SelectionPopulationUseCase,
+)
 from tcc.core.application.genetic_algorithm.population.use_cases.calcule_all_use_case import (
     PopulationCalculatorUseCase,
 )
@@ -142,6 +145,25 @@ class TestUseCaseCalculeAll(unittest.TestCase):
         self.sort_pareto_ranks()
 
         self.assertPopulationChangeValue(self.calcule_fitness, ["fitness"])
+
+    def test_selection_use_case(self):
+        self.calcule_all()
+        self.penalize_population()
+        self.sort_pareto_ranks()
+        self.calcule_fitness()
+        expected_n_population = 3
+        use_case: SelectionPopulationUseCase = SelectionPopulationUseCase(
+            self.population
+        )
+        population: Population = use_case.execute(number=expected_n_population)
+
+        assert population.data is not None
+
+        self.assertIsInstance(population, Population)
+        self.assertEqual(population.props.n_population, expected_n_population)
+        self.assertEqual(population.len(), expected_n_population)
+        self.assertEqual(len(population.data), expected_n_population)
+        self.assertEqual(len(population.genes), expected_n_population)
 
     def test_plot_after_calculation(self):
         self.calcule_all()

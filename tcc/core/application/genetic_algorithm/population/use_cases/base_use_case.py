@@ -17,12 +17,12 @@ class PopulationUseCaseBase(ABC):
         raise NotImplementedError
 
     @abstractmethod
-    def run(self, **options):
+    def run(self, **options) -> Any:
         raise NotImplementedError("not implemented!")
 
-    def execute(self, **options: Any):
+    def execute(self, **options: Any) -> Any:
         self.validate()
-        self.run(**options)
+        return self.run(**options)
 
     def validate(self):
         minimal_step_method = getattr(self, "minimal_step", None)
