@@ -20,7 +20,6 @@ class Result(BaseModel):
     rank: Optional[float] = None
     crowlingDistance: Optional[float] = None
     fitness: Optional[float] = None
-    calculated: float = False
 
 
 class Gene(BaseModel):

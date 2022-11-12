@@ -27,10 +27,10 @@ class PopulationPenalizeUseCase(PopulationUseCaseBase):
 
     def run(self, type: Literal["count", "weigh"] = "count"):
         counts = self.data.apply(
-            count_restrictions_violated,
+            count_restrictions_violated,  # type: ignore
             args=(self.variations,),
             axis=1,
-            result_type="expand",
+            result_type="expand",  # type: ignore
         )
         counts_list = counts[type]
         max_losses = self.variations.PerdasT[1]

@@ -122,7 +122,5 @@ class TestCreatePopulation(unittest.TestCase):
             value_2 = selected_2.loc[key_1]
 
             for i, j in zip(value_1, value_2):
-                self.assertEqual(
-                    i,
-                    j,
-                )
+                is_equal = i == j or (np.isnan(i) and np.isnan(j))
+                self.assertTrue(is_equal, f"deve ser igual: {i} != {j}")

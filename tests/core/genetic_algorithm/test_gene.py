@@ -23,7 +23,6 @@ class TestCreateGene(unittest.TestCase):
         gene = GeneBuilder.build(variations=self.variations)
 
         self.assertIsInstance(gene, Gene)
-        self.assertFalse(gene.results.calculated)
 
     def test_data_in_gene_is_None(self):
         gene = GeneBuilder.build(
@@ -68,4 +67,3 @@ class TestCreateGene(unittest.TestCase):
         self.assertEqual(number, expected_number)
         self.assertTrue(equal_all, f"\n{index=}\n{expected_index=}")
         self.assertIsInstance(gene, Gene)
-        self.assertFalse(gene.results.calculated)
