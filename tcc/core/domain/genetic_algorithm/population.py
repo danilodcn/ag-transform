@@ -39,10 +39,39 @@ class Population(BaseModel):
     class Config:
         arbitrary_types_allowed = True
 
+    def __add__(self, other: Self) -> Self:
+        return self.join(other)
+
+    def join(self, other: Self) -> "Population":
+        self_data = self.data
+        assert isinstance(
+            self_data, pd.DataFrame
+        ), "make sure 'self.data' is a Data Frame"
+
+        other_data = other.data
+        assert isinstance(
+            other_data, pd.DataFrame
+        ), "make sure 'other.data' is a Data Frame"
+
+        data = pd.concat(
+            objs=[self_data, other_data],
+            ignore_index=True,
+        )
+
+        population = self.copy(update={"data": data})
+        population.generate_genes()
+        return population
+
     def set_data(self, data: pd.DataFrame) -> Self:
         self.data = data
         self.generate_genes()
         return self
+
+    def get_data(self) -> pd.DataFrame:
+        if isinstance(self.data, pd.DataFrame):
+            return self.data
+
+        raise AttributeError("data is None")
 
     def set_props(self, props: PopulationProps) -> Self:
         self.props = props
@@ -51,12 +80,6 @@ class Population(BaseModel):
     def set_genes(self, genes: List[Gene]) -> Self:
         self.genes = genes
         return self
-
-    # def get_gene(self, i: int) -> Gene:
-    #     assert self.data is not None
-    #     data: pd.Series = self.data.iloc[i]
-
-    #     return Gene(data=data)
 
     def shape(self):
         assert self.data is not None
@@ -72,9 +95,10 @@ class Population(BaseModel):
         return self.data
 
     def generate_genes(self):
-        assert self.data is not None
+        assert isinstance(self.data, pd.DataFrame)
         data = self.data.apply(
-            lambda data_gene: GeneBuilder.build(data=data_gene), axis=1
+            lambda d: GeneBuilder.build(data=d),  # type: ignore
+            axis=1,
         )
         genes: List[Gene] = list(data)  # type: ignore
         self.genes = genes
@@ -86,7 +110,7 @@ class Population(BaseModel):
         for i, gene in enumerate(genes, start=len(genes)):
             rows[i] = gene.generate_data()
 
-        assert self.data is not None
+        assert isinstance(self.data, pd.DataFrame)
         objs = [
             self.data,
             pd.DataFrame(rows.values(), index=list(rows.keys())),
@@ -105,6 +129,7 @@ class Population(BaseModel):
                 1: "calculado",
                 2: "penalizado",
                 3: "ranks ordenados",
+                4: "fitness calculado",
             }
         )
 

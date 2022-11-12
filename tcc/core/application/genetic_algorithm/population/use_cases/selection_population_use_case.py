@@ -26,6 +26,8 @@ class SelectionPopulationUseCase(PopulationUseCaseBase):
         number: int | None = None,
         frac: float | None = None,
         weights: Iterable[float] | None = None,
+        replace: bool = False,
+        rand_sort: float | None = None,
     ) -> Population:
         if frac is not None and number is not None:
             raise ValueError("Cannot use 'number' and 'frac'")
@@ -39,9 +41,11 @@ class SelectionPopulationUseCase(PopulationUseCaseBase):
         new_data = self.data.sample(
             n=number,
             frac=frac,
-            replace=False,
+            replace=replace,
             weights=weights,
         )
+        if rand_sort:
+            new_data = new_data.sample(frac=1)
         population = self.population.copy(update={"data": new_data})
         population.generate_genes()
         population.props.n_population = len(new_data)

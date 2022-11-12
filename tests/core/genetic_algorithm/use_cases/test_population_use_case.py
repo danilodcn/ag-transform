@@ -2,19 +2,14 @@ import json
 import unittest
 from typing import Callable, Iterable
 
+import numpy as np
+
 from tcc.core.application.genetic_algorithm.population.use_cases import (
-    SelectionPopulationUseCase,
-)
-from tcc.core.application.genetic_algorithm.population.use_cases.calcule_all_use_case import (
+    CrossoverPopulationUseCase,
     PopulationCalculatorUseCase,
-)
-from tcc.core.application.genetic_algorithm.population.use_cases.fitness_population_use_case import (
     PopulationFitnessUseCase,
-)
-from tcc.core.application.genetic_algorithm.population.use_cases.penalize_use_case import (
     PopulationPenalizeUseCase,
-)
-from tcc.core.application.genetic_algorithm.population.use_cases.sort_pareto_ranks_use_case import (
+    SelectionPopulationUseCase,
     SortParetoRanksUseCase,
 )
 from tcc.core.application.tools.plot import Plot
@@ -74,9 +69,9 @@ class TestUseCaseCalculeAll(unittest.TestCase):
         for name in test_field_names:
             elements = self.population.data[name]
             for element in elements:
-                self.assertEqual(
-                    element,
-                    None,
+                is_none = element is None or np.isnan(element)
+                self.assertTrue(
+                    is_none,
                     f"Antes da operação deve ser igual a 'None'.\n{elements}",
                 )
 
@@ -85,15 +80,17 @@ class TestUseCaseCalculeAll(unittest.TestCase):
         for name in test_field_names:
             elements = self.population.data[name]
             for element in elements:
-                self.assertNotEqual(
-                    element,
-                    None,
+                is_none = element is not None or not np.isnan(element)
+                self.assertTrue(
+                    is_none,
                     f"Após a operação deve ser diferente de 'None'.\n{elements}",
                 )
 
-    def calcule_all(self):
+    def calcule_all(self, population=None):
+        if population is None:
+            population = self.population
         calculator = PopulationCalculatorUseCase(
-            self.population,
+            population,
             self.table_repository,
             self.constraints,
             self.variations,
@@ -114,6 +111,14 @@ class TestUseCaseCalculeAll(unittest.TestCase):
             population=self.population, variations=self.variations
         )
         use_case.execute()
+
+    def crossover_population(self, crossover_population_frac):
+        use_case = CrossoverPopulationUseCase(self.population)
+        population: Population = use_case.execute(
+            crossover_population_frac=crossover_population_frac
+        )
+        self.calcule_all(population)
+        self.population = population
 
     def test_calcule_all_in_population(self):
         self.population.generate_data()
@@ -165,6 +170,13 @@ class TestUseCaseCalculeAll(unittest.TestCase):
         self.assertEqual(len(population.data), expected_n_population)
         self.assertEqual(len(population.genes), expected_n_population)
 
+    def test_crossover_population(self):
+        self.calcule_all()
+        self.penalize_population()
+        self.sort_pareto_ranks()
+        self.calcule_fitness()
+        self.crossover_population(crossover_population_frac=0.9)
+
     def test_plot_after_calculation(self):
         self.calcule_all()
         self.penalize_population(type="weigh")
@@ -189,4 +201,15 @@ class TestUseCaseCalculeAll(unittest.TestCase):
             with_ranks=True,
             title="Com ranks (Valores penalizados)",
         )
+
+        self.calcule_fitness()
+        self.crossover_population(crossover_population_frac=0.9)
+        fields_names = "PerdasT Mativa".split()
+        plot.plot(
+            self.population.data,
+            fields_names,
+            with_ranks=True,
+            title="Após crossover",
+        )
+
         plot.save(suffix="plot_after_calculation", type="pdf", dpi=500)
