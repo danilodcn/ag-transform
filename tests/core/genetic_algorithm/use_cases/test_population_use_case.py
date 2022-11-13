@@ -112,10 +112,10 @@ class TestUseCaseCalculeAll(unittest.TestCase):
         )
         use_case.execute()
 
-    def crossover_population(self, crossover_population_frac):
+    def crossover_population(self, population_frac):
         use_case = CrossoverPopulationUseCase(self.population)
         population: Population = use_case.execute(
-            crossover_population_frac=crossover_population_frac
+            population_frac=population_frac
         )
         self.calcule_all(population)
         self.population = population
@@ -175,7 +175,7 @@ class TestUseCaseCalculeAll(unittest.TestCase):
         self.penalize_population()
         self.sort_pareto_ranks()
         self.calcule_fitness()
-        self.crossover_population(crossover_population_frac=0.9)
+        self.crossover_population(population_frac=0.9)
 
     def test_plot_after_calculation(self):
         self.calcule_all()
@@ -203,7 +203,7 @@ class TestUseCaseCalculeAll(unittest.TestCase):
         )
 
         self.calcule_fitness()
-        self.crossover_population(crossover_population_frac=0.9)
+        self.crossover_population(population_frac=0.9)
         fields_names = "PerdasT Mativa".split()
         plot.plot(
             self.population.data,

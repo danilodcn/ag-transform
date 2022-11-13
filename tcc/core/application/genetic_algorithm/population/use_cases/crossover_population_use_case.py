@@ -22,11 +22,11 @@ class CrossoverPopulationUseCase(PopulationUseCaseBase):
     def minimal_step(self) -> PopulationSteps:
         return PopulationSteps.penalized
 
-    def run(self, crossover_population_frac: float):
+    def run(self, population_frac: float):
         selection_use_case = SelectionPopulationUseCase(self.population)
 
         number_of_fathers = round(
-            crossover_population_frac * self.population.props.n_population
+            population_frac * self.population.props.n_population
         )
         options = dict(number=number_of_fathers, rand_sort=True)
 
