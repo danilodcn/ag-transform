@@ -60,6 +60,7 @@ class Population(BaseModel):
 
         population = self.copy(update={"data": data})
         population.generate_genes()
+        population.step = PopulationSteps.new
         return population
 
     def set_data(self, data: pd.DataFrame) -> Self:

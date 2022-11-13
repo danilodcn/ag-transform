@@ -25,7 +25,7 @@ class PopulationPenalizeUseCase(PopulationUseCaseBase):
     def minimal_step(self) -> PopulationSteps:
         return PopulationSteps.calculated
 
-    def run(self, type: Literal["count", "weigh"] = "count"):
+    def run(self, type: Literal["count", "weigh"] = "weigh"):
         counts = self.data.apply(
             count_restrictions_violated,  # type: ignore
             args=(self.variations,),
@@ -33,17 +33,26 @@ class PopulationPenalizeUseCase(PopulationUseCaseBase):
             result_type="expand",  # type: ignore
         )
         counts_list = counts[type]
-        max_losses = self.variations.PerdasT[1]
-        max_active_mass = self.variations.Mativa[1]
-        n_population = self.population.props.n_population
+        max_losses: float = np.max(
+            self.data["PerdasT"][
+                self.data["PerdasT"] <= self.variations.PerdasT[1]
+            ]
+        )
+        max_active_mass: float = np.max(
+            self.data["Mativa"][
+                self.data["Mativa"] <= self.variations.Mativa[1]
+            ]
+        )
+        population_len = self.population.len()
         penalize_constant = self.population.props.penalize_constant
-        # import ipdb; ipdb.set_trace()
+
         result = np.asarray(
             (
-                np.ones(n_population) * max_losses * counts_list,
-                np.ones(n_population) * max_active_mass * counts_list,
+                np.ones(population_len) * max_losses * counts_list,
+                np.ones(population_len) * max_active_mass * counts_list,
             )
         ).transpose()
+
         self.data[["PerdasT_P", "Mativa_P"]] = self.data[["PerdasT", "Mativa"]]
         vector_params = (
             pd.DataFrame(

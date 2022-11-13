@@ -1,5 +1,5 @@
 import functools
-from typing import Any, Optional
+from typing import Any
 
 import numpy as np
 import pandas as pd
@@ -9,21 +9,22 @@ from tcc.core.domain import BaseModel
 from tcc.core.domain.transformer.entities import Variable, Variation
 from tcc.core.domain.types import DictStrAny
 
-InputData = Optional[Variable | pd.Series]
+InputData = Variable | pd.Series | None
 
 
 class Result(BaseModel):
-    PerdasT: Optional[float] = None
-    Mativa: Optional[float] = None
-    PerdasT_P: Optional[float] = None
-    Mativa_P: Optional[float] = None
-    rank: Optional[float] = None
-    crowlingDistance: Optional[float] = None
-    fitness: Optional[float] = None
+    PerdasT: float | None = None
+    Mativa: float | None = None
+    PerdasT_P: float | None = None
+    Mativa_P: float | None = None
+    rank: float | None = None
+    crowlingDistance: float | None = None
+    fitness: float | None = None
+    distance: float | None = None
 
 
 class Gene(BaseModel):
-    data: Optional[pd.Series] = None
+    data: pd.Series | None = None
     variables: Variable
     results: Result
 
@@ -79,9 +80,8 @@ class GeneBuilder:
     @classmethod
     def build(
         cls,
-        variations: Optional[Variation] = None,
+        variations: Variation | None = None,
         data: InputData = None,
-        # variables: Optional[Variable] = None,
     ) -> Gene:
         # if variables is None:
         #     variables = cls.random_create(variations=variations)
@@ -93,7 +93,7 @@ class GeneBuilder:
 
     @functools.singledispatchmethod
     @classmethod
-    def create_gene(cls, data, variations: Optional[Variation] = None) -> Gene:
+    def create_gene(cls, data, variations: Variation | None = None) -> Gene:
         # assert variations is not None
 
         # return cls.random_create(variations)
@@ -107,7 +107,7 @@ class GeneBuilder:
 
     @create_gene.register
     @classmethod
-    def _(cls, data: None, variations: Optional[Variation] = None):
+    def _(cls, data: None, variations: Variation | None = None):
         assert variations is not None
         variables = cls.random_create(variations)
         results = Result()

@@ -48,5 +48,4 @@ class SelectionPopulationUseCase(PopulationUseCaseBase):
             new_data = new_data.sample(frac=1)
         population = self.population.copy(update={"data": new_data})
         population.generate_genes()
-        population.props.n_population = len(new_data)
         return population

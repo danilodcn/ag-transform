@@ -11,6 +11,8 @@ from tcc.core.domain.transformer.entities import Variation
 
 from .base_use_case import PopulationUseCaseBase
 
+BIG_NUMBER = 1e2
+
 
 class PopulationFitnessUseCase(PopulationUseCaseBase):
     def __init__(self, population: Population, variations: Variation) -> None:
@@ -41,6 +43,7 @@ class PopulationFitnessUseCase(PopulationUseCaseBase):
         columns_names = [
             "meanFitness",
             "sumDistance",
+            "distance",
             "sharedFitness",
             "solutions_for_rank",
             "rank",
@@ -61,8 +64,8 @@ class PopulationFitnessUseCase(PopulationUseCaseBase):
         for rank in ranks:
             set: pd.DataFrame = data.loc[data["rank"] == rank][
                 ["PerdasT_P", "Mativa_P"]
-            ]
-            losses_set = set.sort_values(by=["PerdasT_P"])["PerdasT_P"]
+            ].sort_values(by=["PerdasT_P"])
+            losses_set = set["PerdasT_P"]
 
             df.loc[losses_set.index, "solutions_for_rank"] = losses_set.count()
 
@@ -73,14 +76,31 @@ class PopulationFitnessUseCase(PopulationUseCaseBase):
                 n_current, n_before
             ) / (n_before - n_current)
             n_before = n_current
-            # import ipdb; ipdb.set_trace()
 
-            # iterator = it.permutations(set.index, 2)
             loss: pd.Series[float] = set["PerdasT_P"]
             mass: pd.Series[float] = set["Mativa_P"]
-            for i in set.index:
+            # import ipdb; ipdb.set_trace()
+            index_list = list(set.index)
+            first_index = index_list[0]
+            last_index = index_list[-1]
+            for count, i in enumerate(set.index):
                 losses_i, mass_i = loss[i], mass[i]
                 distance = 1
+                if i in [first_index, last_index]:
+                    final_distance = BIG_NUMBER
+                else:
+                    i_0 = set.index[count - 1]
+                    i_1 = set.index[count + 1]
+                    d0 = self.__distance(
+                        losses_i, loss[i_0], mass_i, mass[i_0]  # type: ignore
+                    )
+                    d1 = self.__distance(
+                        losses_i, loss[i_1], mass_i, mass[i_1]  # type: ignore
+                    )
+                    final_distance = (d0 + d1) / 2
+
+                df.loc[i, "distance"] = final_distance
+                count += 1
                 for j in set.index:
                     if i == j:
                         continue
@@ -103,6 +123,7 @@ class PopulationFitnessUseCase(PopulationUseCaseBase):
             * (df["sharedFitness"] / sum_shared_fitness)
         )
         data["fitness"] = result / np.sum(result)
+        data["distance"] = df["distance"]
 
     @validate_arguments
     def __distance(self, l1: float, l2: float, m1: float, m2: float) -> float:
