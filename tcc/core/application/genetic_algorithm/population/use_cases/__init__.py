@@ -1,4 +1,5 @@
 from .calcule_all_use_case import PopulationCalculatorUseCase
+from .clear_population_use_case import ClearPopulationUseCase
 from .fitness_population_use_case import PopulationFitnessUseCase
 from .individual_optimization import (
     CrossoverPopulationUseCase,
@@ -16,4 +17,5 @@ __all__ = [
     "SelectionPopulationUseCase",
     "SortParetoRanksUseCase",
     "MutationPopulationUseCase",
+    "ClearPopulationUseCase",
 ]

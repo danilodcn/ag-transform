@@ -5,6 +5,7 @@ from typing import Callable, Iterable
 import numpy as np
 
 from tcc.core.application.genetic_algorithm.population.use_cases import (
+    ClearPopulationUseCase,
     CrossoverPopulationUseCase,
     MutationPopulationUseCase,
     PopulationCalculatorUseCase,
@@ -129,6 +130,10 @@ class TestUseCaseCalculeAll(unittest.TestCase):
         self.calcule_all(population)
         self.population = population
 
+    def clear_population(self, n_population: int | None = None):
+        use_case = ClearPopulationUseCase(self.population)
+        use_case.execute(n_population=n_population)
+
     def test_calcule_all_in_population(self):
         self.population.generate_data()
         assert self.population.data is not None
@@ -192,6 +197,31 @@ class TestUseCaseCalculeAll(unittest.TestCase):
         self.calcule_fitness()
         frac = 0.46
         self.mutation_population(population_frac=frac)
+
+    def test_clear_population(self):
+        self.calcule_all()
+        self.penalize_population()
+        self.sort_pareto_ranks()
+        self.calcule_fitness()
+
+        frac = 0.46
+
+        self.crossover_population(population_frac=frac)
+        self.penalize_population()
+        self.sort_pareto_ranks()
+        self.calcule_fitness()
+
+        self.mutation_population(population_frac=frac)
+        self.penalize_population()
+        self.sort_pareto_ranks()
+        self.calcule_fitness()
+        n_population = self.population.props.n_population - 4
+
+        self.clear_population(n_population=n_population)
+
+        self.assertIsInstance(self.population, Population)
+        self.assertEqual(len(self.population.get_data()), n_population)
+        self.assertEqual(len(self.population.genes), n_population)
 
     def test_plot_after_calculation(self):
         self.calcule_all()
