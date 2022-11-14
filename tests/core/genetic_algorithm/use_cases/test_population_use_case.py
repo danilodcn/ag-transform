@@ -4,7 +4,7 @@ from typing import Callable, Iterable
 
 import numpy as np
 
-from tcc.core.application.genetic_algorithm.population.use_cases import (
+from tcc.core.application.population.use_cases import (
     ClearPopulationUseCase,
     CrossoverPopulationUseCase,
     MutationPopulationUseCase,
