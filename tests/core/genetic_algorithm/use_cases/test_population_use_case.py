@@ -57,6 +57,8 @@ class TestUseCaseCalculeAll(unittest.TestCase):
             crossover_probability=0.4,
             penalize_constant=1.4,
             niche_radius=0.1,
+            crossover_population_frac=0.4,
+            mutation_population_frac=0.8,
         )
 
         self.population = PopulationBuilder.build(
@@ -116,19 +118,13 @@ class TestUseCaseCalculeAll(unittest.TestCase):
 
     def crossover_population(self, population_frac):
         use_case = CrossoverPopulationUseCase(self.population)
-        population: Population = use_case.execute(
-            population_frac=population_frac
-        )
-        self.calcule_all(population)
-        self.population = population
+        use_case.execute(population_frac=population_frac)
+        self.calcule_all(self.population)
 
     def mutation_population(self, population_frac):
         use_case = MutationPopulationUseCase(self.population)
-        population: Population = use_case.execute(
-            population_frac=population_frac
-        )
-        self.calcule_all(population)
-        self.population = population
+        use_case.execute(population_frac=population_frac)
+        self.calcule_all(self.population)
 
     def clear_population(self, n_population: int | None = None):
         use_case = ClearPopulationUseCase(self.population)
@@ -188,7 +184,13 @@ class TestUseCaseCalculeAll(unittest.TestCase):
         self.penalize_population()
         self.sort_pareto_ranks()
         self.calcule_fitness()
-        self.crossover_population(population_frac=0.9)
+
+        frac = 0.9
+        n_population = self.population.props.n_population
+
+        self.crossover_population(population_frac=frac)
+        self.assertIsInstance(self.population, Population)
+        self.assertGreater(len(self.population.get_data()), n_population)
 
     def test_mutation_population(self):
         self.calcule_all()
@@ -196,7 +198,11 @@ class TestUseCaseCalculeAll(unittest.TestCase):
         self.sort_pareto_ranks()
         self.calcule_fitness()
         frac = 0.46
+        n_population = self.population.props.n_population
         self.mutation_population(population_frac=frac)
+        self.assertIsInstance(self.population, Population)
+
+        self.assertGreater(len(self.population.get_data()), n_population)
 
     def test_clear_population(self):
         self.calcule_all()

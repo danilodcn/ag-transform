@@ -46,6 +46,8 @@ class TestCreatePopulation(unittest.TestCase):
             crossover_probability=0.4,
             penalize_constant=1.4,
             niche_radius=0.1,
+            crossover_population_frac=0.4,
+            mutation_population_frac=0.8,
         )
 
     def test_create_population(self):

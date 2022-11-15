@@ -65,3 +65,5 @@ class PopulationCalculatorUseCase(PopulationUseCaseBase):
         self.population.generate_genes()
 
         self.population.step = PopulationSteps.calculated
+
+        return self.population

@@ -17,8 +17,6 @@ BIG_NUMBER = 1e2
 class PopulationFitnessUseCase(PopulationUseCaseBase):
     def __init__(self, population: Population, variations: Variation) -> None:
         self.population = population
-        assert self.population.data is not None, "data não existe!"
-        self.data = self.population.data
         self.variations = variations
         self.niche_radius = population.props.niche_radius
         self.__set_delta_losses_and_mass()
@@ -34,11 +32,12 @@ class PopulationFitnessUseCase(PopulationUseCaseBase):
 
     def run(self):
         # algoritmo definido na página 120 do Lobato
-        self.__calcule_fitness()
+        self.population.data = self.__calcule_fitness()
         self.population.step = PopulationSteps.fitness_calculated
+        return self.population
 
     def __calcule_fitness(self):
-        data = self.data
+        data = self.population.get_data()
         current_n_population = self.population.len()
         columns_names = [
             "meanFitness",
@@ -124,6 +123,7 @@ class PopulationFitnessUseCase(PopulationUseCaseBase):
         )
         data["fitness"] = result / np.sum(result)
         data["distance"] = df["distance"]
+        return data
 
     @validate_arguments
     def __distance(self, l1: float, l2: float, m1: float, m2: float) -> float:

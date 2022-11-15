@@ -5,6 +5,7 @@ from enum import Enum
 from typing import Dict, List, Optional
 
 import pandas as pd
+from pydantic import validator
 from typing_extensions import Self
 
 from tcc.core.domain import BaseModel
@@ -20,6 +21,21 @@ class PopulationProps(BaseModel):
     crossover_probability: float
     penalize_constant: float
     niche_radius: float
+    crossover_population_frac: float
+    mutation_population_frac: float
+    max_ranks: int | None = None
+
+    @validator(
+        "crossover_population_frac",
+        "mutation_population_frac",
+        allow_reuse=True,
+    )
+    def value_must_be_a_valid_percentage(cls, v):
+        if 0 < v < 1:
+            return v
+
+        else:
+            raise ValueError(f"{v} is not a valid percentage")
 
 
 class PopulationSteps(int, Enum):
@@ -42,13 +58,19 @@ class Population(BaseModel):
     def __add__(self, other: Self) -> Self:
         return self.join(other)
 
-    def join(self, other: Self) -> "Population":
+    def join(self, other: Self | pd.DataFrame) -> "Population":
         self_data = self.data
         assert isinstance(
             self_data, pd.DataFrame
         ), "make sure 'self.data' is a Data Frame"
 
-        other_data = other.data
+        if isinstance(other, Population):
+            other_data = other.data
+        elif isinstance(other, pd.DataFrame):
+            other_data = other
+        else:
+            other_data = None
+
         assert isinstance(
             other_data, pd.DataFrame
         ), "make sure 'other.data' is a Data Frame"
@@ -58,10 +80,10 @@ class Population(BaseModel):
             ignore_index=True,
         )
 
-        population = self.copy(update={"data": data})
-        population.generate_genes()
-        population.step = PopulationSteps.new
-        return population
+        self.data = data
+        self.generate_genes()
+        self.step = PopulationSteps.new
+        return self
 
     def set_data(self, data: pd.DataFrame) -> Self:
         self.data = data

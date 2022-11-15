@@ -15,8 +15,6 @@ class SelectionPopulationUseCase(PopulationUseCaseBase):
 
     def __init__(self, population: Population) -> None:
         self.population = population
-        assert self.population.data is not None, "data não existe!"
-        self.data = self.population.data
 
     def minimal_step(self) -> PopulationSteps:
         return PopulationSteps.fitness_calculated
@@ -29,16 +27,17 @@ class SelectionPopulationUseCase(PopulationUseCaseBase):
         replace: bool = False,
         rand_sort: float | None = None,
     ) -> Population:
+        data = self.population.get_data()
         if frac is not None and number is not None:
             raise ValueError("Cannot use 'number' and 'frac'")
 
         if weights is None:
-            weights = self.data["fitness"]
+            weights = data["fitness"]
         elif weights == 1:
-            weights = np.ones(len(self.data))
+            weights = np.ones(len(data))
         weights = tuple(weights)
 
-        new_data = self.data.sample(
+        new_data = data.sample(
             n=number,
             frac=frac,
             replace=replace,

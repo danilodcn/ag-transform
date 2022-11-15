@@ -1,4 +1,5 @@
 import itertools as it
+from abc import ABC, abstractproperty
 from typing import Iterable, List
 
 import numpy as np
@@ -13,11 +14,13 @@ from .base_use_case import PopulationUseCaseBase
 from .selection_population_use_case import SelectionPopulationUseCase
 
 
-class IndividualOptimizationUseCase(PopulationUseCaseBase):
+class IndividualOptimizationUseCase(PopulationUseCaseBase, ABC):
     def __init__(self, population: Population) -> None:
         self.population = population
-        assert self.population.data is not None, "data não existe!"
-        self.data = self.population.data
+
+    @abstractproperty
+    def population_frac(self) -> float:
+        raise NotImplementedError
 
     def minimal_step(self) -> PopulationSteps:
         return PopulationSteps.penalized
@@ -27,7 +30,11 @@ class IndividualOptimizationUseCase(PopulationUseCaseBase):
     ) -> Iterable:
         raise NotImplementedError
 
-    def run(self, population_frac: float):
+    def run(self, population_frac: float | None = None):
+        self.data = self.population.get_data()
+        if population_frac is None:
+            population_frac = self.population_frac
+
         selection_use_case = SelectionPopulationUseCase(self.population)
 
         number_of_fathers = round(
@@ -59,10 +66,9 @@ class IndividualOptimizationUseCase(PopulationUseCaseBase):
             new_values,
             index=list(range(len(new_values))),
         )
-        population = self.population.copy(update={"data": new_data})
-        population.generate_genes()
-
-        return self.population.join(population)
+        self.population.join(new_data)
+        self.population.generate_genes()
+        return self.population
 
     def crossover(self, i: int, j: int, k: int) -> pd.Series:
         p_i = self.data.iloc[i]
@@ -77,6 +83,10 @@ class IndividualOptimizationUseCase(PopulationUseCaseBase):
 
 
 class CrossoverPopulationUseCase(IndividualOptimizationUseCase):
+    @property
+    def population_frac(self) -> float:
+        return self.population.props.crossover_population_frac
+
     def get_iterator(
         self, selection_population: Population, number: int
     ) -> Iterable:
@@ -98,6 +108,10 @@ class CrossoverPopulationUseCase(IndividualOptimizationUseCase):
 
 
 class MutationPopulationUseCase(IndividualOptimizationUseCase):
+    @property
+    def population_frac(self) -> float:
+        return self.population.props.mutation_population_frac
+
     def get_iterator(
         self, selection_population: Population, number: int
     ) -> Iterable:
