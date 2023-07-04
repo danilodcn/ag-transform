@@ -13,28 +13,25 @@ ENV \
     PIP_DISABLE_PIP_VERSION_CHECK=on \
     PIP_DEFAULT_TIMEOUT=100
 
-RUN apt update && apt install libpq-dev gcc make libjpeg-dev curl git -y
-
-RUN apt-get autoremove -y \
+RUN apt update \
+    && apt install libpq-dev gcc make libjpeg-dev curl git -y \
+    && apt-get autoremove -y \
     && apt-get clean -y \
     && rm -rf /var/lib/apt/lists/*
 
 RUN pip install -U pip && pip install poetry
 
 RUN useradd -ms /bin/bash python
+
 USER python
+
 WORKDIR /home/python/app/
+
 COPY pyproject.toml poetry.lock /home/python/app/
 
-USER root
-RUN poetry config virtualenvs.create false \
-    # && poetry install --no-dev --no-interaction --no-ansi
-    && poetry install $(/usr/bin/test "$DEV_ENV" == "production" && echo "--no-dev")
-
-USER python
-RUN poetry config virtualenvs.create false
+RUN poetry config virtualenvs.in-project true \
+    && poetry install
 
 COPY . .
 
 CMD ["tail", "-f", "/dev/null"]
-# CMD [ "sh", "./src/internal_scripts/web.sh" ]
