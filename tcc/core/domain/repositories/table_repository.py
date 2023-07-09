@@ -9,8 +9,10 @@ class TableRepository(ABC):
     def get(self, name: TableNameEnum) -> Table:
         raise NotImplementedError
 
+    @abstractmethod
     def insert(self, table: Table) -> None:
         raise NotImplementedError
 
+    @abstractmethod
     def insert_many(self, tables: List[Table]) -> None:
         raise NotImplementedError

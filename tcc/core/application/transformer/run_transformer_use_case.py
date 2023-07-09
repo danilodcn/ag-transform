@@ -5,7 +5,7 @@ import numpy as np
 from tcc.core.application.transformer.table_use_cases.table_facade import (
     TableFacade,
 )
-from tcc.core.domain.transformer.table_repository import TableRepository
+from tcc.core.domain.repositories.table_repository import TableRepository
 from tcc.core.domain.transformer.transformer import Transformer
 
 

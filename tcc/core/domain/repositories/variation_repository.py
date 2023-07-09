@@ -17,8 +17,10 @@ class VariationRepository(ABC):
     def get(self, id: Optional[int]) -> Variation:
         raise NotImplementedError
 
+    @abstractmethod
     def insert(self, variation: Variation) -> None:
         raise NotImplementedError
 
+    @abstractmethod
     def insert_many(self, variations: List[Variation]) -> None:
         raise NotImplementedError

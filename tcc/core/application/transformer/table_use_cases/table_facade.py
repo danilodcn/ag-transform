@@ -5,7 +5,7 @@ from tcc.core.application.transformer.table_use_cases import (
     insulation_type_constant,
     number_of_steps,
 )
-from tcc.core.domain.transformer.table_repository import TableRepository
+from tcc.core.domain.repositories.table_repository import TableRepository
 
 
 class TableFacade(object):

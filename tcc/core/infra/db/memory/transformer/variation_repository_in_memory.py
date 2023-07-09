@@ -1,10 +1,10 @@
 from typing import Dict, List, Tuple
 from uuid import UUID
 
-from tcc.core.domain.transformer.entities import Variation
-from tcc.core.domain.transformer.variation_repository import (
+from tcc.core.domain.repositories.variation_repository import (
     VariationRepository,
 )
+from tcc.core.domain.transformer.entities import Variation
 
 
 class VariationRepositoryInMemory(VariationRepository):
@@ -36,3 +36,9 @@ class VariationRepositoryInMemory(VariationRepository):
             return Variation(**value)  # type: ignore
         except Exception as error:
             raise self.DoesNotExist from error
+
+    def insert(self, variation: Variation) -> None:
+        raise NotImplementedError
+
+    def insert_many(self, variations: List[Variation]) -> None:
+        raise NotImplementedError

@@ -1,5 +1,5 @@
+from tcc.core.domain.repositories.table_repository import TableRepository
 from tcc.core.domain.transformer.entities import TableNameEnum
-from tcc.core.domain.transformer.table_repository import TableRepository
 
 
 class GetNumberOfSteps:

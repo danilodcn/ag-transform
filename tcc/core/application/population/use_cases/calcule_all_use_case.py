@@ -7,12 +7,12 @@ from tcc.core.domain.genetic_algorithm.population import (
     Population,
     PopulationSteps,
 )
+from tcc.core.domain.repositories.table_repository import TableRepository
 from tcc.core.domain.transformer.entities import (
     Constraint,
     Variable,
     Variation,
 )
-from tcc.core.domain.transformer.table_repository import TableRepository
 from tcc.core.domain.transformer.transformer import Transformer
 
 from .base_use_case import PopulationUseCaseBase

@@ -1,8 +1,8 @@
 import json
 from typing import Any
 
+from tcc.core.domain.repositories.table_repository import TableRepository
 from tcc.core.domain.transformer.entities import Table, TableNameEnum
-from tcc.core.domain.transformer.table_repository import TableRepository
 
 
 class TableRepositoryInMemory(TableRepository):
@@ -29,3 +29,9 @@ class TableRepositoryInMemory(TableRepository):
             raise KeyError(f"A tabela '{name}' não existe")
         else:
             return Table(name=name, data=table["data"])
+
+    def insert(self, table: Table) -> None:
+        raise NotImplementedError
+
+    def insert_many(self, tables: list[Table]) -> None:
+        raise NotImplementedError

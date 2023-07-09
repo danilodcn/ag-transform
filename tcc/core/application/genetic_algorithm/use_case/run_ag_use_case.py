@@ -16,8 +16,8 @@ from tcc.core.application.population.use_cases import (
     SortParetoRanksUseCase,
 )
 from tcc.core.domain.genetic_algorithm.population import Population
+from tcc.core.domain.repositories.table_repository import TableRepository
 from tcc.core.domain.transformer.entities import Constraint, Variation
-from tcc.core.domain.transformer.table_repository import TableRepository
 
 logger = logging.getLogger(__name__)
 
