@@ -9,8 +9,8 @@ from pydantic import validator
 from typing_extensions import Self
 
 from tcc.core.domain import BaseModel
+from tcc.core.domain.entities.transformer.variation import Variation
 from tcc.core.domain.genetic_algorithm.gene import Gene, GeneBuilder
-from tcc.core.domain.transformer.entities import Variation
 
 InputData = Optional[List[Gene] | pd.DataFrame]
 
@@ -47,7 +47,7 @@ class PopulationSteps(int, Enum):
 
 
 class Population(BaseModel):
-    step = PopulationSteps.new
+    step: PopulationSteps = PopulationSteps.new
     data: pd.DataFrame | None = None
     props: PopulationProps
     genes: List[Gene]

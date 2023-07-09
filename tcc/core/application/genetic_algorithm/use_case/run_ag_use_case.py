@@ -15,9 +15,10 @@ from tcc.core.application.population.use_cases import (
     PopulationPenalizeUseCase,
     SortParetoRanksUseCase,
 )
+from tcc.core.domain.entities.transformer.constraints import Constraint
+from tcc.core.domain.entities.transformer.variation import Variation
 from tcc.core.domain.genetic_algorithm.population import Population
 from tcc.core.domain.repositories.table_repository import TableRepository
-from tcc.core.domain.transformer.entities import Constraint, Variation
 
 logger = logging.getLogger(__name__)
 
@@ -46,7 +47,6 @@ class RunAGUseCase:
         constraints: Constraint,
         variations: Variation,
     ) -> None:
-
         self.population = population
         self.constraints = constraints
         self.variations = variations

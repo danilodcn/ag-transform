@@ -6,11 +6,11 @@ import pandas as pd
 from tcc.core.application.tools.restrict_violated import (
     count_restrictions_violated,
 )
+from tcc.core.domain.entities.transformer.variation import Variation
 from tcc.core.domain.genetic_algorithm.population import (
     Population,
     PopulationSteps,
 )
-from tcc.core.domain.transformer.entities import Variation
 
 from .base_use_case import PopulationUseCaseBase
 

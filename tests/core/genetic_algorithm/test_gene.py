@@ -3,8 +3,8 @@ import unittest
 
 import pandas as pd
 
+from tcc.core.domain.entities.transformer.variable import Variable
 from tcc.core.domain.genetic_algorithm.gene import Gene, GeneBuilder, Result
-from tcc.core.domain.transformer.entities import Variable
 from tcc.core.infra.db.memory.transformer.variation_repository_in_memory import (
     VariationRepositoryInMemory,
 )

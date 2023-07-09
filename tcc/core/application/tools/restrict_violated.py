@@ -2,7 +2,10 @@ from collections.abc import ItemsView
 
 import pandas as pd
 
-from tcc.core.domain.transformer.entities import Variation, VariationTuple
+from tcc.core.domain.entities.transformer.variation import (
+    Variation,
+    VariationTuple,
+)
 
 
 def count_restrictions_violated(genes: pd.Series, variations: Variation):

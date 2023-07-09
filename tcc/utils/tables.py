@@ -4,7 +4,6 @@ from tcc.utils.memory import Memory
 
 
 class Tables:
-
     tables = Memory()
 
     def __init__(self, tables: dict):

@@ -39,7 +39,6 @@ def sum_of_integers(n1, n2):
 
 
 class Population(pd.DataFrame):
-
     # props = PopulationProps(0)
     props = PopulationProps()
     __transformer = ...
@@ -226,7 +225,6 @@ class Population(pd.DataFrame):
         # import ipdb; ipdb.set_trace()
 
     def __calcule_fitness(self):
-
         # import ipdb; ipdb.set_trace()
         lst_rank = list(self["rank"])
         df = pd.DataFrame(

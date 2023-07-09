@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 from typing import List
 
-from tcc.core.domain.transformer.entities import Table, TableNameEnum
+from tcc.core.domain.entities.transformer.table import Table, TableNameEnum
 
 
 class TableRepository(ABC):

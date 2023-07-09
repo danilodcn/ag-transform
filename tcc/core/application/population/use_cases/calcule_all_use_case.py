@@ -3,17 +3,15 @@ import pandas as pd
 from tcc.core.application.transformer.run_transformer_use_case import (
     RunTransformerUseCase,
 )
+from tcc.core.domain.entities.transformer.constraints import Constraint
+from tcc.core.domain.entities.transformer.transformer import Transformer
+from tcc.core.domain.entities.transformer.variable import Variable
+from tcc.core.domain.entities.transformer.variation import Variation
 from tcc.core.domain.genetic_algorithm.population import (
     Population,
     PopulationSteps,
 )
 from tcc.core.domain.repositories.table_repository import TableRepository
-from tcc.core.domain.transformer.entities import (
-    Constraint,
-    Variable,
-    Variation,
-)
-from tcc.core.domain.transformer.transformer import Transformer
 
 from .base_use_case import PopulationUseCaseBase
 

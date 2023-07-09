@@ -1,10 +1,10 @@
 from typing import Dict, List, Tuple
 from uuid import UUID
 
+from tcc.core.domain.entities.transformer.variation import Variation
 from tcc.core.domain.repositories.variation_repository import (
     VariationRepository,
 )
-from tcc.core.domain.transformer.entities import Variation
 
 
 class VariationRepositoryInMemory(VariationRepository):

@@ -2,12 +2,12 @@ from math import sqrt
 
 from pydantic import BaseModel
 
-from tcc.core.domain.transformer.entities import (
+from tcc.core.domain.entities.transformer.constraints import (
     ConnectionEnum,
     Constraint,
-    Variable,
-    Variation,
 )
+from tcc.core.domain.entities.transformer.variable import Variable
+from tcc.core.domain.entities.transformer.variation import Variation
 
 
 class Transformer(BaseModel):
@@ -16,7 +16,6 @@ class Transformer(BaseModel):
     constraints: Constraint
 
     def get_voltages(self):
-
         Vf1, Vf2 = (self.constraints.V1, self.constraints.V2)
         connection = self.constraints.connection
 

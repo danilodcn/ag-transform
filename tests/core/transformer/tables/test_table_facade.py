@@ -4,7 +4,6 @@ import unittest
 from tcc.core.application.transformer.table_use_cases.table_facade import (
     TableFacade,
 )
-from tcc.core.domain.transformer.entities import Table, TableNameEnum
 from tcc.core.infra.db.memory.transformer.table_repository_in_memory import (
     TableRepositoryInMemory,
 )
@@ -19,7 +18,6 @@ class TestTableFacade(unittest.TestCase):
         self.facade = TableFacade(table_repository=self.repository)
 
     def test_get_number_of_steps_from_facade(self):
-
         expected = 1
         calculated = self.facade.get_number_of_steps(area=2)
         error_message = "Para área de até 2 mm² o número de degraus deve ser 1"

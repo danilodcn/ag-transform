@@ -1,8 +1,8 @@
 import json
 from typing import Any
 
+from tcc.core.domain.entities.transformer.table import Table, TableNameEnum
 from tcc.core.domain.repositories.table_repository import TableRepository
-from tcc.core.domain.transformer.entities import Table, TableNameEnum
 
 
 class TableRepositoryInMemory(TableRepository):

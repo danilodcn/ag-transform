@@ -6,8 +6,9 @@ from typing import Dict
 from tcc.core.application.transformer.run_transformer_use_case import (
     RunTransformerUseCase,
 )
-from tcc.core.domain.transformer.entities import Constraint, Variable
-from tcc.core.domain.transformer.transformer import Transformer
+from tcc.core.domain.entities.transformer.constraints import Constraint
+from tcc.core.domain.entities.transformer.transformer import Transformer
+from tcc.core.domain.entities.transformer.variable import Variable
 from tcc.core.infra.db.memory.transformer.table_repository_in_memory import (
     TableRepositoryInMemory,
 )

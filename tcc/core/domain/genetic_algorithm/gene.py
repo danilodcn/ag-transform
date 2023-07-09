@@ -6,7 +6,8 @@ import pandas as pd
 from typing_extensions import Self
 
 from tcc.core.domain import BaseModel
-from tcc.core.domain.transformer.entities import Variable, Variation
+from tcc.core.domain.entities.transformer.variable import Variable
+from tcc.core.domain.entities.transformer.variation import Variation
 from tcc.core.domain.types import DictStrAny
 
 InputData = Variable | pd.Series | None

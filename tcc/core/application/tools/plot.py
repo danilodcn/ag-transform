@@ -14,7 +14,6 @@ NUMBER_OF_COLORS = len(COLORS)
 
 
 class Plot:
-
     LABEL_NAMES = defaultdict(
         lambda: "",
         **{

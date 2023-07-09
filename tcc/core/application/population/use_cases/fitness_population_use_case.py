@@ -3,11 +3,11 @@ import pandas as pd
 from pydantic import validate_arguments
 
 from tcc.core.application.tools.functions import sum_of_integers
+from tcc.core.domain.entities.transformer.variation import Variation
 from tcc.core.domain.genetic_algorithm.population import (
     Population,
     PopulationSteps,
 )
-from tcc.core.domain.transformer.entities import Variation
 
 from .base_use_case import PopulationUseCaseBase
 

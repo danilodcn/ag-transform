@@ -6,13 +6,14 @@ from tcc.core.application.genetic_algorithm.use_case import (
     RunAGUseCase,
 )
 from tcc.core.application.tools.plot import Plot
+from tcc.core.domain.entities.transformer.constraints import Constraint
+from tcc.core.domain.entities.transformer.transformer import Transformer
+from tcc.core.domain.entities.transformer.variable import Variable
 from tcc.core.domain.genetic_algorithm.gene import Gene
 from tcc.core.domain.genetic_algorithm.population import (
     PopulationBuilder,
     PopulationProps,
 )
-from tcc.core.domain.transformer.entities import Constraint, Variable
-from tcc.core.domain.transformer.transformer import Transformer
 from tcc.core.infra.db.memory.transformer.table_repository_in_memory import (
     TableRepositoryInMemory,
 )

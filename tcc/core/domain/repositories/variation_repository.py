@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 from typing import List, Optional
 
-from tcc.core.domain.transformer.entities import Variation
+from tcc.core.domain.entities.transformer.variation import Variation
 
 
 class VariationDoesNotExistError(Exception):
