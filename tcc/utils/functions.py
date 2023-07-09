@@ -1,9 +1,7 @@
-from typing import Dict, List
-
 import pandas as pd
 
 
-def count_restrictions_violated(gene: List[pd.Series], variations: List[List]):
+def count_restrictions_violated(gene: list[pd.Series], variations: list[list]):
     count = 0
     # TODO implementar a funcionalidade
     # do usuário passar pesos para cada variação
@@ -18,6 +16,6 @@ def count_restrictions_violated(gene: List[pd.Series], variations: List[List]):
     return count
 
 
-def deal_response(data: Dict[str, Dict]):
+def deal_response(data: dict[str, dict]):
     # import ipdb; ipdb.set_trace()
     return 0

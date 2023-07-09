@@ -1,17 +1,15 @@
 from collections import namedtuple
-from typing import Dict, NamedTuple
+from typing import NamedTuple
 
 
 class NamedTuple:
     def convert_for_tuple(self, lst: list) -> NamedTuple:
         if isinstance(lst, tuple):
-            # import ipdb; ipdb.set_trace()
             try:
                 keys = lst._fields
                 e_namedtuple = True
             except Exception:
                 e_namedtuple = False
-                # raise ValueError("Aqui")
 
             values = []
 
@@ -33,14 +31,11 @@ class NamedTuple:
 
         return lst
 
-    def to_named_tuple(self, data: Dict):
+    def to_named_tuple(self, data: dict):
         values = []
         keys = []
 
         for key, value in data.items():
-            # if key == "nome":
-            #     import ipdb; ipdb.set_trace()
-
             if isinstance(value, dict):
                 value = self.to_named_tuple(value)
 

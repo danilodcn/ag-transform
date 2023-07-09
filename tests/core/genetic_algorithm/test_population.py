@@ -1,6 +1,5 @@
 import json
 import unittest
-from typing import List
 
 import numpy as np
 
@@ -104,7 +103,7 @@ class TestCreatePopulation(unittest.TestCase):
             list(population_2.data.index), N, replace=False
         )
         genes_for_add_ids.sort()
-        genes_for_add: List[Gene] = []
+        genes_for_add: list[Gene] = []
         for i, gene in enumerate(population_2.genes):
             if i in genes_for_add_ids:
                 genes_for_add.append(gene)

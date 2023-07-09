@@ -81,7 +81,7 @@ class RunAGUseCase:
         consumer_callback: Callable | None = None,
     ):
         with ThreadPoolExecutor(2) as executor:
-            queue = Queue()
+            queue: Queue = Queue()
 
             executor.submit(self.consume, q=queue, callback=consumer_callback)
             executor.submit(self.produce, q=queue, callback=producer_callback)

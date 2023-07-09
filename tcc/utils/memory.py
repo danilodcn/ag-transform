@@ -1,10 +1,10 @@
 from functools import lru_cache
-from typing import Any, Dict
+from typing import Any, dict
 
 
 class Memory:
     def __init__(self) -> None:
-        self.__data: Dict[str, Dict[str, Any | str]] = {}
+        self.__data: dict[str, dict[str, Any | str]] = {}
 
     @property
     def data(self):
@@ -21,7 +21,7 @@ class Memory:
     def set(self, key, value):
         self.__data[key] = value
 
-    def set_many(self, values: Dict):
+    def set_many(self, values: dict):
         self.__data.update(values)
 
     def drop(self):

@@ -1,5 +1,5 @@
-from typing import Any, Dict, TypeVar
+from typing import Any, TypeVar
 
-DictStrAny = Dict[str, Any]
+DictStrAny = dict[str, Any]
 
 Self = TypeVar("Self")  # noqa: Y001

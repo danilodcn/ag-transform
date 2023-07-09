@@ -2,7 +2,6 @@ import functools
 import itertools
 from collections import defaultdict
 from enum import Enum
-from typing import Dict, List, Optional
 
 import pandas as pd
 from pydantic import validator
@@ -12,7 +11,7 @@ from tcc.core.domain import BaseModel
 from tcc.core.domain.entities.transformer.variation import Variation
 from tcc.core.domain.genetic_algorithm.gene import Gene, GeneBuilder
 
-InputData = Optional[List[Gene] | pd.DataFrame]
+InputData = list[Gene] | pd.DataFrame | None
 
 
 class PopulationProps(BaseModel):
@@ -50,7 +49,7 @@ class Population(BaseModel):
     step: PopulationSteps = PopulationSteps.new
     data: pd.DataFrame | None = None
     props: PopulationProps
-    genes: List[Gene]
+    genes: list[Gene]
 
     class Config:
         arbitrary_types_allowed = True
@@ -100,7 +99,7 @@ class Population(BaseModel):
         self.props = props
         return self
 
-    def set_genes(self, genes: List[Gene]) -> Self:
+    def set_genes(self, genes: list[Gene]) -> Self:
         self.genes = genes
         return self
 
@@ -123,13 +122,13 @@ class Population(BaseModel):
             lambda d: GeneBuilder.build(data=d),  # type: ignore
             axis=1,
         )
-        genes: List[Gene] = list(data)  # type: ignore
+        genes: list[Gene] = list(data)  # type: ignore
         self.genes = genes
         return self.genes
 
     def add_genes(self, *genes: Gene):
         self.genes.extend(genes)
-        rows: Dict[int, pd.Series[float]] = {}
+        rows: dict[int, pd.Series[float]] = {}
         for i, gene in enumerate(genes, start=len(genes)):
             rows[i] = gene.generate_data()
 
@@ -185,9 +184,9 @@ class PopulationBuilder:
     def get_genes(
         cls,
         data: InputData,
-        n_population: Optional[int] = None,
-        variations: Optional[Variation] = None,
-    ) -> List[Gene]:
+        n_population: int | None = None,
+        variations: Variation | None = None,
+    ) -> list[Gene]:
         assert n_population is not None
         assert variations is not None
         return cls.random_generate(n_population, variations)
@@ -199,13 +198,13 @@ class PopulationBuilder:
 
     @get_genes.register(list)
     @classmethod
-    def _(cls, data: List[Gene], **_):
+    def _(cls, data: list[Gene], **_):
         return data
 
     @classmethod
     def random_generate(
         cls, n_population: int, variations: Variation
-    ) -> List[Gene]:
+    ) -> list[Gene]:
         genes = map(
             GeneBuilder.build, itertools.repeat(variations, n_population)
         )

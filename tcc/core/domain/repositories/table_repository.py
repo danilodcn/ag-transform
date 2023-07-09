@@ -1,5 +1,4 @@
 from abc import ABC, abstractmethod
-from typing import List
 
 from tcc.core.domain.entities.transformer.table import Table, TableNameEnum
 
@@ -14,5 +13,5 @@ class TableRepository(ABC):
         raise NotImplementedError
 
     @abstractmethod
-    def insert_many(self, tables: List[Table]) -> None:
+    def insert_many(self, tables: list[Table]) -> None:
         raise NotImplementedError

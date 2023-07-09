@@ -32,6 +32,7 @@ class PopulationCalculatorUseCase(PopulationUseCaseBase):
         self.constraints = constraints
         self.variations = variations
 
+    @property
     def minimal_step(self) -> PopulationSteps:
         return PopulationSteps.new
 

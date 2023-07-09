@@ -1,6 +1,6 @@
 import itertools as it
 from abc import ABC, abstractproperty
-from typing import Iterable, List
+from typing import Iterable
 
 import numpy as np
 import pandas as pd
@@ -50,7 +50,7 @@ class IndividualOptimizationUseCase(PopulationUseCaseBase, ABC):
 
         iterator = self.get_iterator(selection_population, number)
         count = 0
-        new_values: List[pd.Series] = []
+        new_values: list[pd.Series] = []
         for i, c in iterator:
             count += 1
             if count > number_of_fathers:

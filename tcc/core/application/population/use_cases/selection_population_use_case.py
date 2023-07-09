@@ -1,4 +1,4 @@
-from typing import Iterable, Type
+from typing import Iterable
 
 import numpy as np
 
@@ -11,8 +11,6 @@ from .base_use_case import PopulationUseCaseBase
 
 
 class SelectionPopulationUseCase(PopulationUseCaseBase):
-    __ret__ = Type[Population]
-
     def __init__(self, population: Population) -> None:
         self.population = population
 

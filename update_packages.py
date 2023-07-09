@@ -1,12 +1,12 @@
 #!/usr/local/bin/python3.7
 import subprocess
-from typing import Dict, cast
+from typing import cast
 
 import toml
 
 
-def update_deps(name: str, version: str, t: Dict) -> Dict:
-    def update(deps: Dict) -> None:
+def update_deps(name: str, version: str, t: dict) -> dict:
+    def update(deps: dict) -> None:
         for key in deps:
             v = deps[key]
             if (
@@ -23,7 +23,7 @@ def update_deps(name: str, version: str, t: Dict) -> Dict:
 
 
 with open("./pyproject.toml", "r") as f:
-    t = cast(Dict, toml.loads(f.read()))
+    t = cast(dict, toml.loads(f.read()))
     output = subprocess.run(["poetry", "show"], capture_output=True)
     lines = cast(str, output.stdout.decode()).split("\n")
 

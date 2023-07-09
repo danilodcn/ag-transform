@@ -1,4 +1,3 @@
-from typing import Dict, List, Tuple
 from uuid import UUID
 
 from tcc.core.domain.entities.transformer.variation import Variation
@@ -9,7 +8,7 @@ from tcc.core.domain.repositories.variation_repository import (
 
 class VariationRepositoryInMemory(VariationRepository):
     __name__ = Variation.__name__
-    items: List[Dict[str, bool | str | Tuple[float, float, float]]] = [
+    items: list[dict[str, bool | str | tuple[float, float, float]]] = [
         {
             "id": "b572eabc-88f5-4f80-9df7-09b8b15ec50a",
             "default": True,
@@ -40,5 +39,5 @@ class VariationRepositoryInMemory(VariationRepository):
     def insert(self, variation: Variation) -> None:
         raise NotImplementedError
 
-    def insert_many(self, variations: List[Variation]) -> None:
+    def insert_many(self, variations: list[Variation]) -> None:
         raise NotImplementedError

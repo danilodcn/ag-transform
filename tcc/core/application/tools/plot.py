@@ -1,7 +1,7 @@
 import io
 from collections import defaultdict
 from pathlib import Path
-from typing import Iterable, Literal, Tuple
+from typing import Iterable, Literal
 from uuid import uuid4
 
 import pandas as pd
@@ -38,7 +38,7 @@ class Plot:
         field_names: Iterable[str],
         with_ranks=False,
         title="",
-        size: Tuple[float, float] = (10, 10),
+        size: tuple[float, float] = (10, 10),
     ):
         _, ax = self.__basic_plot(title)
         plt.gcf().set_size_inches(*size)

@@ -1,5 +1,3 @@
-from typing import List
-
 from tcc.core.application.tools.is_dominated import is_dominated
 from tcc.core.domain.genetic_algorithm.population import (
     Population,
@@ -30,7 +28,7 @@ class SortParetoRanksUseCase(PopulationUseCaseBase):
         data = self.population.get_data()
         max_ranks = self.population.props.max_ranks
         data["rank"] = max_ranks
-        no_dominated: List[int] = list(data.index)
+        no_dominated: list[int] = list(data.index)
         number = 1
         data.loc[no_dominated, "rank"] = number
         while len(no_dominated) != 0:
@@ -43,8 +41,8 @@ class SortParetoRanksUseCase(PopulationUseCaseBase):
         self.population.step = PopulationSteps.ranks_sorted
         return self.population
 
-    def __sort_pareto_ranks(self, no_dominated: List[int], number: int):
-        dominates: List[int] = []
+    def __sort_pareto_ranks(self, no_dominated: list[int], number: int):
+        dominates: list[int] = []
         data = self.population.get_data()
         for i in no_dominated:
             for p in no_dominated:

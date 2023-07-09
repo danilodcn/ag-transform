@@ -1,7 +1,6 @@
 import json
 import os
 import unittest
-from typing import Dict
 
 from tcc.core.application.transformer.run_transformer_use_case import (
     RunTransformerUseCase,
@@ -26,7 +25,7 @@ class TestCreatePopulation(unittest.TestCase):
 
         with open(TRANSFORMER_FILE_NAME) as file:
             transformer_data = json.load(file)
-            self.test_responses: Dict[str, float] = transformer_data.get(
+            self.test_responses: dict[str, float] = transformer_data.get(
                 "for_tests"
             )
             self.variables = Variable(**transformer_data.get("variables", {}))
