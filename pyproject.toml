@@ -23,15 +23,30 @@ ignore_missing_imports = true
 python = "^3.10"
 pandas = "^1.5.3"
 matplotlib = "^3.7.2"
-pydantic = "^2.0.2"
+pydantic = "^2.0.3"
+taskipy = "^1.11.0"
+
+[tool.pytest.ini_options]
+pdbcls = "IPython.terminal.debugger:Pdb"
+addopts = "--disable-warnings"
+
+[tool.taskipy.variables]
+run_command = "poetry run"
+
+[tool.taskipy.tasks]
+format = "isort . && black ."
+lint = "flake8 tcc/core --count --show-source --statistics"
+test = "pytest --cov=tcc.core"
+post_test = "coverage html && rm .coverage"
+clear = "make clear"
 
 [tool.poetry.group.development.dependencies]
 pytest = "^7.4.0"
 ipdb = "^0.13.13"
-black = "^23.3.0"
+black = "^23.7.0"
 isort = "^5.12.0"
 flake8 = "^6.0.0"
 mypy = "^1.4.1"
 toml = "^0.10.2"
 pre-commit = "^3.3.3"
-
+pytest-cov = "^4.1.0"
