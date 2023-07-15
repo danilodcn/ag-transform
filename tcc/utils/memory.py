@@ -1,5 +1,5 @@
 from functools import lru_cache
-from typing import Any, dict
+from typing import Any
 
 
 class Memory:
