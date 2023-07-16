@@ -1,9 +1,9 @@
 import json
-import os
 import unittest
 
-from tcc.core.application.transformer.run_transformer_use_case import (
-    RunTransformerUseCase,
+from tcc.core.application.register.register_type import RegisterType
+from tcc.core.application.transformer.runners.transformer_three_phase_runner import (
+    TransformerThreePhaseRunner,
 )
 from tcc.core.domain.entities.transformer.constraints import Constraint
 from tcc.core.domain.entities.transformer.transformer import Transformer
@@ -14,15 +14,23 @@ from tcc.core.infra.db.memory.transformer.table_repository_in_memory import (
 from tcc.core.infra.db.memory.transformer.variation_repository_in_memory import (
     VariationRepositoryInMemory,
 )
-from tests.constants import *
+from tcc.core.infra.register.application_register import ApplicationRegister
+from tests.constants import TABLE_FILE_NAME, TRANSFORMER_FILE_NAME
 
 
 class TestCreatePopulation(unittest.TestCase):
-    def setUp(self) -> None:
-        self.variation_repository = VariationRepositoryInMemory()
-        self.table_repository = TableRepositoryInMemory()
-        self.table_repository.load_tables(TABLE_FILE_NAME)
+    @classmethod
+    def setUpClass(cls):
+        variation_repository = VariationRepositoryInMemory()
+        table_repository = TableRepositoryInMemory(TABLE_FILE_NAME)
 
+        cls.register = ApplicationRegister()
+        cls.register.provide(RegisterType.TABLE_REPOSITORY, table_repository)
+        cls.register.provide(
+            RegisterType.VARIATION_REPOSITORY, variation_repository
+        )
+
+    def setUp(self) -> None:
         with open(TRANSFORMER_FILE_NAME) as file:
             transformer_data = json.load(file)
             self.test_responses: dict[str, float] = transformer_data.get(
@@ -33,7 +41,11 @@ class TestCreatePopulation(unittest.TestCase):
                 **transformer_data.get("constraints", {})
             )
 
-        self.variations = self.variation_repository.get()
+        variation_repository: VariationRepositoryInMemory = (
+            self.register.inject(RegisterType.VARIATION_REPOSITORY)
+        )
+
+        self.variations = variation_repository.get()
         self.transformer = Transformer(
             variables=self.variables,
             constraints=self.constraints,
@@ -90,11 +102,9 @@ class TestCreatePopulation(unittest.TestCase):
         )
 
     def test_run_transformer(self):
-        use_case = RunTransformerUseCase(
-            table_repository=self.table_repository
-        )
+        use_case = TransformerThreePhaseRunner(register=self.register)
 
-        PerdasT, Mativa = use_case.execute(self.transformer)
+        PerdasT, Mativa = use_case.run(self.transformer)
 
         expected_PerdasT = self.test_responses.get("PerdasT")
         expected_Mativa = self.test_responses.get("Mativa")

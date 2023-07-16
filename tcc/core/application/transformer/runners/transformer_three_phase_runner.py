@@ -2,18 +2,19 @@ from math import pi, sqrt
 
 import numpy as np
 
-from tcc.core.application.transformer.table_use_cases.table_facade import (
-    TableFacade,
+from tcc.core.application.register.register import Register
+from tcc.core.application.transformer.table_facade import TableFacade
+from tcc.core.application.transformer.transformer_runner import (
+    TransformerRunner,
 )
 from tcc.core.domain.entities.transformer.transformer import Transformer
-from tcc.core.domain.repositories.table_repository import TableRepository
 
 
-class RunTransformerUseCase:
-    def __init__(self, table_repository: TableRepository) -> None:
-        self.table_facade = TableFacade(table_repository=table_repository)
+class TransformerThreePhaseRunner(TransformerRunner):
+    def __init__(self, register: Register) -> None:
+        self.table_facade = TableFacade(register=register)
 
-    def execute(self, transformer: Transformer):
+    def run(self, transformer: Transformer):
         constraints = transformer.constraints
         variables = transformer.variables
 
@@ -176,4 +177,4 @@ class RunTransformerUseCase:
         Pj = (R1 * I1**2 + R2 * I2**2) * 3
         PerdasT = Po + Pj
         Mativa = MAT3 + Mbt3 + MT
-        return np.asarray([PerdasT, Mativa], dtype=np.float64)
+        return [PerdasT, Mativa]
