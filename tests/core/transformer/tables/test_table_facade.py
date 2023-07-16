@@ -1,21 +1,25 @@
 import os
 import unittest
 
-from tcc.core.application.transformer.table_use_cases.table_facade import (
-    TableFacade,
-)
+from tcc.core.application.register.register_type import RegisterType
+from tcc.core.application.transformer.table_facade import TableFacade
 from tcc.core.infra.db.memory.transformer.table_repository_in_memory import (
     TableRepositoryInMemory,
 )
+from tcc.core.infra.register.application_register import ApplicationRegister
 
 FILE_NAME = os.getcwd() + "/tests/core/json/tables.json"
 
 
 class TestTableFacade(unittest.TestCase):
-    def setUp(self) -> None:
-        self.repository = TableRepositoryInMemory()
-        self.repository.load_tables(FILE_NAME)
-        self.facade = TableFacade(table_repository=self.repository)
+    @classmethod
+    def setUpClass(cls):
+        repository = TableRepositoryInMemory(FILE_NAME)
+
+        cls.register = ApplicationRegister()
+        cls.register.provide(RegisterType.TABLE_REPOSITORY, repository)
+
+        cls.facade = TableFacade(register=cls.register)
 
     def test_get_number_of_steps_from_facade(self):
         expected = 1

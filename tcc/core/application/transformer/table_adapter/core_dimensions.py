@@ -1,12 +1,11 @@
 from tcc.core.domain.entities.transformer.table import TableNameEnum
-from tcc.core.domain.repositories.table_repository import TableRepository
+
+from .table_adapter import TableAdapter
 
 
-class GetCoreDimensions:
-    def __init__(self, table_repository: TableRepository) -> None:
-        self.table_repository = table_repository
-
-    def execute(self, number_of_steps: int):
+class GetCoreDimensions(TableAdapter):
+    def execute(self, /, **kwargs: int):
+        number_of_steps = kwargs["number_of_steps"]
         TABLE_NAME = TableNameEnum.core_dimensions
         number_of_steps -= 1
 

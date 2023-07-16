@@ -9,23 +9,9 @@ from tcc.core.infra.db.memory.transformer.table_repository_in_memory import (
 FILE_NAME = os.getcwd() + "/tests/core/json/tables.json"
 
 
-class TestTablesRepositoryCreation(unittest.TestCase):
-    def test_should_be_error_in_read_tables_without_load_tables(self):
-        repository = TableRepositoryInMemory()
-        with self.assertRaises(ValueError) as context:
-            _ = repository.tables
-
-        self.assertIn("repository.load_tables(name)", str(context.exception))
-
-    def test_should_read_all_tables(self):
-        repository = TableRepositoryInMemory()
-        repository.load_tables(FILE_NAME)
-
-
 class TestTablesRepository(unittest.TestCase):
     def setUp(self) -> None:
-        self.repository = TableRepositoryInMemory()
-        self.repository.load_tables(FILE_NAME)
+        self.repository = TableRepositoryInMemory(FILE_NAME)
 
     def test_should_read_number_of_steps_table(self):
         table = self.repository.get(TableNameEnum.number_of_steps)

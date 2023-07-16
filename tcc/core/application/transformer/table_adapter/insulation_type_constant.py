@@ -1,12 +1,15 @@
 from tcc.core.domain.entities.transformer.table import TableNameEnum
-from tcc.core.domain.repositories.table_repository import TableRepository
+
+from .table_adapter import TableAdapter
 
 
-class GetInsulationTypeConstraint:
-    def __init__(self, table_repository: TableRepository) -> None:
-        self.table_repository = table_repository
+class GetInsulationTypeConstraint(TableAdapter):
+    def execute(self, /, **kwargs: int | str):
+        type = kwargs["type"]
+        number_of_steps = kwargs["number_of_steps"]
+        assert isinstance(type, str)
+        assert isinstance(number_of_steps, int)
 
-    def execute(self, type: str, number_of_steps: int):
         TABLE_NAME = TableNameEnum.insulation_type_constant
         table = self.table_repository.get(TABLE_NAME)
 
