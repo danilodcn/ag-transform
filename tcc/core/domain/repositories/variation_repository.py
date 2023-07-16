@@ -13,7 +13,7 @@ class VariationRepository(ABC):
     )
 
     @abstractmethod
-    def get(self, id: int) -> Variation:
+    def get(self, id: str | None) -> Variation:
         raise NotImplementedError
 
     @abstractmethod

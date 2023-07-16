@@ -8,6 +8,9 @@ from tcc.core.domain.repositories.table_repository import TableRepository
 class TableRepositoryInMemory(TableRepository):
     _tables: Any
 
+    def __init__(self, table_name: str) -> None:
+        self.load_tables(table_name)
+
     @property
     def tables(self):
         if getattr(self, "_tables", None) is None:

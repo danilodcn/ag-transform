@@ -24,7 +24,7 @@ class VariationRepositoryInMemory(VariationRepository):
         }
     ]
 
-    def get(self, id: UUID | str | None = None) -> Variation:
+    def get(self, id: str | None = None) -> Variation:
         if id is None:
             filtered = filter(lambda x: x["default"], self.items)
         else:
