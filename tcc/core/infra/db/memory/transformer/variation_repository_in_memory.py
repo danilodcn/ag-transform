@@ -1,7 +1,5 @@
-from uuid import UUID
-
 from tcc.core.domain.entities.transformer.variation import Variation
-from tcc.core.domain.repositories.variation_repository import (
+from tcc.core.domain.repositories.transformer.variation_repository import (
     VariationRepository,
 )
 

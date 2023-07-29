@@ -2,14 +2,16 @@ import json
 from typing import Any
 
 from tcc.core.domain.entities.transformer.table import Table, TableNameEnum
-from tcc.core.domain.repositories.table_repository import TableRepository
+from tcc.core.domain.repositories.transformer.table_repository import (  # noqa
+    TableRepository,
+)
 
 
 class TableRepositoryInMemory(TableRepository):
     _tables: Any
 
     def __init__(self, table_name: str) -> None:
-        self.load_tables(table_name)
+        self.__load_tables(table_name)
 
     @property
     def tables(self):
@@ -22,7 +24,7 @@ class TableRepositoryInMemory(TableRepository):
             )
         return self._tables
 
-    def load_tables(self, file_name: str) -> None:
+    def __load_tables(self, file_name: str) -> None:
         with open(file=file_name, mode="r") as file:
             self._tables = json.load(file)
 

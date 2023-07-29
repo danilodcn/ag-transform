@@ -2,15 +2,19 @@ from abc import ABC, abstractmethod
 
 from tcc.core.domain.entities.transformer.variation import Variation
 
+from ..repository import EntityDoesNotExist, Repository
 
-class VariationDoesNotExistError(Exception):
+
+class VariationDoesNotExistError(EntityDoesNotExist):
     ...
 
 
-class VariationRepository(ABC):
-    DoesNotExist = VariationDoesNotExistError(
-        "Variation not found!",
-    )
+class VariationRepository(Repository, ABC):
+    @property
+    def DoesNotExist(self):
+        return VariationDoesNotExistError(
+            "Variation not found!",
+        )
 
     @abstractmethod
     def get(self, id: str | None) -> Variation:
