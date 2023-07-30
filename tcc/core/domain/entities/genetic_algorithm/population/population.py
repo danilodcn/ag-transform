@@ -86,7 +86,7 @@ class Population(BaseModel):
         self.genes.extend(genes)
         rows: dict[int, pd.Series[float]] = {}
         for i, gene in enumerate(genes, start=len(genes)):
-            rows[i] = gene.generate_data()
+            rows[i] = gene.data
 
         assert isinstance(self.data, pd.DataFrame)
         objs = [
