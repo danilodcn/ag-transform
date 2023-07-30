@@ -2,27 +2,28 @@ import json
 import unittest
 
 from tcc.core.application.tools.plot import Plot
+from tcc.core.domain.entities.genetic_algorithm.population.population_builder import (  # noqa
+    PopulationBuilder,
+)
+from tcc.core.domain.entities.genetic_algorithm.population.props import (  # noqa
+    PopulationProps,
+)
 from tcc.core.domain.entities.transformer.constraints import Constraint
 from tcc.core.domain.entities.transformer.transformer import Transformer
 from tcc.core.domain.entities.transformer.variable import Variable
-from tcc.core.domain.genetic_algorithm.population import (
-    PopulationBuilder,
-    PopulationProps,
-)
 from tcc.core.infra.db.memory.transformer.table_repository_in_memory import (
     TableRepositoryInMemory,
 )
-from tcc.core.infra.db.memory.transformer.variation_repository_in_memory import (
+from tcc.core.infra.db.memory.transformer.variation_repository_in_memory import (  # noqa
     VariationRepositoryInMemory,
 )
-from tests.constants import *
+from tests.constants import TABLE_FILE_NAME, TRANSFORMER_FILE_NAME
 
 
 class TestCreatePopulation(unittest.TestCase):
     def setUp(self) -> None:
         self.variation_repository = VariationRepositoryInMemory()
-        self.table_repository = TableRepositoryInMemory()
-        self.table_repository.load_tables(TABLE_FILE_NAME)
+        self.table_repository = TableRepositoryInMemory(TABLE_FILE_NAME)
 
         with open(TRANSFORMER_FILE_NAME) as file:
             transformer_data = json.load(file)
@@ -52,9 +53,7 @@ class TestCreatePopulation(unittest.TestCase):
             variations=variations,
         )
 
-    def test_plot(self):
-        self.population.generate_data()
-        assert self.population.data is not None
+    def test_plot_simple_using_Plot_instance(self):
         plot = Plot()
         plot.plot(self.population.data, "Jat Jbt".split(), title="primeiro")
         plot.plot(self.population.data, "rel Rjan".split(), title="segundo")
