@@ -2,7 +2,9 @@ from abc import ABC, abstractmethod
 from typing import Any
 
 from tcc.core.application.register import Register, RegisterType
-from tcc.core.domain.repositories.table_repository import TableRepository
+from tcc.core.domain.repositories.transformer.table_repository import (
+    TableRepository,
+)
 
 
 class TableAdapter(ABC):
