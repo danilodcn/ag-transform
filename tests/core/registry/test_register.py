@@ -3,50 +3,50 @@ from unittest import TestCase
 
 import pytest
 
-from tcc.core.application.register.exceptions import (
+from tcc.core.application.registry.exceptions import (
     DependencyAlreadyExist,
     DependencyNotFound,
 )
-from tcc.core.infra.register.application_register import ApplicationRegister
+from tcc.core.infra.registry.application_registry import ApplicationRegistry
 
 
-class RegisterTest(TestCase):
-    def test_should_register_dependency(self):
-        register = ApplicationRegister()
+class RegistryTest(TestCase):
+    def test_should_registry_dependency(self):
+        registry = ApplicationRegistry()
 
         test_object = object()
-        register.provide("test", test_object)
+        registry.provide("test", test_object)
 
-        self.assertEqual(len(register.dependencies), 1)
-        self.assertIn(test_object, register.dependencies.values())
+        self.assertEqual(len(registry.dependencies), 1)
+        self.assertIn(test_object, registry.dependencies.values())
 
     def test_inject_method_should_be_return_object(self):
-        register = ApplicationRegister()
+        registry = ApplicationRegistry()
 
         test_object = object()
-        register.provide("test", test_object)
+        registry.provide("test", test_object)
 
-        received_object = register.inject("test")
+        received_object = registry.inject("test")
 
         self.assertIs(received_object, test_object)
 
 
-class TestRaisesInRegister(TestCase):
+class TestRaisesInRegistry(TestCase):
     def setUp(self) -> None:
         self.test_object = object()
-        self.register = ApplicationRegister()
+        self.registry = ApplicationRegistry()
 
-        self.register.provide("test", self.test_object)
+        self.registry.provide("test", self.test_object)
 
-    def test_should_be_raise_when_register_with_same_name(self):
+    def test_should_be_raise_when_registry_with_same_name(self):
         with self.assertRaises(DependencyAlreadyExist) as e:
-            self.register.provide("test", self.test_object)
+            self.registry.provide("test", self.test_object)
 
         self.assertEqual("dependência 'test' já registrada", str(e.exception))
 
     def test_should_be_raise_when_inject_non_existing_dependency(self):
         with self.assertRaises(DependencyNotFound) as e:
-            self.register.inject("dependency")
+            self.registry.inject("dependency")
 
         self.assertEqual(
             "dependência 'dependency' não registrada", str(e.exception)
@@ -59,7 +59,7 @@ class TestRaisesInRegister(TestCase):
         (object(), "objeto"),
         (object(), object()),  # type: ignore
         (
-            ApplicationRegister(),
+            ApplicationRegistry(),
             pytest.fixture,
             pytest.Config,
             ArithmeticError,
@@ -68,15 +68,15 @@ class TestRaisesInRegister(TestCase):
             None,
         ),
     ],
-    ids=["um objeto e uma string", "dois objetos", "varios objetos"],
+    ids=["um objeto e uma string", "dois objetos", "vários objetos"],
 )
-def test_should_be_register_and_get(objects: Any):
-    register = ApplicationRegister()
+def test_should_be_registry_and_get(objects: Any):
+    registry = ApplicationRegistry()
     for i, obj in enumerate(objects):
         name = "obj %d" % i
-        register.provide(name, obj)
+        registry.provide(name, obj)
 
     for i, obj in enumerate(objects):
         name = "obj %d" % i
-        received = register.inject(name)
+        received = registry.inject(name)
         assert received is obj

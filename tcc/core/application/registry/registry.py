@@ -8,7 +8,10 @@ class Empty(metaclass=SingletonMeta):
     ...
 
 
-class Register(ABC):
+empty_register: Empty = Empty()
+
+
+class Registry(ABC):
     @abstractproperty
     def dependencies(self) -> dict[str, Any]:
         raise NotImplementedError
