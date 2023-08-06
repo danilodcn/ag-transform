@@ -10,27 +10,41 @@ from tcc.core.application.registry.registry import Registry, empty_register
 
 class ApplicationRegistry(Registry):
     @property
-    def dependencies(self) -> dict[str, Any]:
+    def __dependencies(self) -> dict[str, Any]:
         dependencies: dict[str, Any] | None = getattr(
-            self, "__dependencies", None
+            self, "__internal_dependencies", None
         )
         if dependencies is None:
             dependencies = OrderedDict()
-            setattr(self, "__dependencies", dependencies)
+            setattr(self, "__internal_dependencies", dependencies)
 
         return dependencies
 
+    @property
+    def count(self):
+        return len(self.__dependencies)
+
     def provide(self, name: str, value: Any) -> None:
-        if self.dependencies.get(name, empty_register) is not empty_register:
+        if self.__dependencies.get(name, empty_register) is not empty_register:
             raise DependencyAlreadyExist(
                 "dependência '%s' já registrada" % name
             )
 
-        self.dependencies[name] = value
+        self.__dependencies[name] = value
 
     def inject(self, name: str) -> Any:
-        dependency = self.dependencies.get(name, empty_register)
+        dependency = self.__dependencies.get(name, empty_register)
         if dependency is not empty_register:
             return dependency
 
         raise DependencyNotFound(f"dependência '{name}' não registrada")
+
+    def remove(self, name: str) -> Any:
+        dependency = self.__dependencies.pop(name, empty_register)
+
+        if dependency is empty_register:
+            raise DependencyNotFound(
+                f"dependência '{name}' não registrada. Impossível apagar"
+            )
+
+        return dependency

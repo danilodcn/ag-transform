@@ -1,4 +1,4 @@
-from abc import ABC, abstractmethod, abstractproperty
+from abc import ABC, abstractmethod
 from typing import Any
 
 from tcc.core.application.singleton.singleton import SingletonMeta
@@ -12,13 +12,13 @@ empty_register: Empty = Empty()
 
 
 class Registry(ABC):
-    @abstractproperty
-    def dependencies(self) -> dict[str, Any]:
-        raise NotImplementedError
-
     @abstractmethod
     def provide(self, name: str, value: Any) -> None:
-        raise NotImplementedError
+        ...
 
     def inject(self, name: str) -> Any:
-        raise NotImplementedError
+        ...
+
+    @abstractmethod
+    def remove(self, name: str) -> None:
+        ...

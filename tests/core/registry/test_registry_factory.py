@@ -1,4 +1,5 @@
 import unittest
+
 import pytest
 
 from tcc.core.application.registry.factory_registry import RegistryFactory

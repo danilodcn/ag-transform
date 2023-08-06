@@ -13,12 +13,11 @@ from tcc.core.infra.registry.application_registry import ApplicationRegistry
 class RegistryTest(TestCase):
     def test_should_registry_dependency(self):
         registry = ApplicationRegistry()
-
         test_object = object()
-        registry.provide("test", test_object)
 
-        self.assertEqual(len(registry.dependencies), 1)
-        self.assertIn(test_object, registry.dependencies.values())
+        self.assertEqual(registry.count, 0)
+        registry.provide("test", test_object)
+        self.assertEqual(registry.count, 1)
 
     def test_inject_method_should_be_return_object(self):
         registry = ApplicationRegistry()
@@ -29,6 +28,17 @@ class RegistryTest(TestCase):
         received_object = registry.inject("test")
 
         self.assertIs(received_object, test_object)
+
+    def test_should_be_remove_object_from_registry(self):
+        registry = ApplicationRegistry()
+
+        test_object = object()
+        self.assertEqual(registry.count, 0)
+        registry.provide("test", test_object)
+        value = registry.remove("test")
+
+        self.assertEqual(registry.count, 0)
+        self.assertIs(value, test_object)
 
 
 class TestRaisesInRegistry(TestCase):
@@ -50,6 +60,15 @@ class TestRaisesInRegistry(TestCase):
 
         self.assertEqual(
             "dependência 'dependency' não registrada", str(e.exception)
+        )
+
+    def test_should_be_raise_when_remove_non_existing_dependency(self):
+        with self.assertRaises(DependencyNotFound) as e:
+            self.registry.remove("remove")
+
+        self.assertEqual(
+            "dependência 'remove' não registrada. Impossível apagar",
+            str(e.exception),
         )
 
 
