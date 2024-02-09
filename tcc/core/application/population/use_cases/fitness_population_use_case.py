@@ -3,11 +3,11 @@ import pandas as pd
 from pydantic import validate_arguments
 
 from tcc.core.application.tools.functions import sum_of_integers
-from tcc.core.domain.entities.transformer.variation import Variation
-from tcc.core.domain.genetic_algorithm.population import (
+from tcc.core.domain.entities.genetic_algorithm.population.population import (
     Population,
     PopulationSteps,
 )
+from tcc.core.domain.entities.transformer.variation import Variation
 
 from .base_use_case import PopulationUseCaseBase
 
@@ -27,6 +27,7 @@ class PopulationFitnessUseCase(PopulationUseCaseBase):
         self.delta_loss = max_losses - min_losses
         self.delta_mass = max_mass - min_mass
 
+    @property
     def minimal_step(self) -> PopulationSteps:
         return PopulationSteps.ranks_sorted
 

@@ -1,4 +1,7 @@
+import uuid
 from enum import Enum
+
+from pydantic import Field
 
 from tcc.core.domain import BaseModel
 
@@ -16,3 +19,8 @@ class TableNameEnum(str, Enum):
 class Table(BaseModel):
     name: TableNameEnum
     data: TableDataType
+
+
+class Tables(BaseModel):
+    tables: list[Table]
+    id: uuid.UUID = Field(default_factory=uuid.uuid4)

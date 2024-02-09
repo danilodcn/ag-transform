@@ -1,8 +1,8 @@
 import unittest
 
 from tcc.core.domain.entities.transformer.variation import Variation
-from tcc.core.infra.db.memory.transformer.variation_repository_in_memory import (  # noqa
-    VariationRepositoryInMemory,
+from tcc.core.infra.db.memory.transformer.table_repository_in_memory import (
+    TableRepositoryInMemory,
 )
 
 

@@ -1,4 +1,4 @@
-from tcc.core.application.register.register import Register
+from tcc.core.application.registry.registry import Registry
 from tcc.core.application.transformer.table_adapter import (
     core_dimensions,
     core_magnetic_loss,
@@ -9,27 +9,32 @@ from tcc.core.application.transformer.table_adapter import (
 
 
 class TableFacade(object):
-    def __init__(self, register: Register) -> None:
-        self.register = register
+    def __init__(self, *, registry: Registry) -> None:
+        assert isinstance(
+            registry, Registry
+        ), f"deve ser instancia de {Registry}, em vez disso é instancia de {registry.__class__.__name__}"  # noqa
+        self.registry = registry
 
     def get_number_of_steps(self, area: float):
-        adapter = number_of_steps.GetNumberOfSteps(self.register)
+        adapter = number_of_steps.GetNumberOfSteps(registry=self.registry)
         return adapter.execute(area=area)
 
     def get_core_dimensions(self, number_of_steps: int):
-        adapter = core_dimensions.GetCoreDimensions(self.register)
+        adapter = core_dimensions.GetCoreDimensions(registry=self.registry)
         return adapter.execute(number_of_steps=number_of_steps)
 
     def get_insulation_type_constant(self, type: str, number_of_steps: int):
         adapter = insulation_type_constant.GetInsulationTypeConstraint(
-            self.register
+            registry=self.registry
         )
         return adapter.execute(type=type, number_of_steps=number_of_steps)
 
     def get_core_magnetic_loss(self, B: float):
-        adapter = core_magnetic_loss.GetCoreMagneticLoss(self.register)
+        adapter = core_magnetic_loss.GetCoreMagneticLoss(
+            registry=self.registry
+        )
         return adapter.execute(B=B)
 
     def get_curve_BH(self, B: float):
-        adapter = curve_BH.GetCurveBH(self.register)
+        adapter = curve_BH.GetCurveBH(registry=self.registry)
         return adapter.execute(B=B)

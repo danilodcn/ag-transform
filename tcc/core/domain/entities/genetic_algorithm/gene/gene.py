@@ -3,13 +3,15 @@ from typing import Any
 import pandas as pd
 from typing_extensions import Self
 
-from tcc.core.domain.entities.individuo import Individuo
+from tcc.core.domain.entities.transformer import Transformer
 from tcc.core.domain.entities.transformer.variable import Variable
 
 from .gene_result import GeneResult
 
 
-class Gene(Individuo):
+class Gene(Transformer):
+    results: GeneResult
+
     def set_variables(self, variables: Variable) -> Self:
         self.variables = variables
         return self

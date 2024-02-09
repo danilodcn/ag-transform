@@ -1,5 +1,5 @@
 from tcc.core.application.tools.is_dominated import is_dominated
-from tcc.core.domain.genetic_algorithm.population import (
+from tcc.core.domain.entities.genetic_algorithm.population.population import (
     Population,
     PopulationSteps,
 )
@@ -11,12 +11,13 @@ class SortParetoRanksUseCase(PopulationUseCaseBase):
     def __init__(self, population: Population) -> None:
         self.population = population
 
+    @property
     def minimal_step(self) -> PopulationSteps:
         return PopulationSteps.penalized
 
     def validate(self):
         super().validate()
-        data = self.population.get_data()
+        data = self.population.data
         assert not all(
             data["PerdasT_P"].isnull()
         ), "garanta que os genes foram penalizados"
@@ -25,7 +26,7 @@ class SortParetoRanksUseCase(PopulationUseCaseBase):
         ), "garanta que os genes foram penalizados"
 
     def run(self):
-        data = self.population.get_data()
+        data = self.population.data
         max_ranks = self.population.props.max_ranks
         data["rank"] = max_ranks
         no_dominated: list[int] = list(data.index)
@@ -43,7 +44,7 @@ class SortParetoRanksUseCase(PopulationUseCaseBase):
 
     def __sort_pareto_ranks(self, no_dominated: list[int], number: int):
         dominates: list[int] = []
-        data = self.population.get_data()
+        data = self.population.data
         for i in no_dominated:
             for p in no_dominated:
                 if i == p:

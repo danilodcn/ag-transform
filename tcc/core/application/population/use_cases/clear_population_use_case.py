@@ -1,7 +1,7 @@
 import numpy as np
 import pandas as pd
 
-from tcc.core.domain.genetic_algorithm.population import (
+from tcc.core.domain.entities.genetic_algorithm.population.population import (
     Population,
     PopulationSteps,
 )
@@ -13,6 +13,7 @@ class ClearPopulationUseCase(PopulationUseCaseBase):
     def __init__(self, population: Population) -> None:
         self.population = population
 
+    @property
     def minimal_step(self) -> PopulationSteps:
         return PopulationSteps.fitness_calculated
 

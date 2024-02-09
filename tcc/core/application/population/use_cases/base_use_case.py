@@ -3,7 +3,7 @@ from typing import Any
 
 import pandas as pd
 
-from tcc.core.domain.genetic_algorithm.population import (
+from tcc.core.domain.entities.genetic_algorithm.population.population import (
     Population,
     PopulationSteps,
 )
@@ -17,7 +17,7 @@ class PopulationUseCaseBase(ABC):
         raise NotImplementedError
 
     @abstractmethod
-    def run(self, **options) -> Any:
+    def run(self, **options: Any) -> Any:
         raise NotImplementedError("not implemented!")
 
     def execute(self, **options: Any) -> Any:

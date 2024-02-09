@@ -8,15 +8,12 @@ from tcc.core.domain.entities.genetic_algorithm.gene.gene_builder import (
     GeneResult,
 )
 from tcc.core.domain.entities.transformer.variable import Variable
-from tcc.core.infra.db.memory.transformer.variation_repository_in_memory import (  # noqa
-    VariationRepositoryInMemory,
-)
 
 
 class TestCreateGene(unittest.TestCase):
     def setUp(self) -> None:
-        self.repository = VariationRepositoryInMemory()
-        self.variations = self.repository.get()
+        # self.repository = VariationRepositoryInMemory()
+        # self.variations = self.repository.get()
 
         self.variables = Variable(
             Jbt=1.2, Jat=1.4, Bm=2.3, Ksw=2.5, kt=34, Rjan=2.8, rel=0.7

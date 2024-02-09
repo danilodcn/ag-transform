@@ -6,11 +6,11 @@ import pandas as pd
 from tcc.core.application.tools.restrict_violated import (
     count_restrictions_violated,
 )
-from tcc.core.domain.entities.transformer.variation import Variation
-from tcc.core.domain.genetic_algorithm.population import (
+from tcc.core.domain.entities.genetic_algorithm.population.population import (
     Population,
     PopulationSteps,
 )
+from tcc.core.domain.entities.transformer.variation import Variation
 
 from .base_use_case import PopulationUseCaseBase
 
@@ -20,6 +20,7 @@ class PopulationPenalizeUseCase(PopulationUseCaseBase):
         self.variations = variations
         self.population = population
 
+    @property
     def minimal_step(self) -> PopulationSteps:
         return PopulationSteps.calculated
 

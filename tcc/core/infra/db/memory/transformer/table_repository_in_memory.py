@@ -1,14 +1,17 @@
 import json
-from typing import Any
+import uuid
+from typing import Any, Callable
 
 from tcc.core.domain.entities.transformer.table import Table, TableNameEnum
 from tcc.core.domain.repositories.transformer.table_repository import (  # noqa
     TableRepository,
 )
 
+SearchFunc = Callable[[dict[str, Any]], bool]
+
 
 class TableRepositoryInMemory(TableRepository):
-    _tables: Any
+    _tables: list[dict[str, Any]]
 
     def __init__(self, table_name: str) -> None:
         self.__load_tables(table_name)
@@ -28,12 +31,20 @@ class TableRepositoryInMemory(TableRepository):
         with open(file=file_name, mode="r") as file:
             self._tables = json.load(file)
 
-    def get(self, name: TableNameEnum) -> Table:
-        table = self.tables.get(name, None)
-        if table is None:
-            raise KeyError(f"A tabela '{name}' não existe")
+    def get(
+        self, *, name: TableNameEnum, table_id: uuid.UUID | None = None
+    ) -> Table:
+        if table_id is None:
+            filtered_func: SearchFunc = lambda i: i["default"]
         else:
-            return Table(name=name, data=table["data"])
+            filtered_func: SearchFunc = lambda i: i["id"]
+
+        tables = filter(filtered_func, self.tables)
+
+        try:
+            return Table(**next(tables)[name])
+        except Exception as error:
+            raise self.DoesNotExist from error
 
     def insert(self, table: Table) -> None:
         raise NotImplementedError

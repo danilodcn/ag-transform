@@ -5,7 +5,7 @@ from typing import Iterable
 import numpy as np
 import pandas as pd
 
-from tcc.core.domain.genetic_algorithm.population import (
+from tcc.core.domain.entities.genetic_algorithm.population.population import (
     Population,
     PopulationSteps,
 )

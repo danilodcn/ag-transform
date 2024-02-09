@@ -2,7 +2,7 @@ from typing import Iterable
 
 import numpy as np
 
-from tcc.core.domain.genetic_algorithm.population import (
+from tcc.core.domain.entities.genetic_algorithm.population.population import (
     Population,
     PopulationSteps,
 )
@@ -14,6 +14,7 @@ class SelectionPopulationUseCase(PopulationUseCaseBase):
     def __init__(self, population: Population) -> None:
         self.population = population
 
+    @property
     def minimal_step(self) -> PopulationSteps:
         return PopulationSteps.fitness_calculated
 
@@ -21,11 +22,11 @@ class SelectionPopulationUseCase(PopulationUseCaseBase):
         self,
         number: int | None = None,
         frac: float | None = None,
-        weights: Iterable[float] | None = None,
+        weights: Iterable[float] | float | None = None,
         replace: bool = False,
         rand_sort: float | None = None,
     ) -> Population:
-        data = self.population.get_data()
+        data = self.population.data
         if frac is not None and number is not None:
             raise ValueError("Cannot use 'number' and 'frac'")
 

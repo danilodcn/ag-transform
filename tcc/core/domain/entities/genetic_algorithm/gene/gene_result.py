@@ -1,4 +1,4 @@
-from ...result import Result
+from ...transformer.result import Result
 
 
 class GeneResult(Result):

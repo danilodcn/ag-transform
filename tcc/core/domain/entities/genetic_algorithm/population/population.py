@@ -73,6 +73,7 @@ class Population(BaseModel):
 
     def set_genes(self, genes: list[Gene]) -> Self:
         self.genes = genes
+        self.__data = self.generate_data()
         return self
 
     def shape(self):

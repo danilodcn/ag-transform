@@ -15,10 +15,14 @@ from tcc.core.application.population.use_cases import (
     PopulationPenalizeUseCase,
     SortParetoRanksUseCase,
 )
+from tcc.core.domain.entities.genetic_algorithm.population.population import (  # noqa
+    Population,
+)
 from tcc.core.domain.entities.transformer.constraints import Constraint
 from tcc.core.domain.entities.transformer.variation import Variation
-from tcc.core.domain.genetic_algorithm.population import Population
-from tcc.core.domain.repositories.table_repository import TableRepository
+from tcc.core.domain.repositories.transformer.table_repository import (
+    TableRepository,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -55,8 +59,8 @@ class RunAGUseCase:
         self.population.generate_data()
         self.on_init()
 
-    def get_data(self, i) -> DataOutput:
-        data = DataOutput(STEPS[i], self.population.get_data().copy())
+    def get_data(self, i: int) -> DataOutput:
+        data = DataOutput(STEPS[i], self.population.data.copy())
         return data
 
     def run(self):

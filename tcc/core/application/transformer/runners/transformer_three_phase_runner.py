@@ -2,7 +2,7 @@ from math import pi, sqrt
 
 import numpy as np
 
-from tcc.core.application.register.register import Register
+from tcc.core.application.registry.registry import Registry
 from tcc.core.application.transformer.table_facade import TableFacade
 from tcc.core.application.transformer.transformer_runner import (
     TransformerRunner,
@@ -11,8 +11,8 @@ from tcc.core.domain.entities.transformer.transformer import Transformer
 
 
 class TransformerThreePhaseRunner(TransformerRunner):
-    def __init__(self, register: Register) -> None:
-        self.table_facade = TableFacade(register=register)
+    def __init__(self, *, registry: Registry) -> None:
+        self.table_facade = TableFacade(registry=registry)
 
     def run(self, transformer: Transformer):
         constraints = transformer.constraints
@@ -30,12 +30,12 @@ class TransformerThreePhaseRunner(TransformerRunner):
         Abc = Ac / constraints.Ke
 
         number_of_steps = self.table_facade.get_number_of_steps(Abc / 1000)
-        Ku, LD = self.table_facade.get_core_dimensions(
+        Ku, __LD = self.table_facade.get_core_dimensions(
             number_of_steps=number_of_steps
         )
 
         # LD é um vetor que contem todos os valores existentes na tabela 2.4
-        LD = np.asarray(LD, np.float64)
+        LD = np.asarray(__LD, np.float64)
 
         So = Abc / Ku  # Seção circular circunscrita
         dc = 2 * sqrt(So / pi)  # é o diâmetro da coluna do núcleo
